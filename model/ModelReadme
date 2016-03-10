@@ -1,1 +1,18 @@
-A guide to everything in the model.
+
+
+REQUIREMENTS:
+
+	- Be sure you have nltk installed on your machine. If it is not installed, follow these directions:
+	
+		- For Ubuntu, run these commands:
+			$ sudo apt-get install python-pip python-dev build-essential 
+			$ sudo pip install --upgrade pip 
+			$ sudo pip install --upgrade virtualenv
+		- For Mac, run this command (untested):
+			$ sudo easy_install pip
+		- Then run this command:
+			$ sudo pip install -U nltk
+		- To test, run 'python' then 'import nltk'
+
+Just for ders:
+	- use python from /usr/bin/python2.7
