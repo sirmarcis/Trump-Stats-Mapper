@@ -77,9 +77,8 @@ def get_rcp_poll_data(website_url):
 			old_race.poll_source_str.append(td_poll[td_index].string)
 		td_index+=1
 	return all_races
-	
 
-def get_rcp_headline_data(website_url):
+def get_headline_data(website_url):
 	"""Called by main"""
 	page = requests.get(website_url)
 	page.raise_for_status()
@@ -91,16 +90,17 @@ def get_rcp_headline_data(website_url):
 		followup_link = curr_item.select('link')[0].string
 		new_headline = Headline(item_title, followup_link)
 		all_headlines.append(new_headline)
-		#print "curr item [", item_title, "] link: [", followup_link, "]"
+		# print "curr item [", item_title, "]"
 	return all_headlines
-
 
 def main():
 	"""The main function for testing HTML parsing"""
 	websites = get_website_URLs()
-	rcp_poll_race_dict = get_rcp_poll_data(websites[0]) # realclearpolotics poll data
-	rcp_headline_arr = get_rcp_headline_data(websites[1]) # realclearpolotics headlines
-	
+	rcp_poll_race_dict = get_rcp_poll_data('http://www.realclearpolitics.com/epolls/latest_polls/') # realclearpolotics poll data
+	all_headlines_arr = []
+	for curr_website in websites:
+		curr_headline_arr = get_headline_data(curr_website)
+		all_headlines_arr.append(curr_headline_arr)
 
 if __name__ == "__main__":
 	main()
