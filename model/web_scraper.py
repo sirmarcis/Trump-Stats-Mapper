@@ -32,6 +32,10 @@ class Headline:
 	def __init__(self, headline_str, link_str):
 		self.headline_str = headline_str
 		self.link_str = link_str
+		
+	def __str__(self):
+		string = self.headline_str + "\n" + self.link_str + "\n"
+		return string
 
 
 def get_website_URLs():
@@ -88,6 +92,8 @@ def get_headline_data(website_url):
 	for curr_item in item_list:
 		item_title = curr_item.title.string
 		followup_link = curr_item.select('link')[0].string
+		item_title = item_title.replace(u"\u2018", "'").replace(u"\u2019", "'")
+		followup_link = followup_link.replace(u"\u2018", "'").replace(u"\u2019", "'")
 		new_headline = Headline(item_title, followup_link)
 		all_headlines.append(new_headline)
 		# print "curr item [", item_title, "]"
@@ -96,11 +102,13 @@ def get_headline_data(website_url):
 def main():
 	"""The main function for testing HTML parsing"""
 	websites = get_website_URLs()
-	rcp_poll_race_dict = get_rcp_poll_data('http://www.realclearpolitics.com/epolls/latest_polls/') # realclearpolotics poll data
+	# rcp_poll_race_dict = get_rcp_poll_data('http://www.realclearpolitics.com/epolls/latest_polls/') # realclearpolotics poll data
 	all_headlines_arr = []
 	for curr_website in websites:
 		curr_headline_arr = get_headline_data(curr_website)
 		all_headlines_arr.append(curr_headline_arr)
+			
+	
 
 if __name__ == "__main__":
 	main()
