@@ -102,7 +102,7 @@ def get_headline_data(website_url):
 def main():
 	"""The main function for testing HTML parsing"""
 	websites = get_website_URLs()
-	# rcp_poll_race_dict = get_rcp_poll_data('http://www.realclearpolitics.com/epolls/latest_polls/') # realclearpolotics poll data
+	rcp_poll_race_dict = get_rcp_poll_data('http://www.realclearpolitics.com/epolls/latest_polls/') # realclearpolotics poll data
 	all_headlines_arr = []
 	for curr_website in websites:
 		curr_headline_arr = get_headline_data(curr_website)
