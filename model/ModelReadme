@@ -16,3 +16,5 @@ REQUIREMENTS:
 
 Just for ders:
 	- use python from /usr/bin/python2.7
+
+have to change a link in nltk package to reflect correct download site.

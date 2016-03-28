@@ -1,13 +1,17 @@
+"""
+data_analysis.py
+Written by: Anders Maraviglia
+"""
+
 import web_scraper
 import operator
 import nltk
 
 keyword_dict = {}
 assc_dict = {}
-stop_word_list = []
 
 def load_keyword_dict():
-	"""called by main"""
+	"""called by get_data_analysis, load keywords from file keywords.txt into keyword_dict"""
 	f = open('keywords.txt', 'r')
 	for line in f:
 		if line != "\n":
@@ -16,7 +20,10 @@ def load_keyword_dict():
 			keyword_dict[clean_line] = []
 
 def parse_headline_arr(curr_headline_arr, top_keyword_dict):
-	"""called by main"""
+	"""
+	called by get_data_analysis parses all headlines from one news source, in curr_headline_arr. 
+	modifies/returns top_keyword_dict: puts in new keywords or adds to the count for existing keywords,
+	modifies assc_dict: adds association keywords for every keyword in a headline."""
 	sig_tokens = ['NN', 'NNP']
 	ignore_tokens = ['Is', 'VIDEO', 'Introduction', '"', 'Has']
 	for curr_headline in curr_headline_arr:
@@ -24,11 +31,9 @@ def parse_headline_arr(curr_headline_arr, top_keyword_dict):
 		headline_tokens = nltk.word_tokenize(curr_headline.headline_str)
 		tagged_tokens = nltk.pos_tag(headline_tokens)
 		for curr_token in tagged_tokens:
-			#print curr_token[0], ", ", curr_token[1]
 			word_token = curr_token[0]
 			if curr_token[1] in sig_tokens and word_token not in ignore_tokens:
 				if word_token in keyword_dict.keys() and not word_token in curr_headline.keywords:
-					#print "found keyword: ", word_token
 					curr_headline.keywords.append(word_token)
 					keyword_dict[word_token].append(curr_headline)
 				if not word_token in top_keyword_dict.keys():
@@ -49,7 +54,7 @@ def parse_headline_arr(curr_headline_arr, top_keyword_dict):
 	return top_keyword_dict
 
 def clean_assc_dict(top_keyword_dict):
-	"""called by main"""
+	"""called by get_data_analysis, gets rid of repeat and irrelevent keywords in assc_dict"""
 	for assc_token in assc_dict.keys():
 		if top_keyword_dict[assc_token] > 1:
 			assc_list = assc_dict[assc_token]
@@ -59,7 +64,8 @@ def clean_assc_dict(top_keyword_dict):
 					unique_tokens.append(assc_list_token)
 			assc_dict[assc_token] = unique_tokens
 
-def main():
+def get_data_analysis():
+	"""called by main"""
 	load_keyword_dict()
 	all_headlines = web_scraper.get_all_headline_data()
 	all_poll_data = web_scraper.get_all_poll_data()
@@ -77,6 +83,8 @@ def main():
 	#for curr_race in all_poll_data.values():
 	#	print curr_race.race_name
 
+def main():
+	get_data_analysis()
 
 if __name__ == "__main__":
 	main()

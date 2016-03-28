@@ -1,3 +1,8 @@
+"""
+web_scraper.py 
+Written by: Anders Maraviglia
+"""
+
 from lxml import html
 import requests
 import bs4
@@ -31,15 +36,7 @@ class Headline:
 	def __init__(self, headline_str, link_str):
 		self.headline_str = headline_str
 		self.link_str = link_str
-<<<<<<< HEAD
 		self.keywords = []
-=======
-		
-	def __str__(self):
-		string = self.headline_str + "\n" + self.link_str + "\n"
-		return string
->>>>>>> 5e038e19a00385765c10ef7843251f3a4c1ad28c
-
 
 def get_website_URLs():
 	"""Called by get_all_headline_data"""
@@ -105,17 +102,13 @@ def get_all_headline_data():
 	for curr_website in websites:
 		curr_headline_arr = get_headline_data(curr_website)
 		all_headlines_arr.append(curr_headline_arr)
-<<<<<<< HEAD
 	return all_headlines_arr
 
 def get_all_poll_data():
 	"""gets all poll data from websites, just rcp right now"""
 	rcp_poll_race_dict = get_rcp_poll_data('http://www.realclearpolitics.com/epolls/latest_polls/') # realclearpolotics poll data
 	return rcp_poll_race_dict
-=======
-			
-	
->>>>>>> 5e038e19a00385765c10ef7843251f3a4c1ad28c
+
 
 
 
