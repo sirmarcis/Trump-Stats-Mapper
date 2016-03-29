@@ -15,4 +15,10 @@ REQUIREMENTS:
 		- To test, run 'python' then 'import nltk'
 
 Just for ders:
+<<<<<<< HEAD
 	- use python from /usr/bin/python2.7
+=======
+	- use python from /usr/bin/python2.7
+
+have to change a link in nltk package to reflect correct download site.
+>>>>>>> refs/remotes/origin/master
