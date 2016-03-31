@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-from lxml import html
-import requests
-import bs4
-import nltk
-=======
 """
 web_scraper.py 
 Written by: Anders Maraviglia
@@ -12,7 +6,6 @@ Written by: Anders Maraviglia
 from lxml import html
 import requests
 import bs4
->>>>>>> refs/remotes/origin/master
 
 class Race_Data:
 	"""Each race should be a unique instance of this object,
@@ -43,21 +36,15 @@ class Headline:
 	def __init__(self, headline_str, link_str):
 		self.headline_str = headline_str
 		self.link_str = link_str
-<<<<<<< HEAD
+		self.keywords = []
 		
 	def __str__(self):
 		string = self.headline_str + "\n" + self.link_str + "\n"
 		return string
-
-
-def get_website_URLs():
-	"""Called by main"""
-=======
-		self.keywords = []
+		
 
 def get_website_URLs():
 	"""Called by get_all_headline_data"""
->>>>>>> refs/remotes/origin/master
 	f = open('web_sources', 'r')
 	websites = []
 	for line in f:
@@ -69,11 +56,7 @@ def get_website_URLs():
 	return websites
 
 def get_rcp_poll_data(website_url):
-<<<<<<< HEAD
-	"""Called by main"""
-=======
 	"""Called by get_all_poll_data, gets poll data from rcp site"""
->>>>>>> refs/remotes/origin/master
 	all_races = dict()
 	page = requests.get(website_url)
 	page.raise_for_status()
@@ -84,29 +67,15 @@ def get_rcp_poll_data(website_url):
 	td_poll = bs_obj.find_all("td", "lp-poll")
 	td_results = bs_obj.find_all("td", "lp-results")
 	td_spread = bs_obj.find_all("td", "lp-spread")
-<<<<<<< HEAD
-	#print "td_race [", len(td_race), "] td_poll [", len(td_poll), "] td_results[", len(td_results), "] td_spread [", len(td_spread), "]"
-	td_index = 0
-	for race_val in td_race:
-		#print "race[", race_val.string, "] poll[", td_poll[td_index].string, "] results[", td_results[td_index].string, "] spread[", td_spread[td_index].string, "]"
-		if race_val.string not in all_races:
-			new_race = Race_Data(race_val.string)
-			#print "making new race: ", new_race.race_name
-=======
 	td_index = 0
 	for race_val in td_race:
 		if race_val.string not in all_races:
 			new_race = Race_Data(race_val.string)
->>>>>>> refs/remotes/origin/master
 			new_race.race_poll_str_data.append(td_results[td_index].string)
 			new_race.race_spread_str_data.append(td_spread[td_index].string)
 			new_race.poll_source_str.append(td_poll[td_index].string)
 			all_races[race_val.string] = new_race
 		else:
-<<<<<<< HEAD
-			#print "adding to race: ", race_val.string, " data: ", td_poll[td_index].string
-=======
->>>>>>> refs/remotes/origin/master
 			old_race = all_races[race_val.string]
 			old_race.race_poll_str_data.append(td_results[td_index].string)
 			old_race.race_spread_str_data.append(td_spread[td_index].string)
@@ -115,11 +84,7 @@ def get_rcp_poll_data(website_url):
 	return all_races
 
 def get_headline_data(website_url):
-<<<<<<< HEAD
-	"""Called by main"""
-=======
 	"""Called by get_all_headline_data"""
->>>>>>> refs/remotes/origin/master
 	page = requests.get(website_url)
 	page.raise_for_status()
 	all_headlines = []
@@ -135,27 +100,14 @@ def get_headline_data(website_url):
 		# print "curr item [", item_title, "]"
 	return all_headlines
 
-<<<<<<< HEAD
-def main():
-	"""The main function for testing HTML parsing"""
-	websites = get_website_URLs()
-	rcp_poll_race_dict = get_rcp_poll_data('http://www.realclearpolitics.com/epolls/latest_polls/') # realclearpolotics poll data
-=======
+
 def get_all_headline_data():
 	"""get all headlines in a 2d array of headline objects"""
 	websites = get_website_URLs()
->>>>>>> refs/remotes/origin/master
 	all_headlines_arr = []
 	for curr_website in websites:
 		curr_headline_arr = get_headline_data(curr_website)
 		all_headlines_arr.append(curr_headline_arr)
-<<<<<<< HEAD
-			
-	
-
-if __name__ == "__main__":
-	main()
-=======
 	return all_headlines_arr
 
 def get_all_poll_data():
@@ -163,7 +115,5 @@ def get_all_poll_data():
 	rcp_poll_race_dict = get_rcp_poll_data('http://www.realclearpolitics.com/epolls/latest_polls/') # realclearpolotics poll data
 	return rcp_poll_race_dict
 
-
->>>>>>> refs/remotes/origin/master
 
 
