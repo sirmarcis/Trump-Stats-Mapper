@@ -37,6 +37,11 @@ class Headline:
 		self.headline_str = headline_str
 		self.link_str = link_str
 		self.keywords = []
+		
+	def __str__(self):
+		string = self.headline_str + "\n" + self.link_str + "\n"
+		return string
+		
 
 def get_website_URLs():
 	"""Called by get_all_headline_data"""
@@ -95,6 +100,7 @@ def get_headline_data(website_url):
 		# print "curr item [", item_title, "]"
 	return all_headlines
 
+
 def get_all_headline_data():
 	"""get all headlines in a 2d array of headline objects"""
 	websites = get_website_URLs()
@@ -108,7 +114,6 @@ def get_all_poll_data():
 	"""gets all poll data from websites, just rcp right now"""
 	rcp_poll_race_dict = get_rcp_poll_data('http://www.realclearpolitics.com/epolls/latest_polls/') # realclearpolotics poll data
 	return rcp_poll_race_dict
-
 
 
 
