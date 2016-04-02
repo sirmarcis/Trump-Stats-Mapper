@@ -5,22 +5,21 @@ Written by: Anders Maraviglia
 
 import web_scraper
 import states_list
+import data_structures
+import database
 import operator
 import nltk
+import time
+
+POLL_BUFFER = 4
 
 keyword_dict = {}
 assc_dict = {}
 state_data_dict = {}
 
-class State_Poll_Data:
-	def __init__(self, state_name):
-		self.state_name = state_name
-		self.red_poll_dict_list = []
-		self.blue_poll_dict_list = []
-		self.general_poll_dict_list = []
-
 def load_keyword_dict():
-	"""called by get_data_analysis, load keywords from file keywords.txt into keyword_dict"""
+	"""Called by get_data_analysis.
+	Load keywords from file keywords.txt into keyword_dict"""
 	f = open('keywords.txt', 'r')
 	for line in f:
 		if line != "\n":
@@ -30,7 +29,8 @@ def load_keyword_dict():
 
 def parse_headline_arr(curr_headline_arr, top_keyword_dict):
 	"""
-	called by get_data_analysis parses all headlines from one news source, in curr_headline_arr. 
+	Called by get_data_analysis.
+	Parses all headlines from one news source, in curr_headline_arr. 
 	modifies/returns top_keyword_dict: puts in new keywords or adds to the count for existing keywords,
 	modifies assc_dict: adds association keywords for every keyword in a headline."""
 	sig_tokens = ['NN', 'NNP']
@@ -43,7 +43,7 @@ def parse_headline_arr(curr_headline_arr, top_keyword_dict):
 			word_token = curr_token[0]
 			if curr_token[1] in sig_tokens and word_token not in ignore_tokens:
 				if word_token in keyword_dict.keys() and not word_token in curr_headline.keywords:
-					curr_headline.keywords.append(word_token)
+					#curr_headline.keywords.append(word_token)
 					keyword_dict[word_token].append(curr_headline)
 				if not word_token in top_keyword_dict.keys():
 					top_keyword_dict[word_token] = 0
@@ -62,8 +62,26 @@ def parse_headline_arr(curr_headline_arr, top_keyword_dict):
 					assc_dict[curr_assc_token] = other_assc_tokens
 	return top_keyword_dict
 
+def tag_headline_arr(curr_headline_arr, top_keyword_dict):
+	"""
+	Called by get_data_analysis.
+	"""
+	sig_tokens = ['NN', 'NNP']
+	ignore_tokens = ['Is', 'VIDEO', 'Introduction', '"', 'Has']
+	for curr_headline in curr_headline_arr:
+		discovered_tokens = []
+		headline_tokens = nltk.word_tokenize(curr_headline.headline_str)
+		tagged_tokens = nltk.pos_tag(headline_tokens)
+		for curr_token in tagged_tokens:
+			word_token = curr_token[0]
+			if curr_token[1] in sig_tokens and word_token not in ignore_tokens:
+				if top_keyword_dict[word_token] > 1:
+					curr_headline.keywords.append(word_token)
+
 def clean_assc_dict(top_keyword_dict):
-	"""called by get_data_analysis, gets rid of repeat and irrelevent keywords in assc_dict"""
+	"""
+	Called by get_data_analysis.
+	Gets rid of repeat and irrelevent keywords in assc_dict"""
 	for assc_token in assc_dict.keys():
 		if top_keyword_dict[assc_token] > 1:
 			assc_list = assc_dict[assc_token]
@@ -89,48 +107,65 @@ def get_state_name_token(poll_name_tokens):
 
 def parse_poll_str_list(poll_str_list):
 	"""called by parse_poll_data"""
-	poll_list = poll_str_list[0].split(', ')
-	poll_dict = {}
-	for curr_poll_str in poll_list:
-		curr_poll_list = curr_poll_str.split()
-		if len(curr_poll_list) == 2:
-			can_name = curr_poll_list[0]
-			poll_num = int(curr_poll_list[1])
-			poll_dict[can_name] = poll_num
-	return poll_dict
+	poll_dict_list = []
+	datestamp = str(int(time.strftime("%d"))/7) + "/" + (time.strftime("%m/%Y"))
+	for poll_str in poll_str_list:
+		poll_list = poll_str.split(', ')
+		poll_dict = {}
+		for curr_poll_str in poll_list:
+			curr_poll_list = curr_poll_str.split()
+			if len(curr_poll_list) == 2:
+				can_name = curr_poll_list[0]
+				poll_num = int(curr_poll_list[1])
+				poll_dict[can_name] = poll_num
+		poll_dict_list.append({datestamp : poll_dict})
+	return poll_dict_list
+
+def merge_poll_dict_lists(database_dict_list, new_dict_list):
+	"""Called by parse_poll_data"""
+	updated_dict_list = []
+	for curr_dict in new_dict_list:
+		if curr_dict not in database_dict_list:
+			updated_dict_list.append(curr_dict)
+	return updated_dict_list
 
 def parse_poll_data(all_poll_data):
-	"""called by get_data_analysis"""
+	"""
+	Called by get_data_analysis.
+	Goes through all poll races and identifies and tags the state, election, and canditades in each of them.
+	"""
 	for curr_race in all_poll_data.values():
 		poll_name_tokens = nltk.word_tokenize(curr_race.race_name)
 		state_token = get_state_name_token(poll_name_tokens)
 		if state_token != None:
-			poll_data_dict = parse_poll_str_list(curr_race.race_poll_str_data)
+			poll_data_dict_list = parse_poll_str_list(curr_race.race_poll_str_data)
 			if state_token in state_data_dict.keys():
 				curr_state_data_obj = state_data_dict[state_token]	
 			else:
-				curr_state_data_obj = State_Poll_Data(state_token)
+				curr_state_data_obj = data_structures.State_Poll_Data(state_token)
 			if "Republican" in poll_name_tokens:
-				#print "red race in: ", state_token, "data: ", poll_data_dict
-				curr_state_data_obj.red_poll_dict_list.append(poll_data_dict)
+				new_data_dict_list = merge_poll_dict_lists(curr_state_data_obj.red_poll_dict_list, poll_data_dict_list)
+				curr_state_data_obj.red_poll_dict_list = (new_data_dict_list + curr_state_data_obj.red_poll_dict_list)[:POLL_BUFFER]
 			elif "Democratic" in poll_name_tokens:
-				#print "blue race: ", state_token, "data: ", poll_data_dict
-				curr_state_data_obj.blue_poll_dict_list.append(poll_data_dict)
+				new_data_dict_list = merge_poll_dict_lists(curr_state_data_obj.blue_poll_dict_list, poll_data_dict_list)
+				curr_state_data_obj.blue_poll_dict_list = (new_data_dict_list + curr_state_data_obj.blue_poll_dict_list)[:POLL_BUFFER]
 			else:
-				#print "general race in: ", state_token, "data: ", poll_data_dict
-				curr_state_data_obj.general_poll_dict_list.append(poll_data_dict)
+				new_data_dict_list = merge_poll_dict_lists(curr_state_data_obj.general_poll_dict_list, poll_data_dict_list)
+				curr_state_data_obj.general_poll_dict_list += new_data_dict_list
 			if not state_token in state_data_dict.keys():
 				state_data_dict[state_token] = curr_state_data_obj
 
 def get_data_analysis():
 	"""called by main"""
+	state_data_dict = database.get_current_races_data()
 	load_keyword_dict()
 	all_headlines = web_scraper.get_all_headline_data()
 	all_poll_data = web_scraper.get_all_poll_data()
-	print "number of news sites parsed: ", len(all_headlines)
 	top_keyword_dict = dict()
 	for curr_headline_arr in all_headlines:
 		top_keyword_dict = parse_headline_arr(curr_headline_arr, top_keyword_dict)
+	for curr_headline_arr in all_headlines:
+		tag_headline_arr(curr_headline_arr, top_keyword_dict)
 	clean_assc_dict(top_keyword_dict)
 	sorted_keyword_list = list(reversed(sorted(top_keyword_dict.items(), key=operator.itemgetter(1))))
 	final_keywords = []
@@ -139,6 +174,8 @@ def get_data_analysis():
 			#print sorted_keyword[0], ", associated tokens: ", assc_dict[sorted_keyword[0]]
 			final_keywords.append(sorted_keyword[0])
 	parse_poll_data(all_poll_data)
+	database.write_current_races_data(state_data_dict) # save state data to database
+	database.write_headlines_data(all_headlines)
 
 def main():
 	get_data_analysis()
