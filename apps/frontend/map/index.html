@@ -56,9 +56,9 @@
 <script>
 	function tooltipHtml(n, d){	/* function to create html content string in tooltip div. */
 		return "<h4>"+n+"</h4><table>"+
-			"<tr><td>Low</td><td>"+(d.low)+"</td></tr>"+
-			"<tr><td>Average</td><td>"+(d.avg)+"</td></tr>"+
-			"<tr><td>High</td><td>"+(d.high)+"</td></tr>"+
+			"<tr><td>Sanders</td><td>"+(d.candidate1)+"</td></tr>"+
+			"<tr><td>Clinton</td><td>"+(d.candidate2)+"</td></tr>"+
+			"<tr><td>Other</td><td>"+(d.other)+"</td></tr>"+
 			"</table>";
 	}
 	
@@ -69,11 +69,17 @@
 	"CO", "NM", "OR", "ND", "SD", "NE", "IA", "MS", "IN", "IL", "MN", 
 	"WI", "MO", "AR", "OK", "KS", "LS", "VA"]
 		.forEach(function(d){ 
-			var low=Math.round(100*Math.random()), 
-				mid=Math.round(100*Math.random()), 
-				high=Math.round(100*Math.random());
-			sampleData[d]={low:d3.min([low,mid,high]), high:d3.max([low,mid,high]), 
-					avg:Math.round((low+mid+high)/3), color:d3.interpolate("#ffffcc", "#800026")(low/100)}; 
+			var candidate1=Math.round(100*Math.random()), 
+				candidate2=Math.round(100*Math.random()), 
+				other=Math.round(100*Math.random());
+				if (candidate1>candidate2) {
+					color = 'green';
+				}
+				else {
+					color = 'blue'
+				}
+			sampleData[d]={candidate1, candidate2, 
+					other, color}; 
 		});
 	
 	/* draw states on id #statesvg */	
