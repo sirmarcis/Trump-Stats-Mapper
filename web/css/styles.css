@@ -1,0 +1,28 @@
+#map-box {
+	height: 400px;
+	width: 70%;
+	float: left;
+	border: 2px black;
+}
+
+#candidates-box {
+	height: 400px;
+	min-width: 200px;
+	float: left;
+	border: 2px black;
+}
+
+#headlines-box {
+	height: 400px;
+	width: 800px;
+	width: 70%;
+	float: left;
+	border: 2px black;
+}
+
+#keywords-box {
+	height: 400px;
+	min-width: 200px;
+	float: left;
+	border: 2px black;
+}
