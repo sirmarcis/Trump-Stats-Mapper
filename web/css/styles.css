@@ -1,28 +1,42 @@
 #map-box {
-	height: 400px;
-	width: 70%;
-	float: left;
-	border: 2px black;
+  height: 600px;
+  width: 70%;
+  float: left;
+  border: 2px solid black;
+}
+
+#map-box iframe {
+  height: 100%;
+  width: 100%;
+}
+
+#options-container {
+  min-width: 200px;
+  float: right;
+  column-count: 1;
+  border: 2px solid black;
 }
 
 #candidates-box {
-	height: 400px;
-	min-width: 200px;
-	float: left;
-	border: 2px black;
+  /*float: left;*/
+  border: 2px solid black;
 }
 
-#headlines-box {
-	height: 400px;
-	width: 800px;
-	width: 70%;
-	float: left;
-	border: 2px black;
+#dateselector-box {
+  min-width: 200px;
+  /*float: left;*/
+  border: 2px solid black;
 }
 
 #keywords-box {
-	height: 400px;
-	min-width: 200px;
-	float: left;
-	border: 2px black;
+  min-height: 200px;
+  min-width: 200px;
+  /*float: left;*/
+  border: 2px solid black;
+}
+
+#headlines-box {
+  width: 70%;
+  float: left;
+  border: 2px solid red;
 }
