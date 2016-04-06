@@ -6,6 +6,7 @@ Written by: Anders Maraviglia
 import os
 import ast
 import data_structures
+import json
 
 def get_database_filepath():
 	filepath = os.path.dirname(os.path.realpath(__file__))
@@ -60,4 +61,22 @@ def write_headlines_data(all_headlines):
 		for curr_headline in curr_headline_arr:
 			f.write(curr_headline.headline_str + "\n")
 			f.write(curr_headline.link_str + "\n")
+			f.write(curr_headline.datestamp + "\n")
 			f.write(str(curr_headline.keywords) + "\n\n")
+
+def write_headlines_to_JSON(all_headlines):
+	database_filepath = get_database_filepath()
+	current_races_filepath = database_filepath + "headlines.json"
+	headline_1d_list = []
+	for curr_headline_arr in all_headlines:
+		for curr_headline in curr_headline_arr:
+			headline_1d_list.append(curr_headline)
+	with open(current_races_filepath, 'w') as outfile:
+		json.dump(headline_1d_list, outfile, cls=data_structures.HeadlineEncoder)
+
+def get_old_headlines_data():
+	database_filepath = get_database_filepath()
+	current_races_filepath = database_filepath + "old_headlines.dat"
+	f = open(current_races_filepath, 'r')
+	#for line in f:
+

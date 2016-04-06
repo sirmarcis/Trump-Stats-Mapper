@@ -7,6 +7,7 @@ import data_structures
 from lxml import html
 import requests
 import bs4
+import string
 		
 
 def get_website_URLs():
@@ -54,11 +55,13 @@ def get_headline_data(website_url):
 	all_headlines = []
 	bs_obj = bs4.BeautifulSoup(page.text, 'html.parser') ## bs_obj.select('div')
 	item_list = bs_obj.select('item')
+	printable = set(string.printable)
 	for curr_item in item_list:
 		item_title = curr_item.title.string
 		followup_link = curr_item.select('link')[0].string
 		item_title = item_title.replace(u"\u2018", "'").replace(u"\u2019", "'")
 		followup_link = followup_link.replace(u"\u2018", "'").replace(u"\u2019", "'")
+		item_title = item_title.encode('ascii', errors='ignore')
 		new_headline = data_structures.Headline(item_title, followup_link)
 		all_headlines.append(new_headline)
 	return all_headlines
