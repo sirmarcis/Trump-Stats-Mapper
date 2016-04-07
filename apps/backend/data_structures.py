@@ -31,12 +31,15 @@ class Race_Data:
 		self.prez_race_p = self.in_prez_race_p(race_name)
 
 class Headline:
-	"""Stores the name and link for a RCP headline"""
-	def __init__(self, headline_str, link_str):
+	"""
+	Stores the data for a news headline.
+	headline_str: """
+	def __init__(self, headline_str, link_str, source, datestamp):
 		self.headline_str = headline_str
 		self.link_str = link_str
 		self.keywords = []
-		self.datestamp = str(int(time.strftime("%d"))/7) + "/" + (time.strftime("%m/%Y"))
+		self.source = source
+		self.datestamp = datestamp #str(int(time.strftime("%d"))/7) + "/" + (time.strftime("%m/%Y"))
 		
 	def __str__(self):
 		string = self.headline_str + "\n" + self.link_str + "\n"
