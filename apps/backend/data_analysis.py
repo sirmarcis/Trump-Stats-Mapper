@@ -19,7 +19,8 @@ assc_dict = {}
 state_data_dict = {}
 
 def load_keyword_dict():
-	"""Called by get_data_analysis.
+	"""
+	Called by get_data_analysis.
 	Load keywords from file keywords.txt into keyword_dict"""
 	f = open('keywords.txt', 'r')
 	for line in f:
@@ -44,7 +45,6 @@ def parse_headline_arr(curr_headline_arr, top_keyword_dict):
 			word_token = curr_token[0]
 			if curr_token[1] in sig_tokens and word_token not in ignore_tokens:
 				if word_token in keyword_dict.keys() and not word_token in curr_headline.keywords:
-					#curr_headline.keywords.append(word_token)
 					keyword_dict[word_token].append(curr_headline)
 				if not word_token in top_keyword_dict.keys():
 					top_keyword_dict[word_token] = 0
@@ -66,7 +66,7 @@ def parse_headline_arr(curr_headline_arr, top_keyword_dict):
 def tag_headline_arr(curr_headline_arr, top_keyword_dict):
 	"""
 	Called by get_data_analysis.
-	"""
+	Tags each headline with its assosiated keywords."""
 	sig_tokens = ['NN', 'NNP']
 	ignore_tokens = ['Is', 'VIDEO', 'Introduction', '"', 'Has']
 	for curr_headline in curr_headline_arr:
@@ -93,7 +93,9 @@ def clean_assc_dict(top_keyword_dict):
 			assc_dict[assc_token] = unique_tokens
 
 def get_state_name_token(poll_name_tokens):
-	"""called by parse_poll_data"""
+	"""
+	Called by parse_poll_data. 
+	Gets the state name from the given list of tokens"""
 	first_token_p = False
 	first_token = ""
 	for curr_token in poll_name_tokens:
@@ -107,7 +109,9 @@ def get_state_name_token(poll_name_tokens):
 			first_token = curr_token
 
 def parse_poll_str_list(poll_str_list):
-	"""called by parse_poll_data"""
+	"""
+	Called by parse_poll_data.
+	Organizes the poll data into a list of dictionaries containing poll data."""
 	poll_dict_list = []
 	datestamp = str(int(time.strftime("%d"))/7) + "/" + (time.strftime("%m/%Y"))
 	for poll_str in poll_str_list:

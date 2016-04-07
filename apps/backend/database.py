@@ -68,6 +68,7 @@ def write_headlines_to_JSON(all_headlines):
 	database_filepath = get_database_filepath()
 	current_races_filepath = database_filepath + "headlines.json"
 	headline_1d_list = []
+	date_sorted_headlines = {}
 	for curr_headline_arr in all_headlines:
 		for curr_headline in curr_headline_arr:
 			headline_1d_list.append(curr_headline)
