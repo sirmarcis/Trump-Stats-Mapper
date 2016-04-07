@@ -1,0 +1,35 @@
+[
+  {
+    "04/07/2016": [
+      {
+        "link_str": "http://www.url.com",
+        "keywords": [
+          "keyword1",
+          "keyword2"
+        ],
+        "headline_str": "the headline",
+        "datestamp": "thur, 04/07/2016"
+      },
+      {
+        "link_str": "http://www.url.com",
+        "keywords": [
+          "keyword1",
+          "keyword2"
+        ],
+        "headline_str": "the headline",
+        "datestamp": "thur, 04/07/2016"
+      },
+      {
+        "link_str": "http://www.url.com",
+        "keywords": [
+          "keyword1",
+          "keyword2"
+        ],
+        "headline_str": "the headline",
+        "datestamp": "thur, 04/07/2016"
+      }
+    ],
+    "04/06/2016": {},
+    "04/05/2016": {}
+  }
+]
