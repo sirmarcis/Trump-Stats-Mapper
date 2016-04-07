@@ -1,5 +1,13 @@
 angular.module('trump-stats-mapper', ['ngAnimate', 'ui.bootstrap']);
-angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function ($scope) {
+
+angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function ($scope, $http) {
+  
+  $scope.headlines = {};
+
+  $http.get("data/headlines.json").then(function (res) {
+    $scope.headlines = res.data
+  });
+
   $scope.today = function() {
     $scope.dt = new Date();
   };
@@ -18,7 +26,7 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
   $scope.dateOptions = {
     dateDisabled: disabled,
     formatYear: 'yy',
-    maxDate: new Date(2020, 5, 22),
+    maxDate: $scope.today(),
     minDate: new Date(),
     startingDay: 1
   };
