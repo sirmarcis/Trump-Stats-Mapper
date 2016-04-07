@@ -8,10 +8,10 @@
   <link rel="stylesheet" type="text/css" href="web/css/bootstrap-modified.css">
 
   <title>Trump Stats Mapper</title>
-  <meta name="description" content="For Software D and D">
+  <meta name="description" content="For Software Development and Documentation">
 
 </head>
-<body>
+<body ng-controller="TrumpStatsMapperCtrl">
 
   <div id="options-container">
     <div id="candidates-box">
@@ -28,8 +28,7 @@
       </form>
     </div>
 
-    <div id="dateselector-box" ng-controller="DateSelectorCtrl">
-      <h3>{{dt | date:'fullDate' }}</h3>
+    <div id="dateselector-box">
       <div style="display:inline-block;">
         <uib-datepicker ng-model="dt" class="well well-sm" datepicker-options="inlineOptions"></uib-datepicker>
       </div>
@@ -53,12 +52,12 @@
   </div>
 
   <div id="headlines-box">
-    <h2>April 6, 2016</h2>
-      <a href="http://www.realclearpolitics.com/2016/04/06/with_wisconsin_win_cruz_tries_for_upper_hand_379835.html">With Wisconsin Win, Cruz Tries for Upper Hand</a><br>
-      <a href="http://www.realclearpolitics.com/2016/04/06/sanders_isn039t_catching_clinton_because_math_379840.html">Sanders Isn't Catching Clinton. Because, Math</a><br>
-      <a href="http://www.realclearpolitics.com/2016/04/06/open_letter_to_trump_5_things_you_need_to_do_now_379851.html">Open Letter to Trump: 5 Things You Need to Do Now</a><br>
-      <a href="http://www.realclearpolitics.com/2016/04/06/bush_quotconservatismquot_expanded_govt_trump_would_trim_the_fat_379841.html">Bush "Conservatism" Expanded Govt, Trump Would Trim the Fat</a><br>
-      <a href="http://www.realclearpolitics.com/2016/04/06/what_if_the_supreme_court_were_liberal_379870.html">What If the Supreme Court Were Liberal?</a>
+    <h2>{{dt | date:'fullDate' }}</h2>
+      <a href="http://www.realclearpolitics.com/2016/04/06/with_wisconsin_win_cruz_tries_for_upper_hand_379835.html" target="_blank">With Wisconsin Win, Cruz Tries for Upper Hand</a><br>
+      <a href="http://www.realclearpolitics.com/2016/04/06/sanders_isn039t_catching_clinton_because_math_379840.html" target="_blank">Sanders Isn't Catching Clinton. Because, Math</a><br>
+      <a href="http://www.realclearpolitics.com/2016/04/06/open_letter_to_trump_5_things_you_need_to_do_now_379851.html" target="_blank">Open Letter to Trump: 5 Things You Need to Do Now</a><br>
+      <a href="http://www.realclearpolitics.com/2016/04/06/bush_quotconservatismquot_expanded_govt_trump_would_trim_the_fat_379841.html" target="_blank">Bush "Conservatism" Expanded Govt, Trump Would Trim the Fat</a><br>
+      <a href="http://www.realclearpolitics.com/2016/04/06/what_if_the_supreme_court_were_liberal_379870.html" target="_blank">What If the Supreme Court Were Liberal?</a>
 
   </div>
   
@@ -67,6 +66,6 @@
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.js"></script>
 <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.3.1.js"></script>
-<script src="web/js/dateselector.js"></script>
+<script src="web/js/app.js"></script>
 
 </html>
