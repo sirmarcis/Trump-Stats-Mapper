@@ -19,6 +19,7 @@
 #candidates-box {
   /*float: left;
   border: 2px solid black;*/
+  padding-left: 20px;
 }
 
 #dateselector-box {
@@ -30,17 +31,26 @@
 #keywords-box {
   min-height: 200px;
   min-width: 200px;
-  /*float: left;
-  border: 2px solid black;*/
+  padding-left: 20px;
+}
+
+#keywords-box .keyword {
+  padding-left: 3px;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+#keywords-box .keyword:hover {
+  text-decoration: underline;
 }
 
 #headlines-box {
   overflow: hidden;
-  /*border: 2px solid red;
-  background: blue;*/
+  padding-left: 20px;
 }
 
 #headlines-box a {
+  padding-left: 3px;
   font-size: 1em;
   font-weight: bold;
   color: #D30015;

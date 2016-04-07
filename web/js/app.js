@@ -1,5 +1,5 @@
 angular.module('trump-stats-mapper', ['ngAnimate', 'ui.bootstrap']);
-angular.module('trump-stats-mapper').controller('DateSelectorCtrl', function ($scope) {
+angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function ($scope) {
   $scope.today = function() {
     $scope.dt = new Date();
   };
