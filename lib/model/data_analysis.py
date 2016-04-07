@@ -10,6 +10,7 @@ import database
 import operator
 import nltk
 import time
+import sys
 
 POLL_BUFFER = 4
 
@@ -155,9 +156,10 @@ def parse_poll_data(all_poll_data):
 			if not state_token in state_data_dict.keys():
 				state_data_dict[state_token] = curr_state_data_obj
 
-def get_data_analysis():
+def get_data_analysis(argv):
 	"""called by main"""
 	state_data_dict = database.get_current_races_data()
+	old_headline_list = database.get_old_headlines_data()
 	load_keyword_dict()
 	all_headlines = web_scraper.get_all_headline_data()
 	all_poll_data = web_scraper.get_all_poll_data()
@@ -171,14 +173,17 @@ def get_data_analysis():
 	final_keywords = []
 	for sorted_keyword in sorted_keyword_list:
 		if sorted_keyword[1] > 1:
-			#print sorted_keyword[0], ", associated tokens: ", assc_dict[sorted_keyword[0]]
+			if len(argv) > 0:
+				if argv[0] == "headlines":
+					print sorted_keyword[0], ", associated tokens: ", assc_dict[sorted_keyword[0]]
 			final_keywords.append(sorted_keyword[0])
 	parse_poll_data(all_poll_data)
 	database.write_current_races_data(state_data_dict) # save state data to database
 	database.write_headlines_data(all_headlines)
+	database.write_headlines_to_JSON(all_headlines)
 
-def main():
-	get_data_analysis()
+def main(argv):
+	get_data_analysis(argv)
 
 if __name__ == "__main__":
-	main()
+	main(sys.argv[1:])

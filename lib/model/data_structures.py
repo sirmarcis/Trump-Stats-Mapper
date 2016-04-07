@@ -3,6 +3,8 @@ data_structures.py
 Written by: Anders Maraviglia
 """
 
+import time
+from json import JSONEncoder
 
 class Race_Data:
 	"""Each race should be a unique instance of this object,
@@ -34,10 +36,15 @@ class Headline:
 		self.headline_str = headline_str
 		self.link_str = link_str
 		self.keywords = []
+		self.datestamp = str(int(time.strftime("%d"))/7) + "/" + (time.strftime("%m/%Y"))
 		
 	def __str__(self):
 		string = self.headline_str + "\n" + self.link_str + "\n"
 		return string
+
+class HeadlineEncoder(JSONEncoder):
+	def default(self, o):
+		return o.__dict__
 
 class State_Poll_Data:
 	"""
