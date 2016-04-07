@@ -1,0 +1,65 @@
+#map-box {
+  overflow: hidden;
+  height: 640px;
+  /*border: 2px solid black;
+  background: red;*/
+}
+
+#map-box iframe {
+  width: 100%;
+  height: 100%;
+}
+
+#options-container {
+  min-width: 200px;
+  float: right;
+  /*border: 2px solid black;*/
+}
+
+#candidates-box {
+  /*float: left;
+  border: 2px solid black;*/
+  padding-left: 20px;
+}
+
+#dateselector-box {
+  min-width: 200px;
+  /*float: left;
+  border: 2px solid black;*/
+}
+
+#keywords-box {
+  min-height: 200px;
+  min-width: 200px;
+  padding-left: 20px;
+}
+
+#keywords-box .keyword {
+  padding-left: 3px;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+#keywords-box .keyword:hover {
+  text-decoration: underline;
+}
+
+#headlines-box {
+  overflow: hidden;
+  padding-left: 20px;
+}
+
+#headlines-box a {
+  padding-left: 3px;
+  font-size: 1em;
+  font-weight: bold;
+  color: #D30015;
+}
+
+#headlines-box a:visited {
+  color: #CC6600;
+}
+
+#headlines-box a:hover {
+  text-decoration: underline;
+}
