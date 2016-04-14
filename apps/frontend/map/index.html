@@ -63,27 +63,31 @@
 	}
 	
 	var sampleData ={};	/* Sample random data. */	
-	["HI", "AK", "FL", "SC", "GA", "AL", "NC", "TN", "RI", "CT", "MA",
-	"ME", "NH", "VT", "NY", "NJ", "PA", "DE", "MD", "WV", "KY", "OH", 
-	"MI", "WY", "MT", "ID", "WA", "DC", "TX", "CA", "AZ", "NV", "UT", 
-	"CO", "NM", "OR", "ND", "SD", "NE", "IA", "MS", "IN", "IL", "MN", 
-	"WI", "MO", "AR", "OK", "KS", "LS", "VA"]
-		.forEach(function(d){ 
-			var candidate1=Math.round(100*Math.random()), 
-				candidate2=Math.round(100*Math.random()), 
-				other=Math.round(100*Math.random());
-				if (candidate1>candidate2) {
-					color = 'green';//placeholder color
-				}
-				else {
-					color = 'blue'
-				}
-			sampleData[d]={candidate1, candidate2, 
-					other, color}; 
-		});
-	
-	/* draw states on id #statesvg */	
-	uStates.draw("#statesvg", sampleData, tooltipHtml);
+	function redrawMap() {
+		["HI", "AK", "FL", "SC", "GA", "AL", "NC", "TN", "RI", "CT", "MA",
+		"ME", "NH", "VT", "NY", "NJ", "PA", "DE", "MD", "WV", "KY", "OH", 
+		"MI", "WY", "MT", "ID", "WA", "DC", "TX", "CA", "AZ", "NV", "UT", 
+		"CO", "NM", "OR", "ND", "SD", "NE", "IA", "MS", "IN", "IL", "MN", 
+		"WI", "MO", "AR", "OK", "KS", "LS", "VA"]
+			.forEach(function(d){ 
+				var candidate1=Math.round(100*Math.random()), 
+					candidate2=Math.round(100*Math.random()), 
+					other=Math.round(100*Math.random());
+					if (candidate1>candidate2) {
+						color = 'green';//placeholder color
+					}
+					else {
+						color = 'blue';
+					}
+				sampleData[d]={candidate1, candidate2, 
+						other, color}; 
+			});
+		/* draw states on id #statesvg */	
+		
+		uStates.draw("#statesvg", sampleData, tooltipHtml);
+	}
+	redrawMap();
 </script>
+<button onclick="redrawMap()">Click Me!</button>
 
 </body>
