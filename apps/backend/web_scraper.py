@@ -9,7 +9,6 @@ import requests
 import bs4
 import string
 		
-
 def get_website_URLs():
 	"""Called by get_all_headline_data"""
 	f = open('web_sources', 'r')
@@ -18,7 +17,8 @@ def get_website_URLs():
 		if line != "\n":
 			endl_index = line.index('\n')
 			clean_line = line[:endl_index]
-			websites.append(clean_line)
+			new_list = clean_line.split(' ', 1)
+			websites.append(new_list)
 	f.close()
 	return websites
 
@@ -48,7 +48,7 @@ def get_rcp_poll_data(website_url):
 		td_index+=1
 	return all_races
 
-def get_headline_data(website_url):
+def get_headline_data(website_url, source):
 	"""Called by get_all_headline_data"""
 	page = requests.get(website_url)
 	page.raise_for_status()
@@ -59,25 +59,27 @@ def get_headline_data(website_url):
 	for curr_item in item_list:
 		item_title = curr_item.title.string
 		followup_link = curr_item.select('link')[0].string
+		datestamp = curr_item.select('pubdate')[0].string
 		item_title = item_title.replace(u"\u2018", "'").replace(u"\u2019", "'")
 		followup_link = followup_link.replace(u"\u2018", "'").replace(u"\u2019", "'")
 		item_title = item_title.encode('ascii', errors='ignore')
-		new_headline = data_structures.Headline(item_title, followup_link)
+		new_headline = data_structures.Headline(item_title, followup_link, source, datestamp)
 		all_headlines.append(new_headline)
 	return all_headlines
 
-
 def get_all_headline_data():
-	"""get all headlines in a 2d array of headline objects"""
+	"""Gets all headlines in a 2d array of headline objects"""
 	websites = get_website_URLs()
 	all_headlines_arr = []
-	for curr_website in websites:
-		curr_headline_arr = get_headline_data(curr_website)
+	for curr_elt in websites:
+		curr_website = curr_elt[0]
+		source = curr_elt[1]
+		curr_headline_arr = get_headline_data(curr_website, source)
 		all_headlines_arr.append(curr_headline_arr)
 	return all_headlines_arr
 
 def get_all_poll_data():
-	"""gets all poll data from websites, just rcp right now"""
+	"""Gets all poll data from websites, just rcp right now"""
 	rcp_poll_race_dict = get_rcp_poll_data('http://www.realclearpolitics.com/epolls/latest_polls/') # realclearpolotics poll data
 	return rcp_poll_race_dict
 
