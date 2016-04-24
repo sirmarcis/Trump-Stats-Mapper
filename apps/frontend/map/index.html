@@ -49,32 +49,41 @@
 	}
 </style>
 <body>
-<div id="tooltip"></div><!-- div to hold tooltip. -->
+<div id="tooltip"></div> <!-- div to hold tooltip. -->
 <svg width="960" height="600" id="statesvg"></svg> <!-- svg to hold the map. -->
 <script src="mapdata.js"></script> <!-- creates uStates. -->
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script>
-	function tooltipHtml(n, d){	/* function to create html content string in tooltip div. */
+	// function to create html content string in tooltip div.
+	function tooltipHtml(n, d){
 		return "<h4>"+n+"</h4><table>"+
 			"<tr><td>"+(d.name1)+"</td><td>"+(d.candidate1)+"</td></tr>"+
 			"<tr><td>"+(d.name2)+"</td><td>"+(d.candidate2)+"</td></tr>"+
 			"<tr><td>"+(d.otherName)+"</td><td>"+(d.other)+"</td></tr>"+
 			"</table>";
 	}
-	var candidate1=70, 
-		candidate2=30,
-		other=20;
-	var sampleData ={};	/* Sample random data. */	
+	
+	
+	
+	var candidate1=70;
+	var candidate2=30;
+	var other=20;
+	// Sample random data.
+	var sampleData ={};		
+	
+	// function to redraw the map with new data
 	function redrawMap() {
 		candidate1 -= 1; 
 		candidate2 += 1;
 		other += 1;
+		// go through the states with data
 		["HI", "AK", "FL", "SC", "GA", "AL", "NC", "TN", "RI", "CT", "MA",
 		"ME", "NH", "VT", "NY", "NJ", "PA", "DE", "MD", "WV", "KY", "OH", 
 		"MI", "WY", "MT", "ID", "WA", "DC", "TX", "CA", "AZ", "NV", "UT", 
 		"CO", "NM", "OR", "ND", "SD", "NE", "IA", "MS", "IN", "IL", "MN", 
 		"WI", "MO", "AR", "OK", "KS", "LS", "VA"]
 			.forEach(function(d){ 
+				// check who is winning and by how much
 				if (candidate1>candidate2) {
 					var green = ['#f7fcf5','#e5f5e0','#c7e9c0','#a1d99b',
 								 '#74c476','#41ab5d','#238b45','#006d2c','#00441b'];
@@ -105,13 +114,14 @@
 				sampleData[d]={name1,candidate1,name2,candidate2, 
 						otherName,other,color}; 
 			});
-		/* draw states on id #statesvg */	
+		// draw states on id #statesvg	
 		
 		uStates.draw("#statesvg", sampleData, tooltipHtml);
 		uStates.updateColor("#statesvg",sampleData);
 	}
 	redrawMap();
 	
+	// Reset the map
 	function resetMap() {
 		candidate1 = 70;
 		candidate2 = 30;
