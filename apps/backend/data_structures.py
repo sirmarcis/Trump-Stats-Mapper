@@ -58,3 +58,7 @@ class State_Poll_Data:
 		self.red_poll_dict_list = []
 		self.blue_poll_dict_list = []
 		self.general_poll_dict_list = []
+
+class State_Poll_DataEncoder(JSONEncoder):
+	def default(self, o):
+		return o.__dict__
