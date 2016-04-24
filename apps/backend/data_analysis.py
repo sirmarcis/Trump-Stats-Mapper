@@ -127,7 +127,9 @@ def parse_poll_str_list(poll_str_list):
 	return poll_dict_list
 
 def merge_poll_dict_lists(database_dict_list, new_dict_list):
-	"""Called by parse_poll_data"""
+	"""
+	Called by parse_poll_data.
+	Merges the two dictionary lists."""
 	updated_dict_list = []
 	for curr_dict in new_dict_list:
 		if curr_dict not in database_dict_list:
@@ -137,8 +139,7 @@ def merge_poll_dict_lists(database_dict_list, new_dict_list):
 def parse_poll_data(all_poll_data):
 	"""
 	Called by get_data_analysis.
-	Goes through all poll races and identifies and tags the state, election, and canditades in each of them.
-	"""
+	Goes through all poll races and identifies and tags the state, election, and canditades in each of them."""
 	for curr_race in all_poll_data.values():
 		poll_name_tokens = nltk.word_tokenize(curr_race.race_name)
 		state_token = get_state_name_token(poll_name_tokens)
@@ -161,7 +162,9 @@ def parse_poll_data(all_poll_data):
 				state_data_dict[state_token] = curr_state_data_obj
 
 def get_data_analysis(argv):
-	"""called by main"""
+	"""
+	Main function call to run the backend.
+	Performs all analysis on poll and headline/keyword data from parsed news sites."""
 	state_data_dict = database.get_current_races_data()
 	old_headline_list = database.get_old_headlines_data()
 	load_keyword_dict()
@@ -184,6 +187,7 @@ def get_data_analysis(argv):
 	parse_poll_data(all_poll_data)
 	database.write_current_races_data(state_data_dict) # save state data to database
 	database.write_headlines_data(all_headlines)
+	database.write_poll_data_to_JSON(state_data_dict)
 	database.write_headlines_to_JSON(all_headlines)
 
 def main(argv):

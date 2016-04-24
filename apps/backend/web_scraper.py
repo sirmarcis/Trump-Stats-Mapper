@@ -10,7 +10,8 @@ import bs4
 import string
 		
 def get_website_URLs():
-	"""Called by get_all_headline_data"""
+	"""
+	Called by get_all_headline_data"""
 	f = open('web_sources', 'r')
 	websites = []
 	for line in f:
@@ -23,7 +24,8 @@ def get_website_URLs():
 	return websites
 
 def get_rcp_poll_data(website_url):
-	"""Called by get_all_poll_data, gets poll data from rcp site"""
+	"""
+	Called by get_all_poll_data, gets poll data from rcp site"""
 	all_races = dict()
 	page = requests.get(website_url)
 	page.raise_for_status()
@@ -49,7 +51,8 @@ def get_rcp_poll_data(website_url):
 	return all_races
 
 def get_headline_data(website_url, source):
-	"""Called by get_all_headline_data"""
+	"""
+	Called by get_all_headline_data"""
 	page = requests.get(website_url)
 	page.raise_for_status()
 	all_headlines = []
@@ -68,7 +71,8 @@ def get_headline_data(website_url, source):
 	return all_headlines
 
 def get_all_headline_data():
-	"""Gets all headlines in a 2d array of headline objects"""
+	"""
+	Gets all headlines in a 2d array of headline objects"""
 	websites = get_website_URLs()
 	all_headlines_arr = []
 	for curr_elt in websites:
@@ -79,7 +83,8 @@ def get_all_headline_data():
 	return all_headlines_arr
 
 def get_all_poll_data():
-	"""Gets all poll data from websites, just rcp right now"""
+	"""
+	Gets all poll data from websites, just rcp right now"""
 	rcp_poll_race_dict = get_rcp_poll_data('http://www.realclearpolitics.com/epolls/latest_polls/') # realclearpolotics poll data
 	return rcp_poll_race_dict
 
