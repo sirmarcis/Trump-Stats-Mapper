@@ -10,18 +10,18 @@ State; Pennsylvania
 rp; [{'0/04/2016': {u'Cruz': 20, u'Trump': 33, u'Kasich': 30}}, {'0/04/2016': {u'Cruz': 17, u'Trump': 36, u'Kasich': 10}}]
 bp; [{'0/04/2016': {u'Sanders': 28, u'Clinton': 53}}, {'0/04/2016': {u'Sanders': 27, u'Clinton': 57}}]
 gp; [{'0/04/2016': {u'Rubio': 40, u'Clinton': 46}}, {'0/04/2016': {u'Sanders': 49, u'Trump': 37}}, {'0/04/2016': {u'Sestak': 38, u'Toomey': 43}}, {'0/04/2016': {u'Sanders': 48, u'Cruz': 40}}]
-State; Florida
-rp; [{'0/04/2016': {u'Rubio': 27, u'Trump': 44, u'Cruz': 17, u'Kasich': 9}}, {'0/04/2016': {u'Rubio': 22, u'Trump': 46, u'Cruz': 14, u'Kasich': 10}}, {'0/04/2016': {u'Rubio': 26, u'Trump': 44, u'Cruz': 18, u'Kasich': 10}}, {'0/04/2016': {u'Rubio': 24, u'Trump': 44, u'Cruz': 20, u'Kasich': 9}}]
-bp; [{'0/04/2016': {u'Sanders': 34, u'Clinton': 60}}, {'0/04/2016': {u'Sanders': 32, u'Clinton': 57}}, {'0/04/2016': {u'Sanders': 37, u'Clinton': 58}}, {'0/04/2016': {u'Sanders': 34, u'Clinton': 61}}]
-gp; [{'0/04/2016': {u'Rubio': 46, u'Clinton': 47}}, {'0/04/2016': {u'Rubio': 48, u'Clinton': 44}}, {'0/04/2016': {u'Rubio': 44, u'Clinton': 45}}, {'0/04/2016': {u'Cruz': 43, u'Clinton': 48}}, {'0/04/2016': {u'Cruz': 47, u'Clinton': 46}}, {'0/04/2016': {u'Cruz': 44, u'Clinton': 46}}, {'0/04/2016': {u'Sanders': 48, u'Cruz': 41}}, {'0/04/2016': {u'Sanders': 50, u'Trump': 42}}, {'0/04/2016': {u'Clinton': 49, u'Trump': 41}}, {'0/04/2016': {u'Clinton': 50, u'Trump': 43}}, {'0/04/2016': {u'Clinton': 44, u'Trump': 45}}]
-State; Michigan
-rp; [{'0/04/2016': {u'Cruz': 18, u'Trump': 41, u'Rubio': 8, u'Kasich': 23}}, {'0/04/2016': {u'Cruz': 23, u'Trump': 36, u'Rubio': 13, u'Kasich': 21}}, {'0/04/2016': {u'Cruz': 23, u'Trump': 41, u'Rubio': 8, u'Kasich': 23}}, {'0/04/2016': {u'Cruz': 19, u'Trump': 42, u'Rubio': 9, u'Kasich': 20}}]
-bp; [{'0/04/2016': {u'Sanders': 34, u'Clinton': 61}}, {'0/04/2016': {u'Sanders': 42, u'Clinton': 55}}, {'0/04/2016': {u'Sanders': 29, u'Clinton': 66}}]
-gp; [{'0/04/2016': {u'Cruz': 39, u'Clinton': 49}}, {'0/04/2016': {u'Sanders': 47, u'Kasich': 42}}, {'0/04/2016': {u'Clinton': 41, u'Kasich': 46}}, {'0/04/2016': {u'Sanders': 55, u'Trump': 36}}, {'0/04/2016': {u'Sanders': 56, u'Cruz': 35}}, {'0/04/2016': {u'Clinton': 49, u'Trump': 38}}, {'0/04/2016': {u'Clinton': 47, u'Trump': 37}}]
 State; Utah
 rp; [{'0/04/2016': {u'Cruz': 42, u'Trump': 21, u'Rubio': 17, u'Kasich': 13}}, {'0/04/2016': {u'Cruz': 53, u'Trump': 11, u'Kasich': 29}}]
 bp; [{'0/04/2016': {u'Sanders': 52, u'Clinton': 44}}]
 gp; [{'0/04/2016': {u'Sanders': 39, u'Cruz': 53}}, {'0/04/2016': {u'Sanders': 35, u'Kasich': 54}}, {'0/04/2016': {u'Cruz': 60, u'Clinton': 32}}, {'0/04/2016': {u'Clinton': 29, u'Kasich': 59}}, {'0/04/2016': {u'Clinton': 38, u'Trump': 36}}, {'0/04/2016': {u'Sanders': 48, u'Trump': 37}}]
+State; Michigan
+rp; [{'0/04/2016': {u'Cruz': 18, u'Trump': 41, u'Rubio': 8, u'Kasich': 23}}, {'0/04/2016': {u'Cruz': 23, u'Trump': 36, u'Rubio': 13, u'Kasich': 21}}, {'0/04/2016': {u'Cruz': 23, u'Trump': 41, u'Rubio': 8, u'Kasich': 23}}, {'0/04/2016': {u'Cruz': 19, u'Trump': 42, u'Rubio': 9, u'Kasich': 20}}]
+bp; [{'0/04/2016': {u'Sanders': 34, u'Clinton': 61}}, {'0/04/2016': {u'Sanders': 42, u'Clinton': 55}}, {'0/04/2016': {u'Sanders': 29, u'Clinton': 66}}]
+gp; [{'0/04/2016': {u'Cruz': 39, u'Clinton': 49}}, {'0/04/2016': {u'Sanders': 47, u'Kasich': 42}}, {'0/04/2016': {u'Clinton': 41, u'Kasich': 46}}, {'0/04/2016': {u'Sanders': 55, u'Trump': 36}}, {'0/04/2016': {u'Sanders': 56, u'Cruz': 35}}, {'0/04/2016': {u'Clinton': 49, u'Trump': 38}}, {'0/04/2016': {u'Clinton': 47, u'Trump': 37}}]
+State; Florida
+rp; [{'0/04/2016': {u'Rubio': 27, u'Kasich': 9, u'Trump': 44, u'Cruz': 17}}, {'0/04/2016': {u'Rubio': 22, u'Kasich': 10, u'Trump': 46, u'Cruz': 14}}, {'0/04/2016': {u'Rubio': 26, u'Kasich': 10, u'Trump': 44, u'Cruz': 18}}, {'0/04/2016': {u'Rubio': 24, u'Kasich': 9, u'Trump': 44, u'Cruz': 20}}]
+bp; [{'0/04/2016': {u'Sanders': 34, u'Clinton': 60}}, {'0/04/2016': {u'Sanders': 32, u'Clinton': 57}}, {'0/04/2016': {u'Sanders': 37, u'Clinton': 58}}, {'0/04/2016': {u'Sanders': 34, u'Clinton': 61}}]
+gp; [{'0/04/2016': {u'Rubio': 46, u'Clinton': 47}}, {'0/04/2016': {u'Rubio': 48, u'Clinton': 44}}, {'0/04/2016': {u'Rubio': 44, u'Clinton': 45}}, {'0/04/2016': {u'Cruz': 43, u'Clinton': 48}}, {'0/04/2016': {u'Cruz': 47, u'Clinton': 46}}, {'0/04/2016': {u'Cruz': 44, u'Clinton': 46}}, {'0/04/2016': {u'Sanders': 48, u'Cruz': 41}}, {'0/04/2016': {u'Sanders': 50, u'Trump': 42}}, {'0/04/2016': {u'Clinton': 49, u'Trump': 41}}, {'0/04/2016': {u'Clinton': 50, u'Trump': 43}}, {'0/04/2016': {u'Clinton': 44, u'Trump': 45}}]
 State; North Carolina
 rp; [{'0/04/2016': {u'Cruz': 33, u'Trump': 44, u'Rubio': 7, u'Kasich': 11}}, {'0/04/2016': {u'Cruz': 28, u'Trump': 48, u'Rubio': 8, u'Kasich': 12}}, {'0/04/2016': {u'Cruz': 26, u'Trump': 32, u'Rubio': 11, u'Kasich': 11}}, {'0/04/2016': {u'Cruz': 27, u'Trump': 41, u'Rubio': 14, u'Kasich': 11}}]
 bp; [{'0/04/2016': {u'Sanders': 37, u'Clinton': 56}}, {'0/04/2016': {u'Sanders': 34, u'Clinton': 58}}, {'0/04/2016': {u'Sanders': 28, u'Clinton': 57}}, {'0/04/2016': {u'Sanders': 34, u'Clinton': 57}}]

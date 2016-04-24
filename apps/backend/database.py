@@ -10,7 +10,7 @@ import json
 
 def get_database_filepath():
 	filepath = os.path.dirname(os.path.realpath(__file__))
-	database_filepath = filepath.split('lib/model')[0] + "data/"
+	database_filepath = filepath.split('apps/backend')[0] + "data/"
 	return database_filepath
 
 def write_current_races_data(state_data_dict):
@@ -68,12 +68,17 @@ def write_headlines_to_JSON(all_headlines):
 	database_filepath = get_database_filepath()
 	current_races_filepath = database_filepath + "headlines.json"
 	headline_1d_list = []
-	date_sorted_headlines = {}
 	for curr_headline_arr in all_headlines:
 		for curr_headline in curr_headline_arr:
 			headline_1d_list.append(curr_headline)
 	with open(current_races_filepath, 'w') as outfile:
 		json.dump(headline_1d_list, outfile, cls=data_structures.HeadlineEncoder)
+
+def write_poll_data_to_JSON(state_data_dict):
+	database_filepath = get_database_filepath()
+	current_races_filepath = database_filepath + "polldata.json"
+	with open(current_races_filepath, 'w') as outfile:
+		json.dump(state_data_dict, outfile, cls=data_structures.State_Poll_DataEncoder)
 
 def get_old_headlines_data():
 	database_filepath = get_database_filepath()

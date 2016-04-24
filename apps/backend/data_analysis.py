@@ -184,6 +184,7 @@ def get_data_analysis(argv):
 	parse_poll_data(all_poll_data)
 	database.write_current_races_data(state_data_dict) # save state data to database
 	database.write_headlines_data(all_headlines)
+	database.write_poll_data_to_JSON(state_data_dict)
 	database.write_headlines_to_JSON(all_headlines)
 
 def main(argv):
