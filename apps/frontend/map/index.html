@@ -54,29 +54,18 @@
 <svg width="960" height="600" id="statesvg"></svg> <!-- svg to hold the map. -->
 <script src="mapdata.js"></script> <!-- creates uStates. -->
 <script src="http://d3js.org/d3.v3.min.js"></script>
-<iframe id="frmFile" src="https://github.com/sirmarcis/Trump-Stats-Mapper/blob/backend/data/polldata.json" onload="LoadFile();" style="display: none;"></iframe>
+
 
 
 
 <script>
-	function LoadFile() {
-	    var oFrame = document.getElementById("frmFile");
-	    var strRawContents = oFrame.contentWindow.document.body.childNodes[0].innerHTML;
-	    while (strRawContents.indexOf("\r") >= 0)
-	        strRawContents = strRawContents.replace("\r", "");
-	    var arrLines = strRawContents.split("\n");
-	    alert("File " + oFrame.src + " has " + arrLines.length + " lines");
-	    for (var i = 0; i < arrLines.length; i++) {
-	        var curLine = arrLines[i];
-	        alert("Line #" + (i + 1) + " is: '" + curLine + "'");
-	    }
-	}
+	
 
 	function tooltipHtml(n, d){	/* function to create html content string in tooltip div. */
 		return "<h4>"+n+"</h4><table>"+
-			"<tr><td>Sanders</td><td>"+(d.candidate1)+"</td></tr>"+
-			"<tr><td>Clinton</td><td>"+(d.candidate2)+"</td></tr>"+
-			"<tr><td>Other</td><td>"+(d.other)+"</td></tr>"+
+			"<tr><td>"+(d.name1)+"</td><td>"+(d.candidate1)+"</td></tr>"+
+			"<tr><td>"+(d.name2)+"</td><td>"+(d.candidate2)+"</td></tr>"+
+			"<tr><td>"+(d.otherName)+"</td><td>"+(d.other)+"</td></tr>"+
 			"</table>";
 	}
 	function drawBar(precent1,precent2){
@@ -90,33 +79,67 @@
 
 
 	}
+	var candidate1=70, 
+		candidate2=30,
+		other=20;
 	var sampleData ={};	/* Sample random data. */	
 	function redrawMap() {
+		candidate1 -= 1; 
+		candidate2 += 1;
+		other += 1;
 		["HI", "AK", "FL", "SC", "GA", "AL", "NC", "TN", "RI", "CT", "MA",
 		"ME", "NH", "VT", "NY", "NJ", "PA", "DE", "MD", "WV", "KY", "OH", 
 		"MI", "WY", "MT", "ID", "WA", "DC", "TX", "CA", "AZ", "NV", "UT", 
 		"CO", "NM", "OR", "ND", "SD", "NE", "IA", "MS", "IN", "IL", "MN", 
 		"WI", "MO", "AR", "OK", "KS", "LS", "VA"]
 			.forEach(function(d){ 
-				var candidate1=Math.round(100*Math.random()), 
-					candidate2=Math.round(100*Math.random()), 
-					other=Math.round(100*Math.random());
-					if (candidate1>candidate2) {
-						color = 'green';//placeholder color
-					}
-					else {
-						color = 'blue';
-					}
-				sampleData[d]={candidate1, candidate2, 
-						other, color}; 
+				if (candidate1>candidate2) {
+					var green = ['#f7fcf5','#e5f5e0','#c7e9c0','#a1d99b',
+								 '#74c476','#41ab5d','#238b45','#006d2c','#00441b'];
+					var orange = ['#fee6ce','#fdd0a2','#fdae6b',
+								  '#fd8d3c','#f16913','#d94801','#a63603','#7f2704'];
+					var index = candidate1-candidate2;
+					index = Math.floor(index/5);
+					if (index > 7) index = 7;
+					else if (index < 0) index = 0;
+					color = orange[index];
+					
+				}
+				else {
+					var blue = ['#f7fbff','#deebf7','#c6dbef','#9ecae1',
+								'#6baed6','#4292c6','#2171b5','#08519c','#08306b'];
+					var purple = ['#efedf5','#dadaeb','#bcbddc',
+								  '#9e9ac8','#807dba','#6a51a3','#54278f','#3f007d']
+					var index = candidate2-candidate1;
+					index = Math.floor(index/5);
+					if (index > 7) index = 7;
+					else if (index < 0) index = 0;
+					color = purple[index];
+				}
+				name1 = "Trump";
+				name2 = "Clinton";
+				otherName = "Other";
+				//console.log(color + " " + candidate1 + " " + candidate2);
+				sampleData[d]={name1,candidate1,name2,candidate2, 
+						otherName,other,color}; 
 			});
 		/* draw states on id #statesvg */	
 		
 		uStates.draw("#statesvg", sampleData, tooltipHtml);
+		uStates.updateColor("#statesvg",sampleData);
 	}
 	drawBar(0.3,0.6);
 	redrawMap();
+	
+	function resetMap() {
+		candidate1 = 70;
+		candidate2 = 30;
+		other = 20;
+		redrawMap();
+	}
+	
 </script>
 <button onclick="redrawMap()">Click Me!</button>
+<button onclick="resetMap()">Reset</button>
 
 </body>
