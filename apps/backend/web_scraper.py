@@ -8,11 +8,14 @@ from lxml import html
 import requests
 import bs4
 import string
+import os
 		
 def get_website_URLs():
 	"""
 	Called by get_all_headline_data"""
-	f = open('web_sources', 'r')
+	filepath = os.path.dirname(os.path.realpath(__file__)) +"/web_sources"
+	#print filepath
+	f = open(filepath, 'r')
 	websites = []
 	for line in f:
 		if line != "\n":

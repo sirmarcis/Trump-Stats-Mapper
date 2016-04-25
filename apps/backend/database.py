@@ -7,6 +7,18 @@ import os
 import ast
 import data_structures
 import json
+import time
+
+
+def get_datestamp():
+	return str(int(time.strftime("%d"))/7) + "." + (time.strftime("%m.%Y"))
+
+def datestamp_correct_form_p(datestamp):
+	datestamp_list = datestamp.split('.')
+	if len(datestamp_list) != 3:
+		return False
+	else:
+		return True
 
 def get_database_filepath():
 	"""
@@ -88,9 +100,22 @@ def write_poll_data_to_JSON(state_data_dict):
 	"""
 	Writes the poll data to JSON for communication to frontend."""
 	database_filepath = get_database_filepath()
-	current_races_filepath = database_filepath + "polldata.json"
+	current_races_filepath = database_filepath + "polldata_" + get_datestamp() + ".json"
 	with open(current_races_filepath, 'w') as outfile:
 		json.dump(state_data_dict, outfile, cls=data_structures.State_Poll_DataEncoder)
+
+def get_poll_JSON_obj(week):
+	if datestamp_correct_form_p(week):
+		database_filepath = get_database_filepath()
+		current_races_filepath = database_filepath + "polldata_" + week + ".json"
+		if os.path.isfile(current_races_filepath):
+			with open(current_races_filepath, 'r') as infile:
+				data = json.load(infile)
+				return data
+		else:
+			return "No data stored for that week."
+	else:
+		return "Invalid Week Format"
 
 def get_old_headlines_data():
 	"""WIP"""
