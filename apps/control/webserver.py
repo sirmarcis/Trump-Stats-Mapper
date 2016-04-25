@@ -32,6 +32,11 @@ def get_poll_data(week=None):
 		data = database.get_poll_JSON_obj(week)
 	return jsonify(result=data)
 
+@app.route('/get_headline_data')
+def get_headline_data():
+	data = database.get_headline_JSON_obj()
+	return jsonify(result=data)
+
 
 
 # @app.route('/')

@@ -117,6 +117,13 @@ def get_poll_JSON_obj(week):
 	else:
 		return "Invalid Week Format"
 
+def get_headline_JSON_obj():
+	database_filepath = get_database_filepath()
+	current_races_filepath = database_filepath + "headlines.json"
+	with open(current_races_filepath, 'r') as infile:
+		data = json.load(infile)
+		return data
+
 def get_old_headlines_data():
 	"""WIP"""
 	database_filepath = get_database_filepath()
