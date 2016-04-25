@@ -55,11 +55,37 @@
 <svg width="960" height="600" id="statesvg"></svg> <!-- svg to hold the map. -->
 <script src="mapdata.js"></script> <!-- creates uStates. -->
 <script src="http://d3js.org/d3.v3.min.js"></script>
-
+<script type="text/javascript"
+  src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+ <script type="text/javascript">
+  var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
 
 
 
 <script>
+
+///ajax stuff
+$(function() {
+    $('a#calculate').bind('click', function() {
+      $.getJSON($SCRIPT_ROOT + '/_add_numbers', {
+        a: $('input[name="a"]').val(),
+        b: $('input[name="b"]').val()
+      }, function(data) {
+        $("#result").text(data.result);
+      });
+      return false;
+    });
+  });
+
+
+
+
+
+///end ajax stuff
+
+
+
   // function to create html content string in tooltip div.
   function tooltipHtml(n, d){ 
     return "<h4>"+n+"</h4><table>"+
@@ -154,6 +180,14 @@
   }
   
 </script>
+
+<h1>jQuery Example</h1>
+<p>
+  <input type="text" size="5" name="a"> +
+  <input type="text" size="5" name="b"> =
+  <span id="result">?</span>
+<p><a href=# id="calculate">calculate server side</a>
+
 <button onclick="redrawMap()">Click Me!</button>
 <button onclick="resetMap()">Reset</button>
 

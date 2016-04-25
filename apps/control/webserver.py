@@ -1,6 +1,6 @@
 import sys
 import os
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 app = Flask(__name__)
 
 
@@ -36,6 +36,13 @@ def get_poll_data(week=None):
 def get_headline_data():
 	data = database.get_headline_JSON_obj()
 	return jsonify(result=data)
+
+
+@app.route('/_add_numbers')
+def add_numbers():
+    a = request.args.get('a', 0, type=int)
+    b = request.args.get('b', 0, type=int)
+    return jsonify(result=a + b)
 
 
 
