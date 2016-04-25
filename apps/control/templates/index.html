@@ -1,0 +1,69 @@
+<!doctype html>
+<html ng-app="trump-stats-mapper">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <link rel="stylesheet" type="text/css" href="../static/web/css/styles.css">
+  <link rel="stylesheet" type="text/css" href="../static/web/css/bootstrap-modified.css">
+
+  <title>Trump Stats Mapper</title>
+  <meta name="description" content="For Software Development and Documentation">
+
+</head>
+<body ng-controller="TrumpStatsMapperCtrl">
+
+  <div id="options-container">
+    <div id="candidates-box">
+      <h2>Candidates</h2>
+      <form action="">
+        <h3>Democrat Party</h3>
+        <input type="checkbox" name="candidate" value="clinton">Clinton<br>
+        <input type="checkbox" name="candidate" value="sanders">Sanders<br>
+
+        <h3>Republican Party</h3>
+        <input type="checkbox" name="candidate" value="trump">Trump<br>
+        <input type="checkbox" name="candidate" value="cruz">Cruz<br>
+        <input type="checkbox" name="candidate" value="kasich">Kasich
+      </form>
+    </div>
+
+    <div id="dateselector-box">
+      <div style="display:inline-block;">
+        <uib-datepicker ng-model="dt" class="well well-sm" datepicker-options="inlineOptions"></uib-datepicker>
+      </div>
+    </div>
+
+    <div id="keywords-box">
+      <h2>Keywords</h2>
+      <span class="keyword">Trump</span><br>
+      <span class="keyword">Cruz</span><br>
+      <span class="keyword">House</span><br>
+      <span class="keyword">War</span><br>
+      <span class="keyword">Obama</span><br>
+      <span class="keyword">Iraq</span><br>
+      <span class="keyword">Wall</span>
+    </div>
+
+  </div>
+
+  <div id="map-box">
+    <iframe src="map_index.html"></iframe>
+  </div>
+
+  <div id="headlines-box">
+      <a href="http://www.realclearpolitics.com/2016/04/06/with_wisconsin_win_cruz_tries_for_upper_hand_379835.html" target="_blank">With Wisconsin Win, Cruz Tries for Upper Hand</a><br>
+      <a href="http://www.realclearpolitics.com/2016/04/06/sanders_isn039t_catching_clinton_because_math_379840.html" target="_blank">Sanders Isn't Catching Clinton. Because, Math</a><br>
+      <a href="http://www.realclearpolitics.com/2016/04/06/open_letter_to_trump_5_things_you_need_to_do_now_379851.html" target="_blank">Open Letter to Trump: 5 Things You Need to Do Now</a><br>
+      <a href="http://www.realclearpolitics.com/2016/04/06/bush_quotconservatismquot_expanded_govt_trump_would_trim_the_fat_379841.html" target="_blank">Bush "Conservatism" Expanded Govt, Trump Would Trim the Fat</a><br>
+      <a href="http://www.realclearpolitics.com/2016/04/06/what_if_the_supreme_court_were_liberal_379870.html" target="_blank">What If the Supreme Court Were Liberal?</a>
+  </div>
+  
+</body>
+
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.js"></script>
+<script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.3.1.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='web/js/app.js') }}"></script>
+
+</html>
