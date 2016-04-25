@@ -53,7 +53,8 @@
 <div id="tooltip"></div><!-- div to hold tooltip. -->
 <svg width="960" height="100" id="barsvg"></svg> <!-- svg to hold the bar. -->
 <svg width="960" height="600" id="statesvg"></svg> <!-- svg to hold the map. -->
-<script src="mapdata.js"></script> <!-- creates uStates. -->
+<script type="text/javascript" src="{{ url_for('static', filename='mapdata.js') }}"></script><!-- creates uStates. --> 
+<!-- <script src="mapdata.js"></script> -->
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script type="text/javascript"
   src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
