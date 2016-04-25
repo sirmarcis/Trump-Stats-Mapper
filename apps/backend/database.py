@@ -88,7 +88,7 @@ def write_headlines_to_JSON(all_headlines):
 	"""
 	Write the headline and keyword data in a json readable format."""
 	database_filepath = get_database_filepath()
-	current_races_filepath = database_filepath + "headlines.json"
+	current_races_filepath = database_filepath + "headlines_" + get_datestamp() + ".json"
 	headline_1d_list = []
 	for curr_headline_arr in all_headlines:
 		for curr_headline in curr_headline_arr:
@@ -117,12 +117,18 @@ def get_poll_JSON_obj(week):
 	else:
 		return "Invalid Week Format"
 
-def get_headline_JSON_obj():
-	database_filepath = get_database_filepath()
-	current_races_filepath = database_filepath + "headlines.json"
-	with open(current_races_filepath, 'r') as infile:
-		data = json.load(infile)
-		return data
+def get_headline_JSON_obj(week):
+	if datestamp_correct_form_p(week):
+		database_filepath = get_database_filepath()
+		current_races_filepath = database_filepath + "headlines_" + week + ".json"
+		if os.path.isfile(current_races_filepath):
+			with open(current_races_filepath, 'r') as infile:
+				data = json.load(infile)
+				return data
+		else:
+			return "No data stored for that week."
+	else:
+		return "Invalid Week Format"
 
 def get_old_headlines_data():
 	"""WIP"""
