@@ -24,22 +24,28 @@ def get_index_filepath():
 
 @app.route('/')
 def index():
-	return render_template("index_test.html")
+	return render_template("index.html")
 
-@app.route('/get_poll_data/<week>')
-def get_poll_data(week=None):
+@app.route('/map_index.html')
+def map_index():
+	return render_template("map_index.html")
+
+@app.route('/get_poll_data')
+def get_poll_data():
+	week=request.args.get('week', '', type=str)
 	data_analysis.get_data_analysis([])
 	data = None
-	if week == None or week == "curr_week":
+	if week == '' or week == "curr_week":
 		data = database.get_poll_JSON_obj(database.get_datestamp())
 	else:
 		data = database.get_poll_JSON_obj(week)
 	return jsonify(result=data)
 
-@app.route('/get_headline_data/<week>')
-def get_headline_data(week=None):
+@app.route('/get_headline_data')
+def get_headline_data():
+	week=request.args.get('week', '', type=str)
 	data = None
-	if week == None or week == "curr_week":
+	if week == '' or week == "curr_week":
 		data = database.get_headline_JSON_obj(database.get_datestamp())
 	else:
 		data = database.get_headline_JSON_obj(week)

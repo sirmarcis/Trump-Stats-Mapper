@@ -79,6 +79,14 @@ $(function() {
     });
   });
 
+  $(function() {
+    $.getJSON($SCRIPT_ROOT + '/get_poll_data', {
+        week:'curr_week'
+      }, function(data) {
+        console.log(data.result);
+      });
+  });
+
 
 
 
