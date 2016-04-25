@@ -1,6 +1,8 @@
 """
 database.py
 Written by: Anders Maraviglia
+
+All basic queries for data from the backend should go through here.
 """
 
 import os
@@ -105,6 +107,8 @@ def write_poll_data_to_JSON(state_data_dict):
 		json.dump(state_data_dict, outfile, cls=data_structures.State_Poll_DataEncoder)
 
 def get_poll_JSON_obj(week):
+	"""
+	Gets the poll data from the specified weeks JSON file, week must be of the correct format and data must exist for said week."""
 	if datestamp_correct_form_p(week):
 		database_filepath = get_database_filepath()
 		current_races_filepath = database_filepath + "polldata_" + week + ".json"
@@ -118,6 +122,8 @@ def get_poll_JSON_obj(week):
 		return "Invalid Week Format"
 
 def get_headline_JSON_obj(week):
+	"""
+	Gets the headline data from the specified weeks JSON file, week must be of the correct format and data must exist for said week."""
 	if datestamp_correct_form_p(week):
 		database_filepath = get_database_filepath()
 		current_races_filepath = database_filepath + "headlines_" + week + ".json"
