@@ -69,7 +69,11 @@
 			"</table>";
 	}
 	
-	
+	{"HI", "AK", "FL", "SC", "GA", "AL", "NC", "TN", "RI", "CT", "MA",
+		"ME", "NH", "VT", "NY", "NJ", "PA", "DE", "MD", "WV", "KY", "OH", 
+		"MI", "WY", "MT", "ID", "WA", "DC", "TX", "CA", "AZ", "NV", "UT", 
+		"CO", "NM", "OR", "ND", "SD", "NE", "IA", "MS", "IN", "IL", "MN", 
+		"WI", "MO", "AR", "OK", "KS", "LS", "VA"}
 	
 	var candidate1=70;
 	var candidate2=30;
@@ -77,7 +81,7 @@
 	// Sample random data.
 	var sampleData ={};		
 	
-	// function to redraw the map with new data
+	// function to draw the progress bar with new data
 	function drawBar(precent1,precent2){
 
 		var bar = d3.select("#barsvg").append("rect").attr("x",120).attr("y",10).attr("rx",10).attr("ry",10).attr("width",720).attr("height",75).style("fill","black");
@@ -87,22 +91,19 @@
 		var barleft = d3.select("#barsvg").append("rect").attr("x",130).attr("y",22).attr("width",blue_width).attr("height",50).style("fill","blue");
 		var barright = d3.select("#barsvg").append("rect").attr("x",130+700-red_width).attr("y",22).attr("width",red_width).attr("height",50).style("fill","red");
 
-
 	}
-	var candidate1=70, 
-		candidate2=30,
-		other=20;
-	var sampleData = {};	/* Sample random data. */	 
+
+	
 	function redrawMap() {
 		candidate1 -= 1; 
 		candidate2 += 1;
 		other += 1;
 		// go through the states with data
-		["HI", "AK", "FL", "SC", "GA", "AL", "NC", "TN", "RI", "CT", "MA",
-		"ME", "NH", "VT", "NY", "NJ", "PA", "DE", "MD", "WV", "KY", "OH", 
-		"MI", "WY", "MT", "ID", "WA", "DC", "TX", "CA", "AZ", "NV", "UT", 
-		"CO", "NM", "OR", "ND", "SD", "NE", "IA", "MS", "IN", "IL", "MN", 
-		"WI", "MO", "AR", "OK", "KS", "LS", "VA"]
+		["Hawaii", "Alaska", "Florida", "New Hampshire", "Michigan", "Vermont", "Maine", "Rhode Island", "New York", "Pennsylvania", "Delaware",
+		"Maryland", "Virginia", "West Virginia", "Ohio", "Indiana", "Illinois", "Connecticut", "Wisconsin", "North Carolina", "Washington DC", "Massachusetts", 
+		"Tennessee", "Arkansas", "Missouri", "Georgia", "South Carolina", "Kentucky", "Alabama", "Louisiana", "Mississippi", "Iowa", "Minnesota", 
+		"Oklahoma", "Texas", "New Mexico", "Kansas", "Nebraska", "South Dakota", "North Dakota", "Wyoming", "Montana", "Colarado", "Idaho", 
+		"Utah", "Arizona", "Nevada", "Oregon", "Washington", "California", "New Jersey"]
 			.forEach(function(d){ 
 				// check who is winning and by how much
 				if (candidate1>candidate2) {
