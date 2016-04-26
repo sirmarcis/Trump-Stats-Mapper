@@ -14,6 +14,11 @@ REQUIREMENTS:
 			$ sudo pip install -U nltk
 		- To test, run 'python' then 'import nltk'
 
+	- Packages you need in NLTK, to install them, open a python instance and run 'import nltk', then 'nltk.download()' and download the following packages:
+		- punkt 
+		- averaged_perceptron_tagger
+		- maxent_treebank_pos_tagger 
+
 Just for ders:
 	- use python from /usr/bin/python2.7
 
