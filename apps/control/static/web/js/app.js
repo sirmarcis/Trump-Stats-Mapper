@@ -4,7 +4,11 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
   
   $scope.headlines = {};
 
- 
+  $http.get("headlines_3.04.2016.json").then(function(response) {
+    $scope.headlines = response.data;
+  });
+
+  console.log(JSON.stringify($scope.headlines, null, 2));  
 
   $scope.today = function() {
     $scope.dt = new Date();
