@@ -11,6 +11,7 @@ import data_structures
 import json
 import time
 import states_list
+import platform
 
 
 def get_datestamp():
@@ -27,7 +28,12 @@ def get_database_filepath():
 	"""
 	Gets the filepath to the database, not hardcoded for a single local machine."""
 	filepath = os.path.dirname(os.path.realpath(__file__))
-	database_filepath = filepath.split('apps/backend')[0] + "data/"
+	database_filepath = ""
+	if platform.system() == "Windows":
+		database_filepath = filepath.split('apps\\backend')[0] + "data\\"
+	else:
+		database_filepath = filepath.split('apps/backend')[0] + "data/"
+
 	return database_filepath
 
 def write_current_races_data(state_data_dict):

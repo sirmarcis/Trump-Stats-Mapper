@@ -6,21 +6,21 @@ Written by: Steven Fiacco, Anders Maraviglia
 import sys
 import os
 from flask import Flask, render_template, jsonify, request
+import platform
 app = Flask(__name__)
 
 def get_backend_filepath():
 	filepath = os.path.dirname(os.path.realpath(__file__))
-	database_filepath = filepath.split('control')[0] + "backend/"
+	database_filepath = ""
+	if platform.system() == "Windows":
+		database_filepath = filepath.split('control')[0] + "backend\\"
+	else:
+		database_filepath = filepath.split('control')[0] + "backend/"
 	return database_filepath
 
 sys.path.append(get_backend_filepath())
 import database
 import data_analysis
-
-def get_index_filepath():
-	filepath = os.path.dirname(os.path.realpath(__file__))
-	database_filepath = filepath.split('apps')[0]
-	return database_filepath
 
 @app.route('/')
 def index():
