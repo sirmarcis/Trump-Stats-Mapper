@@ -10,6 +10,7 @@ import ast
 import data_structures
 import json
 import time
+import states_list
 
 
 def get_datestamp():
@@ -86,17 +87,37 @@ def write_headlines_data(all_headlines):
 			f.write(curr_headline.datestamp + "\n")
 			f.write(str(curr_headline.keywords) + "\n\n")
 
+def is_current_article_p(datestamp, today_datestamp):
+	"""
+	Called by write_headlines_to_JSON.
+	Returns true if the datestamp is within the current week,
+	Returns false otherwise."""
+	datestamp_list = datestamp.split(' ')
+	month_num = states_list.month_hash[datestamp_list[2]]
+	custom_art_datestamp = str(int(datestamp_list[1])/7) + "." + month_num + "." + datestamp_list[3]
+	if today_datestamp == custom_art_datestamp:
+		return True
+	else:
+		return False
+
 def write_headlines_to_JSON(all_headlines):
 	"""
 	Write the headline and keyword data in a json readable format."""
 	database_filepath = get_database_filepath()
-	current_races_filepath = database_filepath + "headlines_" + get_datestamp() + ".json"
+	today_datestamp = get_datestamp()
+	current_races_filepath = database_filepath + "headlines_" + today_datestamp + ".json"
 	headline_1d_list = []
+	headline_list_dict = {}
 	for curr_headline_arr in all_headlines:
 		for curr_headline in curr_headline_arr:
+			if is_current_article_p(curr_headline.sub_datestamp, today_datestamp):
+				if curr_headline.sub_datestamp in headline_list_dict.keys():
+					headline_list_dict[curr_headline.sub_datestamp].append(curr_headline)
+				else:
+					headline_list_dict[curr_headline.sub_datestamp] = [curr_headline]
 			headline_1d_list.append(curr_headline)
 	with open(current_races_filepath, 'w') as outfile:
-		json.dump(headline_1d_list, outfile, cls=data_structures.HeadlineEncoder)
+		json.dump(headline_list_dict, outfile, cls=data_structures.HeadlineEncoder)
 
 def write_poll_data_to_JSON(state_data_dict):
 	"""

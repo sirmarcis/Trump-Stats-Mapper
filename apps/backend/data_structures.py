@@ -40,7 +40,16 @@ class Headline:
 		self.keywords = []
 		self.source = source
 		self.datestamp = datestamp #str(int(time.strftime("%d"))/7) + "/" + (time.strftime("%m/%Y"))
+		self.sub_datestamp = self.break_datestamp(datestamp)
 		
+	def break_datestamp(self, datestamp):
+		datestamp_list = datestamp.split(' ')
+		space_datestamp_list = []
+		for elt in datestamp_list:
+			space_datestamp_list.append(elt)
+			space_datestamp_list.append(" ")
+		return ''.join(space_datestamp_list[0:7])
+
 	def __str__(self):
 		string = self.headline_str + "\n" + self.link_str + "\n"
 		return string
