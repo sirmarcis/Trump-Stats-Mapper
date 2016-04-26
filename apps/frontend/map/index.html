@@ -69,11 +69,9 @@
 			"</table>";
 	}
 	
-	{"HI", "AK", "FL", "SC", "GA", "AL", "NC", "TN", "RI", "CT", "MA",
-		"ME", "NH", "VT", "NY", "NJ", "PA", "DE", "MD", "WV", "KY", "OH", 
-		"MI", "WY", "MT", "ID", "WA", "DC", "TX", "CA", "AZ", "NV", "UT", 
-		"CO", "NM", "OR", "ND", "SD", "NE", "IA", "MS", "IN", "IL", "MN", 
-		"WI", "MO", "AR", "OK", "KS", "LS", "VA"}
+	function tooltipBar(n,percent) {
+		return "<h4>"+n+" "+percent+"</h4>";
+	}
 	
 	var candidate1=70;
 	var candidate2=30;
@@ -82,29 +80,58 @@
 	var sampleData ={};		
 	
 	// function to draw the progress bar with new data
-	function drawBar(precent1,precent2){
-
+	function drawBar(percent1,percent2){
+		// clamping of percents
+		if (percent1 > 1) percent1 = 1;
+		if (percent2 > 1) percent2 = 1;
+		if (percent1 < 0) percent1 = 0;
+		if (percent2 < 0) percent2 = 0;
+		// delete previous contents
+		d3.select("#barsvg").selectAll("*").remove();
+		// draw background black bar
 		var bar = d3.select("#barsvg").append("rect").attr("x",120).attr("y",10).attr("rx",10).attr("ry",10).attr("width",720).attr("height",75).style("fill","black");
-		var blue_width =700*precent1;
-		var red_width =700*precent2;		
+		var blue_width =700*percent1;
+		var red_width =700*percent2;
+		var names = ["Trump","Clinton","Other"]
+		var percents = [percent1*100,percent2*100,Math.floor((1-percent1-percent2).toPrecision(2) * 100 )];
+		// draw main bars
+		function mouseOver(d) {
+			d3.select("#tooltip").transition().duration(200).style("opacity",.9);
+			d3.select("#tooltip").html(tooltipBar(names[d],percents[d]))
+				.style("left", (d3.event.pageX) + "px")
+				.style("top", (d3.event.pageY - 28) + "px");
+		}
+		
+		function mouseOut() {
+			d3.select("#tooltip").transition().duration(500).style("opacity",0);
+		}
+		
 		var background_bar =d3.select("#barsvg").append("rect").attr("x",130).attr("y",22).attr("width",700).attr("height",50).style("fill","grey");
 		var barleft = d3.select("#barsvg").append("rect").attr("x",130).attr("y",22).attr("width",blue_width).attr("height",50).style("fill","blue");
 		var barright = d3.select("#barsvg").append("rect").attr("x",130+700-red_width).attr("y",22).attr("width",red_width).attr("height",50).style("fill","red");
-
+	
+		d3.select("#barsvg").selectAll("rect").on("mouseover",mouseOver).on("mouseout",mouseOut);
 	}
 
-	
+	// main function that redraws the map
 	function redrawMap() {
 		candidate1 -= 1; 
 		candidate2 += 1;
 		other += 1;
+		//variables to get average for progress bar
+		var count = 0;
+		var totalC1 = 0;
+		var totalC2 = 0;
 		// go through the states with data
 		["Hawaii", "Alaska", "Florida", "New Hampshire", "Michigan", "Vermont", "Maine", "Rhode Island", "New York", "Pennsylvania", "Delaware",
 		"Maryland", "Virginia", "West Virginia", "Ohio", "Indiana", "Illinois", "Connecticut", "Wisconsin", "North Carolina", "Washington DC", "Massachusetts", 
 		"Tennessee", "Arkansas", "Missouri", "Georgia", "South Carolina", "Kentucky", "Alabama", "Louisiana", "Mississippi", "Iowa", "Minnesota", 
 		"Oklahoma", "Texas", "New Mexico", "Kansas", "Nebraska", "South Dakota", "North Dakota", "Wyoming", "Montana", "Colarado", "Idaho", 
 		"Utah", "Arizona", "Nevada", "Oregon", "Washington", "California", "New Jersey"]
-			.forEach(function(d){ 
+			.forEach(function(d){
+				count += 1;
+				totalC1 += candidate1;
+				totalC2 += candidate2;
 				// check who is winning and by how much
 				if (candidate1>candidate2) {
 
@@ -142,8 +169,10 @@
 		
 		uStates.draw("#statesvg", sampleData, tooltipHtml);
 		uStates.updateColor("#statesvg",sampleData);
+		//console.log("Hello " + (totalC1/count).toPrecision(2) + " " + (totalC2/count).toPrecision(2));
+		drawBar((totalC1/count/100).toPrecision(2),(totalC2/count/100).toPrecision(2));
 	}
-	drawBar(0.3,0.6);
+	//drawBar(candidate1/100,candidate2/100);
 	redrawMap();
 	
 	// Reset the map
