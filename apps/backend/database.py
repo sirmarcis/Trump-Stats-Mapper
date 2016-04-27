@@ -133,6 +133,14 @@ def write_poll_data_to_JSON(state_data_dict):
 	with open(current_races_filepath, 'w') as outfile:
 		json.dump(state_data_dict, outfile, cls=data_structures.State_Poll_DataEncoder)
 
+def write_finished_states_to_JSON(finished_states_dict):
+	"""
+	Writes the finished states results data to JSON for communication to frontend."""
+	database_filepath = get_database_filepath()
+	current_races_filepath = database_filepath + "finished_states.json"
+	with open(current_races_filepath, 'w') as outfile:
+		json.dump(finished_states_dict, outfile, cls=data_structures.State_Poll_DataEncoder)
+
 def get_poll_JSON_obj(week):
 	"""
 	Gets the poll data from the specified weeks JSON file, week must be of the correct format and data must exist for said week."""
