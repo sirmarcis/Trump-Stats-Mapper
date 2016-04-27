@@ -144,7 +144,14 @@ function getpolldata(weekstring,handledata){
     // delete previous contents
     d3.select("#barsvg").selectAll("*").remove();
     // draw background black bar
-    var bar = d3.select("#barsvg").append("rect").attr("x",120).attr("y",10).attr("rx",10).attr("ry",10).attr("width",720).attr("height",75).style("fill","black");
+    var bar = d3.select("#barsvg").append("rect")
+				.attr("x",120)
+				.attr("y",10)
+				.attr("rx",10)
+				.attr("ry",10)
+				.attr("width",720)
+				.attr("height",75)
+				.style("fill","black");
     var blue_width =700*percent1;
     var red_width =700*percent2;
     var names = ["Trump","Clinton","Other"]
@@ -161,11 +168,28 @@ function getpolldata(weekstring,handledata){
       d3.select("#tooltip").transition().duration(500).style("opacity",0);
     }
     
-    var background_bar =d3.select("#barsvg").append("rect").attr("x",130).attr("y",22).attr("width",700).attr("height",50).style("fill","grey");
-    var barleft = d3.select("#barsvg").append("rect").attr("x",130).attr("y",22).attr("width",blue_width).attr("height",50).style("fill","blue");
-    var barright = d3.select("#barsvg").append("rect").attr("x",130+700-red_width).attr("y",22).attr("width",red_width).attr("height",50).style("fill","red");
+    var background_bar = d3.select("#barsvg").append("rect")
+							.attr("x",130)
+							.attr("y",22)
+							.attr("width",700)
+							.attr("height",50)
+							.style("fill","grey");
+    var barleft = d3.select("#barsvg").append("rect")
+							.attr("x",130)
+							.attr("y",22)
+							.attr("width",blue_width)
+							.attr("height",50)
+							.style("fill","blue");
+    var barright = d3.select("#barsvg").append("rect")
+							.attr("x",130+700-red_width)
+							.attr("y",22)
+							.attr("width",red_width)
+							.attr("height",50)
+							.style("fill","red");
   
-    d3.select("#barsvg").selectAll("rect").on("mouseover",mouseOver).on("mouseout",mouseOut);
+    d3.select("#barsvg").selectAll("rect")
+		.on("mouseover",mouseOver)
+		.on("mouseout",mouseOut);
   }
 
   // main function that redraws the map
@@ -353,7 +377,7 @@ function getpolldata(weekstring,handledata){
   <span id="result">?</span>
 <p><a href=# id="calculate">calculate server side</a>
 
-<button onclick="redrawMap()">Click Me!</button>
+<button onclick="redrawMap()">Redraw Map</button>
 <button onclick="resetMap()">Reset</button>
 
 </body>
