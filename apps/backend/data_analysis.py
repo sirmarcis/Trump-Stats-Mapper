@@ -188,10 +188,14 @@ def get_data_analysis(argv):
 					print sorted_keyword[0], ", associated tokens: ", assc_dict[sorted_keyword[0]]
 			final_keywords.append(sorted_keyword[0])
 	parse_poll_data(all_poll_data, state_data_dict) # self explanitory
+	finished_states_dict = web_scraper.get_finished_states_dict()
 	database.write_current_races_data(state_data_dict) # save state data to database
 	database.write_headlines_data(all_headlines)
 	database.write_poll_data_to_JSON(state_data_dict) # write poll data to json file
 	database.write_headlines_to_JSON(all_headlines) # write headline data to json file
+	database.write_finished_states_to_JSON(finished_states_dict)
+	
+
 
 def get_state_poll_data():
 	return state_data_dict
