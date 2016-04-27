@@ -78,21 +78,33 @@ $(function() {
     });
   });
 
-  $(function() {
-    $.getJSON($SCRIPT_ROOT + '/get_poll_data', {
-        week:'curr_week'
-      }, function(data) {
-        console.log(data.result);
-      });
-  });
+  // $(function() {
+  //   $.getJSON($SCRIPT_ROOT + '/get_poll_data', {
+  //       week:'curr_week'
+  //     }, function(data) {
+  //       console.log(data.result);
+  //     });
+  // });
 
-  $(function() {
-    $.getJSON($SCRIPT_ROOT + '/get_headline_data', {
-        week:'curr_week'
-      }, function(data) {
-        console.log(data.result);
+  // $(function() {
+  //   $.getJSON($SCRIPT_ROOT + '/get_headline_data', {
+  //       week:'curr_week'
+  //     }, function(data) {
+  //       console.log(data.result);
+  //     });
+  // });
+
+
+
+//poll call
+function getpolldata(weekstring,handledata){
+ 
+  $.getJSON($SCRIPT_ROOT + '/get_poll_data', {
+          week: weekstring
+        }, function(data) {
+          handledata(data.result);
       });
-  });
+}
 
 
 
@@ -158,13 +170,17 @@ $(function() {
 
   // main function that redraws the map
   function redrawMap() {
-    candidate1 -= 1; 
-    candidate2 += 1;
-    other += 1;
+    // candidate1 -= 1; 
+    // candidate2 += 1;
+    // other += 1;
     //variables to get average for progress bar
     var count = 0;
+    var candidate1 = 0;
+    var candidate2 = 0;
     var totalC1 = 0;
     var totalC2 = 0;
+    var sampleData = {};
+    var color = '#ffffff';
     // go through the states with data
     ["Hawaii", "Alaska", "Florida", "New Hampshire", "Michigan", "Vermont", "Maine", "Rhode Island", "New York", "Pennsylvania", "Delaware",
     "Maryland", "Virginia", "West Virginia", "Ohio", "Indiana", "Illinois", "Connecticut", "Wisconsin", "North Carolina", "Washington DC", "Massachusetts", 
@@ -172,12 +188,51 @@ $(function() {
     "Oklahoma", "Texas", "New Mexico", "Kansas", "Nebraska", "South Dakota", "North Dakota", "Wyoming", "Montana", "Colarado", "Idaho", 
     "Utah", "Arizona", "Nevada", "Oregon", "Washington", "California", "New Jersey"]
       .forEach(function(d){
-        count += 1;
-        totalC1 += candidate1;
-        totalC2 += candidate2;
-        // check who is winning and by how much
-        if (candidate1>candidate2) {
+        var name1 = "Clinton";
+        var name2 = "Sanders";
+        var otherName = "Other";
+        var other = 0;
+        sampleData[d] = {name1,candidate1,name2,candidate2,otherName,other,color};
+      });
+    getpolldata('curr_week',function(output) {//sync
+      // output.layoutDescriptions[0].state_name;
+    //   ["Hawaii", "Alaska", "Florida", "New Hampshire", "Michigan", "Vermont", "Maine", "Rhode Island", "New York", "Pennsylvania", "Delaware",
+    // "Maryland", "Virginia", "West Virginia", "Ohio", "Indiana", "Illinois", "Connecticut", "Wisconsin", "North Carolina", "Washington DC", "Massachusetts", 
+    // "Tennessee", "Arkansas", "Missouri", "Georgia", "South Carolina", "Kentucky", "Alabama", "Louisiana", "Mississippi", "Iowa", "Minnesota", 
+    // "Oklahoma", "Texas", "New Mexico", "Kansas", "Nebraska", "South Dakota", "North Dakota", "Wyoming", "Montana", "Colarado", "Idaho", 
+    // "Utah", "Arizona", "Nevada", "Oregon", "Washington", "California", "New Jersey"].forEach(function(state){
 
+    //   output.size();
+    //   console.log(output[state]);
+    //   console.log(output[state]["blue_poll_dict_list"]);
+    //   console.log(output[state]["blue_poll_dict_list"].size());
+
+    // })
+
+    var key, counter = 0;
+    color = '#ffffff';
+    for(key in output) {
+      counter = 0;
+      candidate1 = 0;
+      candidate2 = 0;
+      var key2;
+      for (key2 in output[key]["blue_poll_dict_list"]){
+        var key3;
+        for (key3 in output[key]["blue_poll_dict_list"][key2]){
+          if (output[key]["blue_poll_dict_list"][key2][key3].hasOwnProperty("Clinton")) {
+            candidate1 += output[key]["blue_poll_dict_list"][key2][key3]["Clinton"];
+          }
+          if (output[key]["blue_poll_dict_list"][key2][key3].hasOwnProperty("Sanders")) {
+            candidate2 += output[key]["blue_poll_dict_list"][key2][key3]["Sanders"];
+          }
+        }
+        counter++;
+      }
+      console.log("State: " + key +"candidate1: " + candidate1 + " candidate2: " + candidate2);
+      if (counter > 0){
+        candidate1 = Math.floor(candidate1/counter);
+        candidate2 = Math.floor(candidate2/counter);
+        if (candidate1>candidate2) {
           var green = ['#f7fcf5','#e5f5e0','#c7e9c0','#a1d99b',
                  '#74c476','#41ab5d','#238b45','#006d2c','#00441b'];
           var orange = ['#fee6ce','#fdd0a2','#fdae6b',
@@ -187,8 +242,6 @@ $(function() {
           if (index > 7) index = 7;
           else if (index < 0) index = 0;
           color = orange[index];
-          
-
         }
         else {
           var blue = ['#f7fbff','#deebf7','#c6dbef','#9ecae1',
@@ -200,14 +253,79 @@ $(function() {
           if (index > 7) index = 7;
           else if (index < 0) index = 0;
           color = purple[index];
+
         }
-        name1 = "Trump";
-        name2 = "Clinton";
-        otherName = "Other";
-        //console.log(color + " " + candidate1 + " " + candidate2);
-        sampleData[d]={name1,candidate1,name2,candidate2, 
-            otherName,other,color}; 
-      });
+      }
+      var name1 = "Clinton";
+      var name2 = "Sanders";
+      totalC1 += candidate1;
+      totalC2 += candidate2; 
+      var otherName = "Other";
+      var other = 100 - candidate1 - candidate2;
+      sampleData[key]={name1,candidate1,name2,candidate2, 
+            otherName,other,color};
+    }
+    uStates.updateColor("#statesvg",sampleData);
+
+      
+      
+      // for(var i =0; i<50; i++){
+
+      //   console.log(output[i].state_name);
+      // }
+
+
+      // output.forEach(function(d){
+      //   var numPolls = 0;
+      //   var color = '#f7fbff';
+      //   candidate1 = 0;
+      //   candidate2 = 0;
+      //   d["blue_poll_dict_list"].forEach(function(e){
+      //     console.log(e);
+      //     candidate1 += e["Clinton"];
+      //     candidate2 += e["Sanders"];
+      //   })
+      //   count += 1;
+      //   totalC1 += candidate1;
+      //   totalC2 += candidate2;
+      //   // check who is winning and by how much
+      //   if (candidate1>candidate2) {
+
+      //     var green = ['#f7fcf5','#e5f5e0','#c7e9c0','#a1d99b',
+      //            '#74c476','#41ab5d','#238b45','#006d2c','#00441b'];
+      //     var orange = ['#fee6ce','#fdd0a2','#fdae6b',
+      //             '#fd8d3c','#f16913','#d94801','#a63603','#7f2704'];
+      //     var index = candidate1-candidate2;
+      //     index = Math.floor(index/5);
+      //     if (index > 7) index = 7;
+      //     else if (index < 0) index = 0;
+      //     color = orange[index];
+          
+
+      //   }
+      //   else {
+      //     var blue = ['#f7fbff','#deebf7','#c6dbef','#9ecae1',
+      //           '#6baed6','#4292c6','#2171b5','#08519c','#08306b'];
+      //     var purple = ['#efedf5','#dadaeb','#bcbddc',
+      //             '#9e9ac8','#807dba','#6a51a3','#54278f','#3f007d']
+      //     var index = candidate2-candidate1;
+      //     index = Math.floor(index/5);
+      //     if (index > 7) index = 7;
+      //     else if (index < 0) index = 0;
+      //     color = purple[index];
+      //   }
+      //   name1 = "Trump";
+      //   name2 = "Clinton";
+      //   otherName = "Other";
+      //   //console.log(color + " " + candidate1 + " " + candidate2);
+      //   sampleData[d["state_name"]]={name1,candidate1,name2,candidate2, 
+      //       otherName,other,color}; 
+      // })
+    });
+
+
+
+
     // draw states on id #statesvg  
     
     uStates.draw("#statesvg", sampleData, tooltipHtml);
