@@ -26,6 +26,14 @@ def get_website_URLs():
 	f.close()
 	return websites
 
+def get_rcp_primary_result_data(website_url):
+	page = requests.get(website_url)
+	page.raise_for_status()
+	bs_obj = bs4.BeautifulSoup(page.text, 'lxml')
+	results_bs_table = bs_obj.find('table')
+	#table_body = results_bs_table.find('tbody')
+	print results_bs_table
+
 def get_rcp_poll_data(website_url):
 	"""
 	Called by get_all_poll_data, gets poll data from rcp site"""
@@ -91,5 +99,9 @@ def get_all_poll_data():
 	rcp_poll_race_dict = get_rcp_poll_data('http://www.realclearpolitics.com/epolls/latest_polls/') # realclearpolotics poll data
 	return rcp_poll_race_dict
 
+def main():
+	get_rcp_primary_result_data("http://www.realclearpolitics.com/epolls/2016/president/republican_delegate_count.html")
 
+if __name__ == "__main__":
+	main()
 
