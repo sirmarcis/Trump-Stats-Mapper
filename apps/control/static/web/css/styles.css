@@ -1,8 +1,6 @@
 #map-box {
   overflow: hidden;
-  height: 640px;
-  /*border: 2px solid black;
-  background: red;*/
+  height: 770px;
 }
 
 #map-box iframe {
@@ -13,19 +11,14 @@
 #options-container {
   min-width: 200px;
   float: right;
-  /*border: 2px solid black;*/
 }
 
 #candidates-box {
-  /*float: left;
-  border: 2px solid black;*/
   padding-left: 20px;
 }
 
 #dateselector-box {
   min-width: 200px;
-  /*float: left;
-  border: 2px solid black;*/
 }
 
 #keywords-box {
