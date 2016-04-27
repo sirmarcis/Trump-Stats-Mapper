@@ -1,65 +1,117 @@
 #map-box {
   overflow: hidden;
-  height: 770px;
-  /*border: 2px solid black;
-  background: red;*/
 }
-
 #map-box iframe {
   width: 100%;
   height: 100%;
 }
-
+.candidate-label {
+  float: left;
+  width: 10px;
+  height: 10px;
+  margin: 5px;
+  border: 1p solid rgba(0,0,0,0.2);
+}
+.clinton {
+  background: #0A1CC9;
+}
+.sanders {
+  background: #10AF84;
+}
+.trump {
+  background: #0A1CC9;
+}
+.cruz {
+  background: #E7D509;
+}
+.kasich {
+  background: #25D07E;
+}
+.rubio {
+  background: #CB1515;
+}
 #options-container {
   min-width: 200px;
   float: right;
-  /*border: 2px solid black;*/
 }
-
 #candidates-box {
-  /*float: left;
-  border: 2px solid black;*/
   padding-left: 20px;
 }
-
 #dateselector-box {
   min-width: 200px;
-  /*float: left;
-  border: 2px solid black;*/
 }
-
 #keywords-box {
   min-height: 200px;
   min-width: 200px;
   padding-left: 20px;
 }
-
 #keywords-box .keyword {
   padding-left: 3px;
   font-size: 1em;
   font-weight: bold;
 }
-
 #keywords-box .keyword:hover {
   text-decoration: underline;
 }
-
 #headlines-box {
   overflow: hidden;
   padding-left: 20px;
 }
-
 #headlines-box a {
   padding-left: 3px;
   font-size: 1em;
   font-weight: bold;
   color: #D30015;
 }
-
 #headlines-box a:visited {
   color: #CC6600;
 }
-
 #headlines-box a:hover {
   text-decoration: underline;
+}
+.state {
+  fill: none;
+  stroke: #a9a9a9;
+  stroke-width: 1;
+}
+.state:hover {
+  fill-opacity: 0.5;
+}
+#tooltip {
+  position: absolute;
+  text-align: center;
+  padding: 20px;
+  margin: 10px;
+  font: 12px sans-serif;
+  background: lightsteelblue;
+  border: 1px;
+  border-radius: 2px;
+  pointer-events: none;
+}
+#tooltip h4 {
+  margin: 0;
+  font-size: 14px;
+}
+#tooltip {
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid grey;
+  border-radius: 5px;
+  font-size: 12px;
+  width: auto;
+  padding: 4px;
+  color: white;
+  opacity: 0;
+}
+#tooltip table {
+  table-layout: fixed;
+}
+#tooltip tr td {
+  padding: 0;
+  margin: 0;
+}
+#tooltip tr td:nth-child(1) {
+  width: 50px;
+}
+#tooltip tr td:nth-child(2) {
+  text-align: center;
 }
