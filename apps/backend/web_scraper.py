@@ -29,10 +29,10 @@ def get_website_URLs():
 def get_rcp_primary_result_data(website_url):
 	page = requests.get(website_url)
 	page.raise_for_status()
-	bs_obj = bs4.BeautifulSoup(page.text, 'lxml')
-	results_bs_table = bs_obj.find('table')
+	bs_obj = bs4.BeautifulSoup(page.text, 'html.parser')
+	results_bs_table = bs_obj.find('div', attrs={'class':'delegate_wrapper'})
 	#table_body = results_bs_table.find('tbody')
-	print results_bs_table
+	print results_bs_table.prettify()
 
 def get_rcp_poll_data(website_url):
 	"""
