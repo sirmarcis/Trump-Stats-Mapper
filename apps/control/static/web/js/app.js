@@ -9,7 +9,7 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
   });
   */
 
-  console.log(JSON.stringify($scope.headlines, null, 2));  
+  console.log(JSON.stringify($scope.headlines, null, 2));
 
   $scope.today = function() {
     $scope.dt = new Date();

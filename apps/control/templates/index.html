@@ -15,17 +15,19 @@
     <div id="candidates-box">
       <h2>Candidates</h2>
       <form action="">
-        <h3>Democrat Party</h3>
-        <input type="checkbox" name="candidate" value="clinton">Clinton
+        <h3><input type="radio" name="party" value="democrat">Democrat</h3>
+        <div class="candidate-label clinton"></div>Clinton
         <br>
-        <input type="checkbox" name="candidate" value="sanders">Sanders
+        <div class="candidate-label sanders"></div>Sanders
         <br>
-        <h3>Republican Party</h3>
-        <input type="checkbox" name="candidate" value="trump">Trump
+        <h3><input type="radio" name="party" value="gop" checked="checked">GOP</h3>
+        <div class="candidate-label trump"></div>Trump
         <br>
-        <input type="checkbox" name="candidate" value="cruz">Cruz
+        <div class="candidate-label cruz"></div>Cruz
         <br>
-        <input type="checkbox" name="candidate" value="kasich">Kasich
+        <div class="candidate-label kasich"></div>Kasich
+        <br>
+        <div class="candidate-label rubio"></div>Rubio
       </form>
     </div>
     <div id="dateselector-box">
@@ -62,7 +64,7 @@
     <script type="text/javascript" src="{{ url_for('static', filename='mapdata.js') }}"></script>
     <!-- creates uStates. -->
     <script type="text/javascript">
-      var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    var $SCRIPT_ROOT = {{ request.script_root | tojson | safe }};
     </script>
     <h1>jQuery Example</h1>
     <p>
@@ -95,7 +97,6 @@
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='web/js/app.js') }}"></script>
-
 <script type="text/javascript" src="{{ url_for('static', filename='web/js/map.js') }}"></script>
 
 </html>
