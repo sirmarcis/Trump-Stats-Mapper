@@ -15,12 +15,12 @@
     <div id="candidates-box">
       <h2>Candidates</h2>
       <form action="">
-        <h3><input type="radio" name="party" value="democrat">Democrat</h3>
+        <h3><input type="radio" name="party" value="democrat" onclick="redrawMap('democrat')">Democrat</h3>
         <div class="candidate-label clinton"></div>Clinton
         <br>
         <div class="candidate-label sanders"></div>Sanders
         <br>
-        <h3><input type="radio" name="party" value="gop" checked="checked">GOP</h3>
+        <h3><input type="radio" name="party" value="gop" onclick="redrawMap('gop')" checked="checked">GOP</h3>
         <div class="candidate-label trump"></div>Trump
         <br>
         <div class="candidate-label cruz"></div>Cruz
@@ -32,7 +32,7 @@
     </div>
     <div id="dateselector-box">
       <div style="display:inline-block;">
-        <uib-datepicker ng-model="dt" class="well well-sm" datepicker-options="inlineOptions"></uib-datepicker>
+        <uib-datepicker ng-model="dt" class="well well-sm" datepicker-options="inlineOptions" onclick="redrawMap(document.getElementById('dt').innerHTML)"></uib-datepicker>
       </div>
     </div>
     <div id="keywords-box">
@@ -66,20 +66,14 @@
     <script type="text/javascript">
     var $SCRIPT_ROOT = {{ request.script_root | tojson | safe }};
     </script>
-    <h1>jQuery Example</h1>
-    <p>
-      <input type="text" size="5" name="a"> +
-      <input type="text" size="5" name="b"> =
-      <span id="result">?</span>
-      <p><a href=# id="calculate">calculate server side</a>
-        <button onclick="redrawMap()">Redraw Map</button>
-        <button onclick="resetMap()">Reset</button>
-      </p>
-    </p>
+    
+    <button onclick="resetMap()">Reset</button>
+    
   </div>
   <div id="headlines-box">
     {% raw %}
-    <h2>{{ dt | date:'fullDate'}}</h2> {% endraw %}
+    <h2 id="dt">{{ dt | date:'fullDate'}}</h2>
+    {% endraw %}
     <a href="http://www.realclearpolitics.com/2016/04/06/with_wisconsin_win_cruz_tries_for_upper_hand_379835.html" target="_blank">With Wisconsin Win, Cruz Tries for Upper Hand</a>
     <br>
     <a href="http://www.realclearpolitics.com/2016/04/06/sanders_isn039t_catching_clinton_because_math_379840.html" target="_blank">Sanders Isn't Catching Clinton. Because, Math</a>
