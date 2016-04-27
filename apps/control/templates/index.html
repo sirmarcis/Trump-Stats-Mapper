@@ -32,7 +32,7 @@
     </div>
     <div id="dateselector-box">
       <div style="display:inline-block;">
-        <uib-datepicker ng-model="dt" class="well well-sm" datepicker-options="inlineOptions"></uib-datepicker>
+        <uib-datepicker ng-model="dt" class="well well-sm" datepicker-options="inlineOptions" onclick="redrawMap(document.getElementById('dt').innerHTML)"></uib-datepicker>
       </div>
     </div>
     <div id="keywords-box">
@@ -72,7 +72,8 @@
   </div>
   <div id="headlines-box">
     {% raw %}
-    <h2>{{ dt | date:'fullDate'}}</h2> {% endraw %}
+    <h2 id="dt">{{ dt | date:'fullDate'}}</h2>
+    {% endraw %}
     <a href="http://www.realclearpolitics.com/2016/04/06/with_wisconsin_win_cruz_tries_for_upper_hand_379835.html" target="_blank">With Wisconsin Win, Cruz Tries for Upper Hand</a>
     <br>
     <a href="http://www.realclearpolitics.com/2016/04/06/sanders_isn039t_catching_clinton_because_math_379840.html" target="_blank">Sanders Isn't Catching Clinton. Because, Math</a>
