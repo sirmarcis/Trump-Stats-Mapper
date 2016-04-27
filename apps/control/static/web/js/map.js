@@ -102,12 +102,26 @@ function drawBar(percent1, percent2,percent3) {
         .attr("height", 30)
         .style("fill", "blue");
 
+    d3.select("#barsvg").append("text")
+        .attr("x", 130+blue_width/2 -14)
+        .attr("y", 40)
+        .attr("font-size", "20px")
+        .attr("fill", "white")
+        .text(percent1*100+"%");
+
     d3.select("#barsvg").append("rect")
         .attr("x", 130 + 700 - red_width-green_width)
         .attr("y", 18)
         .attr("width", green_width)
         .attr("height", 30)
         .style("fill", "green");
+
+    d3.select("#barsvg").append("text")
+    .attr("x", 130 + 700 - red_width-green_width/2 -14)
+    .attr("y", 40)
+    .attr("font-size", "20px")
+    .attr("fill", "white")
+    .text(percent3*100+"%");
 
     d3.select("#barsvg").append("rect")
         .attr("x", 130 + 700 - red_width)
@@ -118,21 +132,13 @@ function drawBar(percent1, percent2,percent3) {
 
 
     d3.select("#barsvg").append("text")
-        .attr("x", 130 + blue_width / 2)
-        .attr("y", 11)
-        .attr("dy", ".35em")
-        .attr("text", function(d) {
-            return percent1 + "%" })
+        .attr("x", 130 + 700 - red_width/2 -14)
+        .attr("y", 40)
+        .attr("font-size", "20px")
+        .attr("fill", "white")
+        .text(percent2*100+"%");
 
-    d3.select("#barsvg").append("text")
-        .attr("x", 130 + 700 - red_width / 2)
-        .attr("y", 11)
-        .attr("fill", "#fff")
-        .style("stroke-width", 1)
-        .style({ "font-size": "18px", "z-index": "999999999" })
-        .style("text-anchor", "middle")
-        .attr("text", function(d) {
-            return percent2 + "%" });
+   
 
     d3.select("#barsvg").selectAll("rect")
         .on("mouseover", mouseOver)
@@ -238,7 +244,7 @@ function redrawMap(party) {
             };
         }
         uStates.updateColor("#statesvg", sampleData);
-        drawBar((totalC1 / count / 100).toPrecision(2), (totalC2 / count / 100).toPrecision(2),0.1);
+        drawBar((totalC1 / count / 100).toPrecision(2), (totalC2 / count / 100).toPrecision(2),0.06);
     });
 
     // draw states on id #statesvg  
