@@ -131,7 +131,10 @@ function drawBar(percent1, percent2) {
 }
 
 // main function that redraws the map
-function redrawMap() {
+function redrawMap(party) {
+
+	console.log("drawing ", party);
+	
     //variables to get average for progress bar
     var count = 0;
     var candidate1 = 0;
@@ -236,12 +239,9 @@ function redrawMap() {
     // drawBar((totalC1/count/100).toPrecision(2),(totalC2/count/100).toPrecision(2));
     //console.log("Hello " + (totalC1/count).toPrecision(2) + " " + (totalC2/count).toPrecision(2));
 }
-redrawMap();
+redrawMap('gop');
 
 // Reset the map
 function resetMap() {
-    candidate1 = 70;
-    candidate2 = 30;
-    other = 20;
-    redrawMap();
+    redrawMap('gop');
 }

@@ -15,12 +15,12 @@
     <div id="candidates-box">
       <h2>Candidates</h2>
       <form action="">
-        <h3><input type="radio" name="party" value="democrat">Democrat</h3>
+        <h3><input type="radio" name="party" value="democrat" onclick="redrawMap('democrat')">Democrat</h3>
         <div class="candidate-label clinton"></div>Clinton
         <br>
         <div class="candidate-label sanders"></div>Sanders
         <br>
-        <h3><input type="radio" name="party" value="gop" checked="checked">GOP</h3>
+        <h3><input type="radio" name="party" value="gop" onclick="redrawMap('gop')" checked="checked">GOP</h3>
         <div class="candidate-label trump"></div>Trump
         <br>
         <div class="candidate-label cruz"></div>Cruz
