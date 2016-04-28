@@ -6,11 +6,11 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
     $scope.keyword = "";
 
     getHeadlineData('curr_week', function(output) {
-      $scope.data = output;
-      $scope.$apply();
-      //console.log("keywords length: ", $scope.data[$scope.formatDate($scope.dt)].keywords.length);
-      //console.log("headlines: ", $scope.data[$scope.formatDate($scope.dt)].headlines);
-      //console.log("keywords: ", $scope.data[$scope.formatDate($scope.dt)].keywords);
+        $scope.data = output;
+        $scope.$apply();
+        console.log("keywords length: ", $scope.data[$scope.formatDate($scope.dt)].keywords.length);
+        console.log("headlines: ", $scope.data[$scope.formatDate($scope.dt)].headlines);
+        console.log("keywords: ", $scope.data[$scope.formatDate($scope.dt)].keywords);
     });
 
     $scope.today = function() {
@@ -24,7 +24,7 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
 
     $scope.inlineOptions = {
         customClass: getDayClass,
-        minDate: new Date(),
+        maxDate: new Date(),
         showWeeks: true
     };
 
@@ -42,13 +42,6 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
             mode = data.mode;
         return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
     }
-
-    $scope.toggleMin = function() {
-        $scope.inlineOptions.minDate = $scope.inlineOptions.minDate ? null : new Date();
-        $scope.dateOptions.minDate = $scope.inlineOptions.minDate;
-    };
-
-    $scope.toggleMin();
 
     $scope.open1 = function() {
         $scope.popup1.opened = true;
@@ -104,13 +97,33 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
         });
     }
 
+    $scope.checkForData = function() {
+        if ($scope.data[$scope.formatDate($scope.dt)] == null) {
+            var week = Math.floor($filter('date')($scope.dt, 'd') / 7) +
+                "." +
+                $filter('date')($scope.dt, 'MM.yyyy');
+            console.log(week);
+
+            getHeadlineData(week, function(output) {
+                for (var newdate in output) $scope.data[newdate] = output[newdate];
+                $scope.$apply();
+                console.log("data = ", $scope.data);
+            });
+        }
+    }
+
+    $scope.hasHeadline = function(date) {
+        console.log($scope.data[$scope.formatDate(date)].headlines.length);
+        return $scope.data[$scope.formatDate(date)].headlines.length > 0;
+    }
+
     $scope.formatDate = function(date) {
         var d = $filter('date')(date, 'EEE, d MMM y');
         return d;
     }
 
     $scope.sortByKeyword = function(headline) {
-        return -1*headline.keywords.indexOf($scope.keyword)
+        return -1 * headline.keywords.indexOf($scope.keyword)
     }
 
     $scope.clickKeyword = function(word) {
