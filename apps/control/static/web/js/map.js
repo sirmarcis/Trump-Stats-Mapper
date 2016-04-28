@@ -102,12 +102,14 @@ function drawBar(percent1, percent2,percent3) {
         .attr("height", 30)
         .style("fill", "blue");
 
-    d3.select("#barsvg").append("text")
-        .attr("x", 130+blue_width/2 -14)
-        .attr("y", 40)
-        .attr("font-size", "20px")
-        .attr("fill", "white")
-        .text(percent1*100+"%");
+    if(percent1>=0.06){
+        d3.select("#barsvg").append("text")
+            .attr("x", 130+blue_width/2 -14)
+            .attr("y", 40)
+            .attr("font-size", "20px")
+            .attr("fill", "white")
+            .text(percent1*100+"%");
+    }
 
     d3.select("#barsvg").append("rect")
         .attr("x", 130 + 700 - red_width-green_width)
@@ -115,13 +117,14 @@ function drawBar(percent1, percent2,percent3) {
         .attr("width", green_width)
         .attr("height", 30)
         .style("fill", "green");
-
-    d3.select("#barsvg").append("text")
-    .attr("x", 130 + 700 - red_width-green_width/2 -14)
-    .attr("y", 40)
-    .attr("font-size", "20px")
-    .attr("fill", "white")
-    .text(percent3*100+"%");
+    if(percent3>=0.06){
+        d3.select("#barsvg").append("text")
+        .attr("x", 130 + 700 - red_width-green_width/2 -14)
+        .attr("y", 40)
+        .attr("font-size", "20px")
+        .attr("fill", "white")
+        .text(percent3*100+"%");
+    }
 
     d3.select("#barsvg").append("rect")
         .attr("x", 130 + 700 - red_width)
@@ -130,13 +133,15 @@ function drawBar(percent1, percent2,percent3) {
         .attr("height", 30)
         .style("fill", "red");
 
+    if(percent2>=0.06){
 
-    d3.select("#barsvg").append("text")
-        .attr("x", 130 + 700 - red_width/2 -14)
-        .attr("y", 40)
-        .attr("font-size", "20px")
-        .attr("fill", "white")
-        .text(percent2*100+"%");
+        d3.select("#barsvg").append("text")
+            .attr("x", 130 + 700 - red_width/2 -14)
+            .attr("y", 40)
+            .attr("font-size", "20px")
+            .attr("fill", "white")
+            .text(percent2*100+"%");
+    }
 
    
 
