@@ -13,10 +13,10 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
         console.log("keywords: ", $scope.data[$scope.formatDate($scope.dt)].keywords);
     });
 
-    $scope.today = function() {
+    $scope.reset = function() {
         $scope.dt = new Date();
     };
-    $scope.today();
+    $scope.reset();
 
     $scope.clear = function() {
         $scope.dt = null;
@@ -31,7 +31,6 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
     $scope.dateOptions = {
         dateDisabled: disabled,
         formatYear: 'yy',
-        maxDate: $scope.today(),
         minDate: new Date(),
         startingDay: 1
     };
