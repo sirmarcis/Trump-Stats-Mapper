@@ -27,9 +27,6 @@ function getpolldata(weekstring, handledata) {
     });
 }
 
-// end ajax stuff
-
-
 
 // function to create html content string in tooltip div.
 function tooltipHtmlDem(n, d) {
@@ -50,13 +47,9 @@ function tooltipHtmlGop(n, d) {
         "</table>";
 }
 
-function tooltipBar(n, percent) {
-    return "<h4>" + n + " " + percent + "</h4>";
-}
-
 var party;
 var d = new Date();
-// Sample random data.
+// sampled data.
 var sampleData = {};
 
 // function to redraw the map with new data
@@ -81,20 +74,7 @@ function drawBar(percent1, percent2,percent3) {
     var blue_width = 700 * percent1;
     var red_width = 700 * percent2;
     var green_width = 700* percent3;
-    var names = ["Trump", "Clinton", "Other"]
-    var percents = [percent1 * 100, percent2 * 100, Math.floor((1 - percent1 - percent2).toPrecision(2) * 100)];
     // draw main bars
-    function mouseOver(d) {
-        d3.select("#tooltip").transition().duration(200).style("opacity", .9);
-        d3.select("#tooltip").html(tooltipBar(names[d], percents[d]))
-            .style("left", (d3.event.pageX) + "px")
-            .style("top", (d3.event.pageY - 28) + "px");
-    }
-
-    function mouseOut() {
-        d3.select("#tooltip").transition().duration(500).style("opacity", 0);
-    }
-
     d3.select("#barsvg").append("rect")
         .attr("x", 130)
         .attr("y", 18)
@@ -149,12 +129,6 @@ function drawBar(percent1, percent2,percent3) {
             .attr("fill", "white")
             .text(percent2*100+"%");
     }
-
-   
-
-    d3.select("#barsvg").selectAll("rect")
-        .on("mouseover", mouseOver)
-        .on("mouseout", mouseOut);
 }
 
 // main function that redraws the map
@@ -257,6 +231,7 @@ function redrawMap(input) {
 				}
 				if (candidate1 == 0 && candidate2 == 0) {
 					color = "gray";
+					count--;
 				}
 				var name1 = "Clinton";
 				var name2 = "Sanders";
@@ -344,6 +319,7 @@ function redrawMap(input) {
 				}
 				if (candidate1 == 0 && candidate2 == 0 && candidate3 == 0 && candidate4 == 0) {
 					color = "gray";
+					count--;
 				}
 				var name1 = "Trump";
 				var name2 = "Cruz";
