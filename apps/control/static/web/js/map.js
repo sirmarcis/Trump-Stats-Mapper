@@ -42,6 +42,7 @@ function tooltipHtmlGop(n, d) {
 var party;
 var d = new Date();
 d.setHours(0,0,0,0);
+var gradient = true;
 
 // function to redraw the progress bar with new data
 function drawBar(percent1, percent2,percent3) {
@@ -133,6 +134,8 @@ function drawBar(percent1, percent2,percent3) {
 function redrawMap(input) {
 	if (input == 'democrat' || input == 'gop') {
 		party = input;
+	} else if (input == "gradient") {
+		gradient = !gradient;
 	} else {
 		d = new Date(input);
 		// console.log(d);
@@ -248,32 +251,40 @@ function redrawMap(input) {
 						//var green = ['#f7fcf5', '#e5f5e0', '#c7e9c0', '#a1d99b',
 						//	'#74c476', '#41ab5d', '#238b45', '#006d2c', '#00441b'];
 						// create gradient color for candidate
-						var orange = ['#fee6ce', '#fdd0a2', '#fdae6b',
-							'#fd8d3c', '#f16913', '#d94801', '#a63603', '#7f2704'];
-						var index = candidate1 - candidate2;
-						index = Math.floor(index / 5);
-						// clamp the gradient
-						if (index > 7) index = 7;
-						else if (index < 0) index = 0;
-						color = orange[index];
+						if (gradient) {
+							var orange = ['#fee6ce', '#fdd0a2', '#fdae6b',
+								'#fd8d3c', '#f16913', '#d94801', '#a63603', '#7f2704'];
+							var index = candidate1 - candidate2;
+							index = Math.floor(index / 5);
+							// clamp the gradient
+							if (index > 7) index = 7;
+							else if (index < 0) index = 0;
+							color = orange[index];
+						} else {
+							color = 'orange';
+						}
 					} else {
 						//var blue = ['#f7fbff', '#deebf7', '#c6dbef', '#9ecae1',
 						//	'#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b'];
 						// create gradient color for candidate
-						var purple = ['#efedf5', '#dadaeb', '#bcbddc',
-							'#9e9ac8', '#807dba', '#6a51a3', '#54278f', '#3f007d'];
-						var index = candidate2 - candidate1;
-						index = Math.floor(index / 5);
-						// clamp the gradient
-						if (index > 7) index = 7;
-						else if (index < 0) index = 0;
-						color = purple[index];
+						if (gradient) {
+							var purple = ['#efedf5', '#dadaeb', '#bcbddc',
+								'#9e9ac8', '#807dba', '#6a51a3', '#54278f', '#3f007d'];
+							var index = candidate2 - candidate1;
+							index = Math.floor(index / 5);
+							// clamp the gradient
+							if (index > 7) index = 7;
+							else if (index < 0) index = 0;
+							color = purple[index];
+						} else {
+							color = 'purple';
+						}
 					}
 				}
 				// if both candidates are 0, then something went wrong
 				// set the color to gray
 				if (candidate1 == 0 && candidate2 == 0) {
-					color = "gray";
+					color = "white";
 					count--;
 				}
 				var name1 = "Clinton";
@@ -353,26 +364,31 @@ function redrawMap(input) {
 						}
 					}
 					// select the color for the candidate with the highest numbers
-					var blue = ['#f7fbff', '#deebf7', '#c6dbef', '#9ecae1',
+					if (gradient) {
+						var blue = ['#f7fbff', '#deebf7', '#c6dbef', '#9ecae1',
 							'#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b'];
-					var purple = ['#efedf5', '#dadaeb', '#bcbddc',
+						var purple = ['#efedf5', '#dadaeb', '#bcbddc',
 							'#9e9ac8', '#807dba', '#6a51a3', '#54278f', '#3f007d'];
-					var green = ['#f7fcf5', '#e5f5e0', '#c7e9c0', '#a1d99b',
+						var green = ['#f7fcf5', '#e5f5e0', '#c7e9c0', '#a1d99b',
 							'#74c476', '#41ab5d', '#238b45', '#006d2c', '#00441b'];
-					var orange = ['#fee6ce', '#fdd0a2', '#fdae6b',
+						var orange = ['#fee6ce', '#fdd0a2', '#fdae6b',
 							'#fd8d3c', '#f16913', '#d94801', '#a63603', '#7f2704'];
-					var colors = [blue,orange,green,purple];
-					// make it a gradient versus the person in second place
-					var colorIndex = max - secondMax;
+						var colors = [blue,orange,green,purple];
+						// make it a gradient versus the person in second place
+						var colorIndex = max - secondMax;
 						colorIndex = Math.floor(colorIndex / 5);
 						if (colorIndex > 7) colorIndex = 7;
 						else if (colorIndex < 0) colorIndex = 0;
-					color = colors[maxIndex][colorIndex];
+						color = colors[maxIndex][colorIndex];
+					} else {
+						var colors = ['blue','orange','green','purple'];
+						color = colors[maxIndex];
+					}
 				}
 				// if they are all 0, then something went wrong, and set the color to gray
 				// most likely a poll for the democratic party but not the GOP
 				if (candidate1 == 0 && candidate2 == 0 && candidate3 == 0 && candidate4 == 0) {
-					color = "gray";
+					color = "white";
 					count--;
 				}
 				var name1 = "Trump";
@@ -425,7 +441,7 @@ function redrawMap(input) {
 							// in the json it is formatted
 							// MonthName DayofMonth so March 1
 							var monthArr = key3.split(" ");
-							var monthNum = months[monthArr[0]]
+							var monthNum = months[monthArr[0]] - 1;
 							var pollDate = new Date(2016,monthNum,monthArr[1]);
 							
 							// console.log("pollDate: " + pollDate.getTime() + " currentDate: " + d.getTime())
@@ -458,25 +474,33 @@ function redrawMap(input) {
 						candidate1 = Math.floor(candidate1 / counter);
 						candidate2 = Math.floor(candidate2 / counter);
 						if (candidate1 > candidate2) {
-							// var green = ['#f7fcf5', '#e5f5e0', '#c7e9c0', '#a1d99b',
-							//	'#74c476', '#41ab5d', '#238b45', '#006d2c', '#00441b'];
-							var orange = ['#fee6ce', '#fdd0a2', '#fdae6b',
-								'#fd8d3c', '#f16913', '#d94801', '#a63603', '#7f2704'];
-							var index = candidate1 - candidate2;
-							index = Math.floor(index / 5);
-							if (index > 7) index = 7;
-							else if (index < 0) index = 0;
-							color = orange[index];
+							if (gradient) {
+								// var green = ['#f7fcf5', '#e5f5e0', '#c7e9c0', '#a1d99b',
+								//	'#74c476', '#41ab5d', '#238b45', '#006d2c', '#00441b'];
+								var orange = ['#fee6ce', '#fdd0a2', '#fdae6b',
+									'#fd8d3c', '#f16913', '#d94801', '#a63603', '#7f2704'];
+								var index = candidate1 - candidate2;
+								index = Math.floor(index / 5);
+								if (index > 7) index = 7;
+								else if (index < 0) index = 0;
+								color = orange[index];
+							} else {
+								color = 'orange';
+							}
 						} else {
-							//var blue = ['#f7fbff', '#deebf7', '#c6dbef', '#9ecae1',
-							//	'#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b'];
-							var purple = ['#efedf5', '#dadaeb', '#bcbddc',
-								'#9e9ac8', '#807dba', '#6a51a3', '#54278f', '#3f007d'];
-							var index = candidate2 - candidate1;
-							index = Math.floor(index / 5);
-							if (index > 7) index = 7;
-							else if (index < 0) index = 0;
-							color = purple[index];
+							if (gradient) {
+								//var blue = ['#f7fbff', '#deebf7', '#c6dbef', '#9ecae1',
+								//	'#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b'];
+								var purple = ['#efedf5', '#dadaeb', '#bcbddc',
+									'#9e9ac8', '#807dba', '#6a51a3', '#54278f', '#3f007d'];
+								var index = candidate2 - candidate1;
+								index = Math.floor(index / 5);
+								if (index > 7) index = 7;
+								else if (index < 0) index = 0;
+								color = purple[index];
+							} else {
+								color = 'purple';
+							}
 						}
 					}
 					// if the state was skipped, leave it as the color it was
@@ -485,7 +509,7 @@ function redrawMap(input) {
 						if (skipped[key]) {
 							color = color = "#ffffff";
 						} else {
-							color = "gray";
+							color = "white";
 						}
 						count--;
 					}
@@ -586,20 +610,25 @@ function redrawMap(input) {
 						}
 						// select the color based on who has the most delegates 
 						// gradient based on how many more than the second largest
-						var blue = ['#f7fbff', '#deebf7', '#c6dbef', '#9ecae1',
+						if (gradient) {
+							var blue = ['#f7fbff', '#deebf7', '#c6dbef', '#9ecae1',
 								'#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b'];
-						var purple = ['#efedf5', '#dadaeb', '#bcbddc',
+							var purple = ['#efedf5', '#dadaeb', '#bcbddc',
 								'#9e9ac8', '#807dba', '#6a51a3', '#54278f', '#3f007d'];
-						var green = ['#f7fcf5', '#e5f5e0', '#c7e9c0', '#a1d99b',
+							var green = ['#f7fcf5', '#e5f5e0', '#c7e9c0', '#a1d99b',
 								'#74c476', '#41ab5d', '#238b45', '#006d2c', '#00441b'];
-						var orange = ['#fee6ce', '#fdd0a2', '#fdae6b',
+							var orange = ['#fee6ce', '#fdd0a2', '#fdae6b',
 								'#fd8d3c', '#f16913', '#d94801', '#a63603', '#7f2704'];
-						var colors = [blue,orange,green,purple];
-						var colorIndex = max - secondMax;
+							var colors = [blue,orange,green,purple];
+							var colorIndex = max - secondMax;
 							colorIndex = Math.floor(colorIndex / 5);
 							if (colorIndex > 7) colorIndex = 7;
 							else if (colorIndex < 0) colorIndex = 0;
-						color = colors[maxIndex][colorIndex];
+							color = colors[maxIndex][colorIndex];
+						} else {
+							var colors = ['blue','orange','green','purple'];
+							color = colors[maxIndex];
+						}
 					}
 					// if the state was skipped, leave it alone
 					// otherwise an error happened and make it gray
@@ -607,7 +636,7 @@ function redrawMap(input) {
 						if (skipped[key]) {
 							color = "#ffffff";
 						} else {
-							color = "gray";
+							color = "white";
 						}
 						count--;
 					}
