@@ -145,7 +145,6 @@ function redrawMap(input) {
 	} else {
 		d = input;
 	}
-	console.log("drawing ", input);
 	
     //variables to get average for progress bar
     var count = 0;
@@ -184,7 +183,15 @@ function redrawMap(input) {
 							name3, candidate3, name4, candidate4, otherName, other, color };
 		}
     });
-    getpolldata('curr_week', function(output) { //sync
+	
+	var input;
+	if (d = new Date()) {
+		input = 'curr_week';
+	} else {
+		input = 'polldata_' + d.getDay() + "." + d.getMonth() + "." + d.getYear();
+	}
+	
+    getpolldata(input, function(output) { //sync
 		if (party == 'democrat') {
 			var key;
 			var counter = 0;
