@@ -66,6 +66,10 @@ def update_poll_headline_data():
 	data_analysis.get_data_analysis([])
 	return "Finished updating headline and poll data."
 
+@app.route('/get_keywords')
+def get_keywords():
+	return jsonify(result=database.get_keywords_JSON_obj())
+
 def main():
 	print get_backend_filepath()
 

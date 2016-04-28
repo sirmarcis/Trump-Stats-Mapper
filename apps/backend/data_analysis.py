@@ -194,6 +194,7 @@ def get_data_analysis(argv):
 	database.write_poll_data_to_JSON(state_data_dict) # write poll data to json file
 	database.write_headlines_to_JSON(all_headlines) # write headline data to json file
 	database.write_finished_states_to_JSON(finished_states_dict)
+	database.write_assc_dict_to_JSON(final_keywords)
 	
 
 

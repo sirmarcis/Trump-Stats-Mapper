@@ -114,14 +114,26 @@ def write_headlines_to_JSON(all_headlines):
 	current_races_filepath = database_filepath + "headlines_" + today_datestamp + ".json"
 	headline_1d_list = []
 	headline_list_dict = {}
+	keywords_list_dict = {}
 	for curr_headline_arr in all_headlines:
 		for curr_headline in curr_headline_arr:
 			if is_current_article_p(curr_headline.sub_datestamp, today_datestamp):
 				if curr_headline.sub_datestamp in headline_list_dict.keys():
 					headline_list_dict[curr_headline.sub_datestamp].append(curr_headline)
+					keywords_list_dict[curr_headline.sub_datestamp] += curr_headline.keywords
 				else:
 					headline_list_dict[curr_headline.sub_datestamp] = [curr_headline]
+					keywords_list_dict[curr_headline.sub_datestamp] = curr_headline.keywords
 			headline_1d_list.append(curr_headline)
+	for date_str in keywords_list_dict.keys():
+		agg_keyword_list = []
+		for keyword in keywords_list_dict[date_str]:
+			if keyword not in agg_keyword_list:
+				agg_keyword_list.append(keyword)
+		curr_headlines = headline_list_dict[date_str]
+		headline_list_dict[date_str] = {}
+		headline_list_dict[date_str]["headlines"] = curr_headlines
+		headline_list_dict[date_str]["keywords"] = agg_keyword_list
 	with open(current_races_filepath, 'w') as outfile:
 		json.dump(headline_list_dict, outfile, cls=data_structures.HeadlineEncoder)
 
@@ -140,6 +152,14 @@ def write_finished_states_to_JSON(finished_states_dict):
 	current_races_filepath = database_filepath + "finished_states.json"
 	with open(current_races_filepath, 'w') as outfile:
 		json.dump(finished_states_dict, outfile, cls=data_structures.State_Poll_DataEncoder)
+
+def write_assc_dict_to_JSON(assc_dict):
+	"""
+	Writes the keywords to JSON for communication to frontend."""
+	database_filepath = get_database_filepath()
+	current_races_filepath = database_filepath + "keywords.json"
+	with open(current_races_filepath, 'w') as outfile:
+		json.dump(assc_dict, outfile)
 
 def get_finished_states_JSON_obj():
 	database_filepath = get_database_filepath()
@@ -180,6 +200,16 @@ def get_headline_JSON_obj(week):
 			return "No data stored for that week."
 	else:
 		return "Invalid Week Format"
+
+def get_keywords_JSON_obj():
+	database_filepath = get_database_filepath()
+	current_races_filepath = database_filepath + "keywords.json"
+	if os.path.isfile(current_races_filepath):
+		with open(current_races_filepath, 'r') as infile:
+			data = json.load(infile)
+			return data
+	else:
+		return None
 
 def get_old_headlines_data():
 	"""WIP"""
