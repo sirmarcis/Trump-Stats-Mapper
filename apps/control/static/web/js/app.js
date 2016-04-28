@@ -2,11 +2,15 @@ angular.module('trump-stats-mapper', ['ngAnimate', 'ui.bootstrap']);
 
 angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function($scope, $filter) {
 
-    $scope.headlines = {};
+    $scope.data = {};
+    $scope.keyword = "";
 
     getHeadlineData('curr_week', function(output) {
-      $scope.headlines = output;
+      $scope.data = output;
       $scope.$apply();
+      //console.log("keywords length: ", $scope.data[$scope.formatDate($scope.dt)].keywords.length);
+      //console.log("headlines: ", $scope.data[$scope.formatDate($scope.dt)].headlines);
+      //console.log("keywords: ", $scope.data[$scope.formatDate($scope.dt)].keywords);
     });
 
     $scope.today = function() {
@@ -103,5 +107,13 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
     $scope.formatDate = function(date) {
         var d = $filter('date')(date, 'EEE, d MMM y');
         return d;
+    }
+
+    $scope.sortByKeyword = function(headline) {
+        return -1*headline.keywords.indexOf($scope.keyword)
+    }
+
+    $scope.clickKeyword = function(word) {
+        $scope.keyword = word;
     }
 });
