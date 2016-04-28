@@ -483,7 +483,7 @@ function redrawMap(input) {
 					// otherwise something went wrong and make it gray
 					if (candidate1 == 0 && candidate2 == 0) {
 						if (skipped[key]) {
-							color = sampleData[key].color;
+							color = color = "#ffffff";
 						} else {
 							color = "gray";
 						}
@@ -605,7 +605,7 @@ function redrawMap(input) {
 					// otherwise an error happened and make it gray
 					if (candidate1 == 0 && candidate2 == 0 && candidate3 == 0 && candidate4 == 0) {
 						if (skipped[key]) {
-							color = sampleData[key].color;
+							color = "#ffffff";
 						} else {
 							color = "gray";
 						}
