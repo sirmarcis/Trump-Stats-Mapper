@@ -42,7 +42,7 @@ function tooltipHtmlGop(n, d) {
 var party;
 var d = new Date();
 d.setHours(0,0,0,0);
-var gradient = false;
+var gradient = true;
 
 // function to redraw the progress bar with new data
 function drawBar(percent1, percent2,percent3) {

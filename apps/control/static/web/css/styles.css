@@ -2,6 +2,9 @@
   margin-top: 10px;
   margin-bottom: 10px;
 }
+#options-container .btn-option {
+  margin-right: 10px;
+}
 #map-box {
   overflow: hidden;
 }
