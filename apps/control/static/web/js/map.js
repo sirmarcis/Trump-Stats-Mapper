@@ -27,6 +27,13 @@ function getpolldata(weekstring, handledata) {
     });
 }
 
+function getFinishedStates(handledata) {
+    $.getJSON($SCRIPT_ROOT + '/get_finished_states_data', {}, 
+	  function(data) {
+        handledata(data.result);
+    });
+}
+
 
 // function to create html content string in tooltip div.
 function tooltipHtmlDem(n, d) {
@@ -235,8 +242,6 @@ function redrawMap(input) {
 				}
 				var name1 = "Clinton";
 				var name2 = "Sanders";
-				totalC1 += candidate1;
-				totalC2 += candidate2;
 				var otherName = "Other";
 				var other = 100 - candidate1 - candidate2;
 				count++;
@@ -250,10 +255,12 @@ function redrawMap(input) {
 					color
 				};
 			}
+			/*
 			d3.select("#statesvg").selectAll("*").remove();
 			uStates.draw("#statesvg", sampleData, tooltipHtmlDem);
 			uStates.updateColor("#statesvg", sampleData);
 			drawBar((totalC1 / count / 100).toPrecision(2), (totalC2 / count / 100).toPrecision(2),0);
+			*/
 		} else {
 			var key;
 			var counter = 0;
@@ -325,10 +332,6 @@ function redrawMap(input) {
 				var name2 = "Cruz";
 				var name3 = "Kasich";
 				var name4 = "Rubio";
-				totalC1 += candidate1;
-				totalC2 += candidate2;
-				totalC3 += candidate3;
-				totalC4 += candidate4;
 				var otherName = "Other";
 				var other = 100 - candidate1 - candidate2;
 				count++;
@@ -346,11 +349,188 @@ function redrawMap(input) {
 					color
 				};
 			}
+			/*
 			d3.select("#statesvg").selectAll("*").remove();
 			uStates.draw("#statesvg", sampleData, tooltipHtmlGop);
 			uStates.updateColor("#statesvg", sampleData);
 			drawBar((totalC1 / count / 100).toPrecision(2), (totalC2 / count / 100).toPrecision(2),.06);
+			*/
 		}
+		getFinishedStates(function(finished) {
+			if (party == 'democrat') {
+				var key;
+				var counter = 0;
+				color = '#ffffff';
+				for (key in finished) {
+					counter = 0;
+					candidate1 = 0;
+					candidate2 = 0;
+					var key2;
+					for (key2 in finished[key]["blue_poll_dict_list"]) {
+						var key3;
+						for (key3 in finished[key]["blue_poll_dict_list"][key2]) {
+							if (finished[key]["blue_poll_dict_list"][key2][key3].hasOwnProperty("Clinton")) {
+								candidate1 += finished[key]["blue_poll_dict_list"][key2][key3]["Clinton"];
+							}
+							if (finished[key]["blue_poll_dict_list"][key2][key3].hasOwnProperty("Sanders")) {
+								candidate2 += finished[key]["blue_poll_dict_list"][key2][key3]["Sanders"];
+							}
+						}
+						counter++;
+					}
+					// console.log("State: " + key +" candidate1: " + candidate1 + " candidate2: " + candidate2);
+					if (counter > 0) {
+						candidate1 = Math.floor(candidate1 / counter);
+						candidate2 = Math.floor(candidate2 / counter);
+						if (candidate1 > candidate2) {
+							var green = ['#f7fcf5', '#e5f5e0', '#c7e9c0', '#a1d99b',
+								'#74c476', '#41ab5d', '#238b45', '#006d2c', '#00441b'
+							];
+							var orange = ['#fee6ce', '#fdd0a2', '#fdae6b',
+								'#fd8d3c', '#f16913', '#d94801', '#a63603', '#7f2704'
+							];
+							var index = candidate1 - candidate2;
+							index = Math.floor(index / 5);
+							if (index > 7) index = 7;
+							else if (index < 0) index = 0;
+							color = orange[index];
+						} else {
+							var blue = ['#f7fbff', '#deebf7', '#c6dbef', '#9ecae1',
+								'#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b'
+							];
+							var purple = ['#efedf5', '#dadaeb', '#bcbddc',
+								'#9e9ac8', '#807dba', '#6a51a3', '#54278f', '#3f007d'
+							]
+							var index = candidate2 - candidate1;
+							index = Math.floor(index / 5);
+							if (index > 7) index = 7;
+							else if (index < 0) index = 0;
+							color = purple[index];
+						}
+					}
+					if (candidate1 == 0 && candidate2 == 0) {
+						color = "gray";
+						count--;
+					}
+					var name1 = "Clinton";
+					var name2 = "Sanders";
+					totalC1 += candidate1;
+					totalC2 += candidate2;
+					var otherName = "Other";
+					var other = 0;
+					count++;
+					sampleData[key] = {
+						name1,
+						candidate1,
+						name2,
+						candidate2,
+						otherName,
+						other,
+						color
+					};
+				}
+				d3.select("#statesvg").selectAll("*").remove();
+				uStates.draw("#statesvg", sampleData, tooltipHtmlDem);
+				uStates.updateColor("#statesvg", sampleData);
+				drawBar((totalC1 / 4051).toPrecision(2), (totalC2 / 4051).toPrecision(2),0);
+			} else {
+				var key;
+				var counter = 0;
+				color = '#ffffff';
+				for (key in finished) {
+					counter = 0;
+					candidate1 = 0;
+					candidate2 = 0;
+					candidate3 = 0;
+					candidate4 = 0;
+					var key2;
+					for (key2 in finished[key]["red_poll_dict_list"]) {
+						var key3;
+						for (key3 in finished[key]["red_poll_dict_list"][key2]) {
+							if (finished[key]["red_poll_dict_list"][key2][key3].hasOwnProperty("Trump")) {
+								candidate1 += finished[key]["red_poll_dict_list"][key2][key3]["Trump"];
+							}
+							if (finished[key]["red_poll_dict_list"][key2][key3].hasOwnProperty("Cruz")) {
+								candidate2 += finished[key]["red_poll_dict_list"][key2][key3]["Cruz"];
+							}
+							if (finished[key]["red_poll_dict_list"][key2][key3].hasOwnProperty("Kasich")) {
+								candidate3 += finished[key]["red_poll_dict_list"][key2][key3]["Kasich"];
+							}
+							if (finished[key]["red_poll_dict_list"][key2][key3].hasOwnProperty("Rubio")) {
+								candidate4 += finished[key]["red_poll_dict_list"][key2][key3]["Rubio"];
+							}
+						}
+						counter++;
+					}
+					// console.log("State: " + key +" candidate1: " + candidate1 + " candidate2: " + candidate2);
+					if (counter > 0) {
+						candidate1 = Math.floor(candidate1 / counter);
+						candidate2 = Math.floor(candidate2 / counter);
+						candidate3 = Math.floor(candidate3 / counter);
+						candidate4 = Math.floor(candidate4 / counter);
+						candidates = [candidate1,candidate2,candidate3,candidate4];
+						var max = 0;
+						var maxIndex = 0;
+						var secondMax = 0;
+						for (var candidate in candidates) {
+							if (candidates[candidate] > max) {
+								secondMax = max;
+								max = candidates[candidate];
+								maxIndex = candidate;
+							} else if (candidates[candidate] > secondMax) {
+								secondMax = candidates[candidate];
+							}
+						}
+						var blue = ['#f7fbff', '#deebf7', '#c6dbef', '#9ecae1',
+								'#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b'];
+						var purple = ['#efedf5', '#dadaeb', '#bcbddc',
+								'#9e9ac8', '#807dba', '#6a51a3', '#54278f', '#3f007d'];
+						var green = ['#f7fcf5', '#e5f5e0', '#c7e9c0', '#a1d99b',
+								'#74c476', '#41ab5d', '#238b45', '#006d2c', '#00441b'];
+						var orange = ['#fee6ce', '#fdd0a2', '#fdae6b',
+								'#fd8d3c', '#f16913', '#d94801', '#a63603', '#7f2704'];
+						var colors = [blue,orange,green,purple];
+						var colorIndex = max - secondMax;
+							colorIndex = Math.floor(colorIndex / 5);
+							if (colorIndex > 7) colorIndex = 7;
+							else if (colorIndex < 0) colorIndex = 0;
+						color = colors[maxIndex][colorIndex];
+					}
+					if (candidate1 == 0 && candidate2 == 0 && candidate3 == 0 && candidate4 == 0) {
+						color = "gray";
+						count--;
+					}
+					var name1 = "Trump";
+					var name2 = "Cruz";
+					var name3 = "Kasich";
+					var name4 = "Rubio";
+					totalC1 += candidate1;
+					totalC2 += candidate2;
+					totalC3 += candidate3;
+					totalC4 += candidate4;
+					var otherName = "Other";
+					var other = 0;
+					count++;
+					sampleData[key] = {
+						name1,
+						candidate1,
+						name2,
+						candidate2,
+						name3,
+						candidate3,
+						name4,
+						candidate4,
+						otherName,
+						other,
+						color
+					};
+				}
+				d3.select("#statesvg").selectAll("*").remove();
+				uStates.draw("#statesvg", sampleData, tooltipHtmlGop);
+				uStates.updateColor("#statesvg", sampleData);
+				drawBar((totalC1 / 2472).toPrecision(2), (totalC2 / 2472).toPrecision(2), (totalC3 / 2472).toPrecision(2));
+			}
+		});
     });
 }
 redrawMap('gop');
