@@ -15,9 +15,15 @@ import platform
 
 
 def get_datestamp():
+	"""
+	Gets the datestamp for the current day in TSM format. 
+	<week>.<month, in 2 digit format>.<year>"""
 	return str(int(time.strftime("%d"))/7) + "." + (time.strftime("%m.%Y"))
 
 def datestamp_correct_form_p(datestamp):
+	"""
+	Returns True if the datestamp is in TSM format,
+	Returns False otherwise."""
 	datestamp_list = datestamp.split('.')
 	if len(datestamp_list) != 3:
 		return False
@@ -107,6 +113,9 @@ def is_current_article_p(datestamp, today_datestamp):
 		return False
 
 def get_headline_weight(curr_headline, keyword_weight_dict):
+	"""
+	Called by write_headlines_to_JSON,
+	Adds the weight of each keyword in curr_headline and returns result."""
 	keyword_weight = 0
 	for keyword in curr_headline.keywords:
 		keyword_weight += keyword_weight_dict[keyword]
@@ -167,6 +176,8 @@ def write_assc_dict_to_JSON(assc_dict):
 		json.dump(assc_dict, outfile)
 
 def get_finished_states_JSON_obj():
+	"""
+	Gets the delegate counts for all states who have finished their primary."""
 	database_filepath = get_database_filepath()
 	current_races_filepath = database_filepath + "finished_states.json"
 	if os.path.isfile(current_races_filepath):
@@ -207,6 +218,8 @@ def get_headline_JSON_obj(week):
 		return "Invalid Week Format"
 
 def get_keywords_JSON_obj():
+	"""
+	Gets the keywords stored in the keywords.json file, for the most current week"""
 	database_filepath = get_database_filepath()
 	current_races_filepath = database_filepath + "keywords.json"
 	if os.path.isfile(current_races_filepath):
@@ -215,11 +228,4 @@ def get_keywords_JSON_obj():
 			return data
 	else:
 		return None
-
-def get_old_headlines_data():
-	"""WIP"""
-	database_filepath = get_database_filepath()
-	current_races_filepath = database_filepath + "old_headlines.dat"
-	f = open(current_races_filepath, 'r')
-	#for line in f:
 

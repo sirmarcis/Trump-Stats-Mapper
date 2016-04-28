@@ -14,38 +14,21 @@ import sys
 
 POLL_BUFFER = 4
 
-keyword_dict = {}
-assc_dict = {}
-#state_data_dict = {}
-
-def load_keyword_dict():
-	"""
-	Called by get_data_analysis.
-	Load keywords from file keywords.txt into keyword_dict"""
-	f = open('keywords.txt', 'r')
-	for line in f:
-		if line != "\n":
-			endl_index = line.index('\n')
-			clean_line = line[:endl_index]
-			keyword_dict[clean_line] = []
-
-def parse_headline_arr(curr_headline_arr, top_keyword_dict):
+def parse_headline_arr(curr_headline_arr, top_keyword_dict, assc_dict):
 	"""
 	Called by get_data_analysis.
 	Parses all headlines from one news source, in curr_headline_arr. 
 	modifies/returns top_keyword_dict: puts in new keywords or adds to the count for existing keywords,
 	modifies assc_dict: adds association keywords for every keyword in a headline."""
 	sig_tokens = ['NN', 'NNP']
-	ignore_tokens = ['Is', 'VIDEO', 'Introduction', '"', 'Has']
+	ignore_tokens = ['Is', 'VIDEO', 'Introduction', '"', 'Has', 'Opinion']
 	for curr_headline in curr_headline_arr:
 		discovered_tokens = []
-		headline_tokens = nltk.word_tokenize(curr_headline.headline_str)
+		headline_tokens = nltk.word_tokenize(curr_headline.headline_str.replace("'", ""))
 		tagged_tokens = nltk.pos_tag(headline_tokens)
 		for curr_token in tagged_tokens:
-			word_token = curr_token[0]
+			word_token = curr_token[0][:1].upper() + curr_token[0][1:]
 			if curr_token[1] in sig_tokens and word_token not in ignore_tokens:
-				if word_token in keyword_dict.keys() and not word_token in curr_headline.keywords:
-					keyword_dict[word_token].append(curr_headline)
 				if not word_token in top_keyword_dict.keys():
 					top_keyword_dict[word_token] = 0
 				else:
@@ -68,13 +51,13 @@ def tag_headline_arr(curr_headline_arr, top_keyword_dict, keyword_weight_dict):
 	Called by get_data_analysis.
 	Tags each headline with its assosiated keywords."""
 	sig_tokens = ['NN', 'NNP']
-	ignore_tokens = ['Is', 'VIDEO', 'Introduction', '"', 'Has']
+	ignore_tokens = ['Is', 'VIDEO', 'Introduction', '"', 'Has', 'Opinion']
 	for curr_headline in curr_headline_arr:
 		discovered_tokens = []
-		headline_tokens = nltk.word_tokenize(curr_headline.headline_str)
+		headline_tokens = nltk.word_tokenize(curr_headline.headline_str.replace("'", ""))
 		tagged_tokens = nltk.pos_tag(headline_tokens)
 		for curr_token in tagged_tokens:
-			word_token = curr_token[0]
+			word_token = curr_token[0][:1].upper() + curr_token[0][1:]
 			if curr_token[1] in sig_tokens and word_token not in ignore_tokens:
 				if top_keyword_dict[word_token] > 1 and word_token not in curr_headline.keywords:
 					curr_headline.keywords.append(word_token)
@@ -83,7 +66,7 @@ def tag_headline_arr(curr_headline_arr, top_keyword_dict, keyword_weight_dict):
 					else:
 						keyword_weight_dict[word_token] = 1
 
-def clean_assc_dict(top_keyword_dict):
+def clean_assc_dict(top_keyword_dict, assc_dict):
 	"""
 	Called by get_data_analysis.
 	Gets rid of repeat and irrelevent keywords in assc_dict"""
@@ -164,9 +147,7 @@ def parse_poll_data(all_poll_data, state_data_dict):
 			else:
 				new_data_dict_list = merge_poll_dict_lists(curr_state_data_obj.general_poll_dict_list, poll_data_dict_list)
 				curr_state_data_obj.general_poll_dict_list += new_data_dict_list
-			#if not state_token in state_data_dict.keys():
 			state_data_dict[state_token] = curr_state_data_obj # update the state data in the larger dictionary
-	#return state_data_dict
 
 def get_data_analysis(argv):
 	"""
@@ -177,14 +158,15 @@ def get_data_analysis(argv):
 	state_data_dict = database.get_current_races_data() # poll data from previous weeks
 	all_headlines = web_scraper.get_all_headline_data() # get the headline data from the web
 	all_poll_data = web_scraper.get_all_poll_data() # get the poll data from the web
+	assc_dict = {}
 	top_keyword_dict = {}
 	final_keywords = []
 	keyword_weight_dict = {}
 	for curr_headline_arr in all_headlines: # find all keywords from headlines
-		top_keyword_dict = parse_headline_arr(curr_headline_arr, top_keyword_dict)
+		top_keyword_dict = parse_headline_arr(curr_headline_arr, top_keyword_dict, assc_dict)
 	for curr_headline_arr in all_headlines: # aggregate keyword data and tag headlines with significant keywords
 		tag_headline_arr(curr_headline_arr, top_keyword_dict, keyword_weight_dict)
-	clean_assc_dict(top_keyword_dict) # clean up the association keywords found from parsing headlines
+	clean_assc_dict(top_keyword_dict, assc_dict) # clean up the association keywords found from parsing headlines
 	sorted_keyword_list = list(reversed(sorted(top_keyword_dict.items(), key=operator.itemgetter(1))))
 	for sorted_keyword in sorted_keyword_list: # make keyword association map
 		if sorted_keyword[1] > 1:
@@ -201,14 +183,3 @@ def get_data_analysis(argv):
 	database.write_headlines_to_JSON(all_headlines, keyword_weight_dict) # write headline data to json file
 	database.write_finished_states_to_JSON(finished_states_dict)
 	database.write_assc_dict_to_JSON(final_keywords)
-	
-
-
-def get_state_poll_data():
-	return state_data_dict
-
-#def main(argv):
-#	get_data_analysis(argv)
-
-#if __name__ == "__main__":
-#	main(sys.argv[1:])
