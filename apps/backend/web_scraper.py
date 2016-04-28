@@ -1,6 +1,8 @@
 """
 web_scraper.py 
 Written by: Anders Maraviglia
+
+In charge of collecting data from online or stored sources, does not perform any analysis on the data it finds.
 """
 
 import data_structures
@@ -12,8 +14,7 @@ import string
 import os
 		
 def get_website_URLs():
-	"""
-	Called by get_all_headline_data, gets the news sourse URL's to parse."""
+	"""Called by get_all_headline_data, gets the news sourse URL's to parse."""
 	filepath = os.path.dirname(os.path.realpath(__file__)) +"/web_sources"
 	f = open(filepath, 'r')
 	websites = []
@@ -27,8 +28,7 @@ def get_website_URLs():
 	return websites
 
 def get_red_rcp_primary_result_data(finished_states_dict):
-	"""
-	Parse the republican html file and get the delegate count for all finished states and put data in finished_states_dict."""
+	"""Parse the republican html file and get the delegate count for all finished states and put data in finished_states_dict."""
 	data_filepath = database.get_database_filepath() + "rep_primary_results_table.html"
 	html_str = open(data_filepath, 'r').read()
 	bs_obj = bs4.BeautifulSoup(html_str, 'html.parser')
@@ -52,7 +52,7 @@ def get_red_rcp_primary_result_data(finished_states_dict):
 					kasich_votes = int(elt_list[6].string) # kasich
 					state_obj = None
 					if state_name not in finished_states_dict.keys():
-						state_obj = data_structures.State_Poll_Data(state_name)
+						state_obj = data_structures.StatePollData(state_name)
 					else:
 						state_obj = finished_states_dict[state_name]
 					red_dict = {}
@@ -66,8 +66,7 @@ def get_red_rcp_primary_result_data(finished_states_dict):
 					finished_states_dict[state_name] = state_obj
 
 def get_blue_rcp_primary_result_data(finished_states_dict):
-	"""
-	Parse the democratic html file and get the delegate count for all finished states and put data in finished_states_dict."""
+	"""Parse the democratic html file and get the delegate count for all finished states and put data in finished_states_dict."""
 	data_filepath = database.get_database_filepath() + "dem_primary_results_table.html"
 	html_str = open(data_filepath, 'r').read()
 	bs_obj = bs4.BeautifulSoup(html_str, 'html.parser')
@@ -86,7 +85,7 @@ def get_blue_rcp_primary_result_data(finished_states_dict):
 					sanders_votes = int(elt_list[4].string) # sanders
 					state_obj = None
 					if state_name not in finished_states_dict.keys():
-						state_obj = data_structures.State_Poll_Data(state_name)
+						state_obj = data_structures.StatePollData(state_name)
 					else:
 						state_obj = finished_states_dict[state_name]
 					red_dict = {}
@@ -98,8 +97,7 @@ def get_blue_rcp_primary_result_data(finished_states_dict):
 					finished_states_dict[state_name] = state_obj
 
 def get_rcp_poll_data(website_url):
-	"""
-	Called by get_all_poll_data, gets poll data from rcp site"""
+	"""Called by get_all_poll_data, gets poll data from rcp site"""
 	all_races = dict()
 	page = requests.get(website_url)
 	page.raise_for_status()
@@ -111,7 +109,7 @@ def get_rcp_poll_data(website_url):
 	td_index = 0
 	for race_val in td_race:
 		if race_val.string not in all_races:
-			new_race = data_structures.Race_Data(race_val.string)
+			new_race = data_structures.RaceData(race_val.string)
 			new_race.race_poll_str_data.append(td_results[td_index].string)
 			new_race.race_spread_str_data.append(td_spread[td_index].string)
 			new_race.poll_source_str.append(td_poll[td_index].string)
@@ -125,19 +123,19 @@ def get_rcp_poll_data(website_url):
 	return all_races
 
 def get_headline_data(website_url, source):
+	"""Called by get_all_headline_data,
+	Parse the headline html data for one news site and make each headline into a Headline object.
 	"""
-	Called by get_all_headline_data"""
 	page = requests.get(website_url)
 	page.raise_for_status()
 	all_headlines = []
-	bs_obj = bs4.BeautifulSoup(page.text, 'html.parser') ## bs_obj.select('div')
+	bs_obj = bs4.BeautifulSoup(page.text, 'html.parser')
 	item_list = bs_obj.select('item')
 	printable = set(string.printable)
 	for curr_item in item_list:
 		item_title = curr_item.title.string
 		followup_link = curr_item.select('link')[0].string
 		datestamp = curr_item.select('pubdate')[0].string
-		#item_title = item_title.replace(u"\u2018", "'").replace(u"\u2019", "'")
 		item_title = item_title.replace("&apos;", "'")
 		followup_link = followup_link.replace(u"\u2018", "'").replace(u"\u2019", "'")
 		item_title = item_title.encode('utf-8', errors='ignore')
@@ -146,9 +144,8 @@ def get_headline_data(website_url, source):
 	return all_headlines
 
 def get_all_headline_data():
-	"""
-	Gets all headlines in a 2d array of headline objects"""
-	websites = get_website_URLs()
+	"""Gets all headlines in a 2d array of headline objects"""
+	websites = database.get_website_URLs()
 	all_headlines_arr = []
 	for curr_elt in websites:
 		curr_website = curr_elt[0]
@@ -158,14 +155,12 @@ def get_all_headline_data():
 	return all_headlines_arr
 
 def get_all_poll_data():
-	"""
-	Gets all poll data from websites, just rcp right now"""
+	"""Gets all poll data from websites, just rcp right now"""
 	rcp_poll_race_dict = get_rcp_poll_data('http://www.realclearpolitics.com/epolls/latest_polls/') # realclearpolotics poll data
 	return rcp_poll_race_dict
 
 def get_finished_states_dict():
-	"""
-	Get the delegate count for all completed primaries, and return the result."""
+	"""Get the delegate count for all completed primaries, and return the result."""
 	finished_states_dict = {}
 	get_red_rcp_primary_result_data(finished_states_dict)
 	get_blue_rcp_primary_result_data(finished_states_dict)
