@@ -24,7 +24,7 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
 
     $scope.inlineOptions = {
         customClass: getDayClass,
-        minDate: new Date(),
+        maxDate: new Date(),
         showWeeks: true
     };
 
@@ -42,13 +42,6 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
             mode = data.mode;
         return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
     }
-
-    $scope.toggleMin = function() {
-        $scope.inlineOptions.minDate = $scope.inlineOptions.minDate ? null : new Date();
-        $scope.dateOptions.minDate = $scope.inlineOptions.minDate;
-    };
-
-    $scope.toggleMin();
 
     $scope.open1 = function() {
         $scope.popup1.opened = true;
