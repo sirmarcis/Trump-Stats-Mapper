@@ -63,7 +63,7 @@ def parse_headline_arr(curr_headline_arr, top_keyword_dict):
 					assc_dict[curr_assc_token] = other_assc_tokens
 	return top_keyword_dict
 
-def tag_headline_arr(curr_headline_arr, top_keyword_dict):
+def tag_headline_arr(curr_headline_arr, top_keyword_dict, keyword_weight_dict):
 	"""
 	Called by get_data_analysis.
 	Tags each headline with its assosiated keywords."""
@@ -76,8 +76,12 @@ def tag_headline_arr(curr_headline_arr, top_keyword_dict):
 		for curr_token in tagged_tokens:
 			word_token = curr_token[0]
 			if curr_token[1] in sig_tokens and word_token not in ignore_tokens:
-				if top_keyword_dict[word_token] > 1:
+				if top_keyword_dict[word_token] > 1 and word_token not in curr_headline.keywords:
 					curr_headline.keywords.append(word_token)
+					if word_token in keyword_weight_dict.keys():
+						keyword_weight_dict[word_token] += 1
+					else:
+						keyword_weight_dict[word_token] = 1
 
 def clean_assc_dict(top_keyword_dict):
 	"""
@@ -173,26 +177,28 @@ def get_data_analysis(argv):
 	state_data_dict = database.get_current_races_data() # poll data from previous weeks
 	all_headlines = web_scraper.get_all_headline_data() # get the headline data from the web
 	all_poll_data = web_scraper.get_all_poll_data() # get the poll data from the web
-	top_keyword_dict = dict()
+	top_keyword_dict = {}
+	final_keywords = []
+	keyword_weight_dict = {}
 	for curr_headline_arr in all_headlines: # find all keywords from headlines
 		top_keyword_dict = parse_headline_arr(curr_headline_arr, top_keyword_dict)
 	for curr_headline_arr in all_headlines: # aggregate keyword data and tag headlines with significant keywords
-		tag_headline_arr(curr_headline_arr, top_keyword_dict)
+		tag_headline_arr(curr_headline_arr, top_keyword_dict, keyword_weight_dict)
 	clean_assc_dict(top_keyword_dict) # clean up the association keywords found from parsing headlines
 	sorted_keyword_list = list(reversed(sorted(top_keyword_dict.items(), key=operator.itemgetter(1))))
-	final_keywords = []
 	for sorted_keyword in sorted_keyword_list: # make keyword association map
 		if sorted_keyword[1] > 1:
 			if len(argv) > 0:
 				if argv[0] == "headlines":
 					print sorted_keyword[0], ", associated tokens: ", assc_dict[sorted_keyword[0]]
+			keyword_weight_dict[sorted_keyword[0]] += len(assc_dict[sorted_keyword[0]])
 			final_keywords.append(sorted_keyword[0])
 	parse_poll_data(all_poll_data, state_data_dict) # self explanitory
 	finished_states_dict = web_scraper.get_finished_states_dict()
 	database.write_current_races_data(state_data_dict) # save state data to database
 	database.write_headlines_data(all_headlines)
 	database.write_poll_data_to_JSON(state_data_dict) # write poll data to json file
-	database.write_headlines_to_JSON(all_headlines) # write headline data to json file
+	database.write_headlines_to_JSON(all_headlines, keyword_weight_dict) # write headline data to json file
 	database.write_finished_states_to_JSON(finished_states_dict)
 	database.write_assc_dict_to_JSON(final_keywords)
 	

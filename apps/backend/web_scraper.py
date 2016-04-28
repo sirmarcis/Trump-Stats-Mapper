@@ -31,7 +31,7 @@ def get_red_rcp_primary_result_data(finished_states_dict):
 	data_filepath = database.get_database_filepath() + "rep_primary_results_table.html"
 	html_str = open(data_filepath, 'r').read()
 	bs_obj = bs4.BeautifulSoup(html_str, 'html.parser')
-	table = bs_obj.find('table')
+	table = bs_obj.find('table') # wyoming, nebraska, washington
 	for row in table.find_all("tr"):
 		state_name = ""
 		span_list = row.find_all('span')

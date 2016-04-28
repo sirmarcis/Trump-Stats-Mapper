@@ -106,33 +106,38 @@ def is_current_article_p(datestamp, today_datestamp):
 	else:
 		return False
 
-def write_headlines_to_JSON(all_headlines):
+def get_headline_weight(curr_headline, keyword_weight_dict):
+	keyword_weight = 0
+	for keyword in curr_headline.keywords:
+		keyword_weight += keyword_weight_dict[keyword]
+	return keyword_weight
+
+def write_headlines_to_JSON(all_headlines, keyword_weight_dict):
 	"""
 	Write the headline and keyword data in a json readable format."""
 	database_filepath = get_database_filepath()
 	today_datestamp = get_datestamp()
 	current_races_filepath = database_filepath + "headlines_" + today_datestamp + ".json"
-	headline_1d_list = []
 	headline_list_dict = {}
 	keywords_list_dict = {}
 	for curr_headline_arr in all_headlines:
 		for curr_headline in curr_headline_arr:
 			if is_current_article_p(curr_headline.sub_datestamp, today_datestamp):
+				curr_headline.keyword_weight = get_headline_weight(curr_headline, keyword_weight_dict)
 				if curr_headline.sub_datestamp in headline_list_dict.keys():
 					headline_list_dict[curr_headline.sub_datestamp].append(curr_headline)
-					keywords_list_dict[curr_headline.sub_datestamp] += curr_headline.keywords
+					keywords_list_dict[curr_headline.sub_datestamp] = keywords_list_dict[curr_headline.sub_datestamp] + curr_headline.keywords
 				else:
 					headline_list_dict[curr_headline.sub_datestamp] = [curr_headline]
 					keywords_list_dict[curr_headline.sub_datestamp] = curr_headline.keywords
-			headline_1d_list.append(curr_headline)
-	for date_str in keywords_list_dict.keys():
+	for date_str in headline_list_dict.keys():
 		agg_keyword_list = []
 		for keyword in keywords_list_dict[date_str]:
 			if keyword not in agg_keyword_list:
 				agg_keyword_list.append(keyword)
 		curr_headlines = headline_list_dict[date_str]
 		headline_list_dict[date_str] = {}
-		headline_list_dict[date_str]["headlines"] = curr_headlines
+		headline_list_dict[date_str]["headlines"] = list(sorted(curr_headlines, key=lambda x: x.keyword_weight, reverse=True))
 		headline_list_dict[date_str]["keywords"] = agg_keyword_list
 	with open(current_races_filepath, 'w') as outfile:
 		json.dump(headline_list_dict, outfile, cls=data_structures.HeadlineEncoder)
