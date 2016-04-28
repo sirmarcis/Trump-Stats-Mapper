@@ -56,6 +56,9 @@ function tooltipHtmlGop(n, d) {
 
 var party;
 var d = new Date();
+d.setHours(0,0,0,0);
+var currentDate = new Date();
+currentDate.setHours(0,0,0,0);
 // sampled data.
 var sampleData = {};
 
@@ -143,7 +146,8 @@ function redrawMap(input) {
 	if (input == 'democrat' || input == 'gop') {
 		party = input;
 	} else {
-		d = input;
+		d = new Date(input);
+		// console.log(d);
 	}
 	
     //variables to get average for progress bar
@@ -185,11 +189,34 @@ function redrawMap(input) {
     });
 	
 	var input;
-	if (d = new Date()) {
+	var today = new Date();
+	today.setHours(0,0,0,0);
+	if (d.getTime() == today.getTime()) {
 		input = 'curr_week';
+		// console.log("today");
 	} else {
-		input = 'polldata_' + d.getDay() + "." + d.getMonth() + "." + d.getYear();
+		var extra = ""
+		if (d.getMonth() < 9) {
+			extra = '0';
+		}
+		input = Math.floor(d.getDate()/7) + "." + extra + (d.getMonth()+1) + "." + d.getFullYear();
+		// console.log("not today " + input);
 	}
+	
+	var months = {
+		'January': 1,
+		'February': 2,
+		'March': 3,
+		'April': 4,
+		'May': 5,
+		'June': 6,
+		'July': 7,
+		'August': 8,
+		'September': 9,
+		'October': 10,
+		'November': 11,
+		'December': 12
+	};
 	
     getpolldata(input, function(output) { //sync
 		if (party == 'democrat') {
@@ -363,8 +390,10 @@ function redrawMap(input) {
 			drawBar((totalC1 / count / 100).toPrecision(2), (totalC2 / count / 100).toPrecision(2),.06);
 			*/
 		}
+		
 		getFinishedStates(function(finished) {
 			if (party == 'democrat') {
+				var skipped = {};
 				var key;
 				var counter = 0;
 				color = '#ffffff';
@@ -376,6 +405,18 @@ function redrawMap(input) {
 					for (key2 in finished[key]["blue_poll_dict_list"]) {
 						var key3;
 						for (key3 in finished[key]["blue_poll_dict_list"][key2]) {
+							var monthArr = key3.split(" ");
+							var monthNum = months[monthArr[0]]
+							var pollDate = new Date(2016,monthNum,monthArr[1]);
+							// console.log("pollDate: " + pollDate.getTime() + " currentDate: " + d.getTime())
+							// console.log(pollDate);
+							// console.log(d);
+							if (pollDate.getTime() > d.getTime()) {
+								counter--;
+								// console.log("skipped: " + key);
+								skipped[key] = true;
+								continue;
+							}
 							if (finished[key]["blue_poll_dict_list"][key2][key3].hasOwnProperty("Clinton")) {
 								candidate1 += finished[key]["blue_poll_dict_list"][key2][key3]["Clinton"];
 							}
@@ -416,7 +457,11 @@ function redrawMap(input) {
 						}
 					}
 					if (candidate1 == 0 && candidate2 == 0) {
-						color = "gray";
+						if (skipped[key]) {
+							color = '#ffffff';
+						} else {
+							color = "gray";
+						}
 						count--;
 					}
 					var name1 = "Clinton";
@@ -441,6 +486,7 @@ function redrawMap(input) {
 				uStates.updateColor("#statesvg", sampleData);
 				drawBar((totalC1 / 4051).toPrecision(2), (totalC2 / 4051).toPrecision(2),0);
 			} else {
+				var skipped = {};
 				var key;
 				var counter = 0;
 				color = '#ffffff';
@@ -454,6 +500,18 @@ function redrawMap(input) {
 					for (key2 in finished[key]["red_poll_dict_list"]) {
 						var key3;
 						for (key3 in finished[key]["red_poll_dict_list"][key2]) {
+							var monthArr = key3.split(" ");
+							var monthNum = months[monthArr[0]] - 1;
+							var pollDate = new Date(2016,monthNum,monthArr[1]);
+							// console.log("pollDate: " + pollDate.getTime() + " currentDate: " + d.getTime())
+							// console.log(pollDate);
+							// console.log(d);
+							if (pollDate.getTime() > d.getTime()) {
+								counter--;
+								// console.log("skipped: " + key);
+								skipped[key] = true;
+								continue;
+							}
 							if (finished[key]["red_poll_dict_list"][key2][key3].hasOwnProperty("Trump")) {
 								candidate1 += finished[key]["red_poll_dict_list"][key2][key3]["Trump"];
 							}
@@ -504,7 +562,11 @@ function redrawMap(input) {
 						color = colors[maxIndex][colorIndex];
 					}
 					if (candidate1 == 0 && candidate2 == 0 && candidate3 == 0 && candidate4 == 0) {
-						color = "gray";
+						if (skipped[key]) {
+							color = '#ffffff'
+						} else {
+							color = "gray";
+						}
 						count--;
 					}
 					var name1 = "Trump";
