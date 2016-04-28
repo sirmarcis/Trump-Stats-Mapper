@@ -651,4 +651,5 @@ redrawMap('gop');
 // Reset the map
 function resetMap() {
     redrawMap('gop');
+    document.getElementById("gop").checked = true;
 }

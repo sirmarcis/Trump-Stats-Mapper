@@ -5,23 +5,19 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
     $scope.data = {};
     $scope.keyword = "";
 
+    // First grab of headline data (including keywords)
     getHeadlineData('curr_week', function(output) {
         $scope.data = output;
         $scope.$apply();
-        console.log("keywords length: ", $scope.data[$scope.formatDate($scope.dt)].keywords.length);
-        console.log("headlines: ", $scope.data[$scope.formatDate($scope.dt)].headlines);
-        console.log("keywords: ", $scope.data[$scope.formatDate($scope.dt)].keywords);
     });
 
-    $scope.today = function() {
+    // Calendar reset
+    $scope.reset = function() {
         $scope.dt = new Date();
     };
-    $scope.today();
+    $scope.reset();
 
-    $scope.clear = function() {
-        $scope.dt = null;
-    };
-
+    // Calendar options
     $scope.inlineOptions = {
         customClass: getDayClass,
         maxDate: new Date(),
@@ -31,7 +27,6 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
     $scope.dateOptions = {
         dateDisabled: disabled,
         formatYear: 'yy',
-        maxDate: $scope.today(),
         minDate: new Date(),
         startingDay: 1
     };
@@ -89,6 +84,7 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
         return '';
     }
 
+    // Retrieves headlines data
     function getHeadlineData(weekstring, handledata) {
         $.getJSON($SCRIPT_ROOT + '/get_headline_data', {
             week: weekstring
