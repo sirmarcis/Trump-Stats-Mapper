@@ -31,6 +31,7 @@
       </form>
     </div>
     <button onclick="resetMap()" ng-click="reset()" class="btn btn-sm btn-default" uib-tooltip="Reset candidates and date">Reset</button>
+    <button onclick="redrawMap('grdient')" class="btn btn-sm btn-default" uib-tooltip="Changes map gradient">Gradient</button>
     <div id="dateselector-box" class="box">
       <div style="display:inline-block;">
         <uib-datepicker ng-model="dt" class="well well-sm" datepicker-options="inlineOptions" onclick="redrawMap(document.getElementById('dt').innerHTML)" ng-click="checkForData()"></uib-datepicker>
