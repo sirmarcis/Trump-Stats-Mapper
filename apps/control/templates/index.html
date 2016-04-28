@@ -11,10 +11,11 @@
 </head>
 
 <body ng-controller="TrumpStatsMapperCtrl">
-  <div id="options-container">
-    <div id="candidates-box" class="box">
+  <div id="options-container"><!-- Container that holds all options and keywords -->
+    <div id="candidates-box" class="box"><!-- Container that holds the candidates -->
       <h2>Candidates</h2>
       <form>
+      <!-- Radio that selects 1 of the 2 parties -->
         <h3><input id="dem" type="radio" name="party" value="democrat" onclick="redrawMap('democrat')"><span>Democrat</span></h3>
         <div class="candidate-label clinton"></div>Clinton
         <br>
