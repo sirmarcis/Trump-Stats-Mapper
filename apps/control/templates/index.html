@@ -67,6 +67,7 @@
     <div id="headlines-box-inner" ng-repeat="headline in data[formatDate(dt)].headlines | orderBy:sortByKeyword">
       <a class="animate-repeat" href="{{headline.link_str}}" target="_blank">{{headline.headline_str}}</a> <span class="headline-source">{{headline.source}}</span>
       <br>
+      <span ng-if="!hasHeadlines()">hi</span>
     </div>
     {% endraw %}
   </div>
