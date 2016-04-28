@@ -31,7 +31,7 @@ def get_red_rcp_primary_result_data(finished_states_dict):
 	data_filepath = database.get_database_filepath() + "rep_primary_results_table.html"
 	html_str = open(data_filepath, 'r').read()
 	bs_obj = bs4.BeautifulSoup(html_str, 'html.parser')
-	table = bs_obj.find('table')
+	table = bs_obj.find('table') # wyoming, nebraska, washington
 	for row in table.find_all("tr"):
 		state_name = ""
 		span_list = row.find_all('span')
@@ -63,6 +63,7 @@ def get_red_rcp_primary_result_data(finished_states_dict):
 					red_dict[date_str] = can_dict
 					state_obj.red_poll_dict_list.append(red_dict)
 					finished_states_dict[state_name] = state_obj
+					#print "added red data for ", state_name
 
 def get_blue_rcp_primary_result_data(finished_states_dict):
 	data_filepath = database.get_database_filepath() + "dem_primary_results_table.html"
@@ -134,9 +135,10 @@ def get_headline_data(website_url, source):
 		item_title = curr_item.title.string
 		followup_link = curr_item.select('link')[0].string
 		datestamp = curr_item.select('pubdate')[0].string
-		item_title = item_title.replace(u"\u2018", "'").replace(u"\u2019", "'")
+		#item_title = item_title.replace(u"\u2018", "'").replace(u"\u2019", "'")
+		item_title = item_title.replace("&apos;", "'")
 		followup_link = followup_link.replace(u"\u2018", "'").replace(u"\u2019", "'")
-		item_title = item_title.encode('ascii', errors='ignore')
+		item_title = item_title.encode('utf-8', errors='ignore')
 		new_headline = data_structures.Headline(item_title, followup_link, source, datestamp)
 		all_headlines.append(new_headline)
 	return all_headlines

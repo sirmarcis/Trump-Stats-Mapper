@@ -47,6 +47,7 @@ class Headline:
 		self.source = source
 		self.datestamp = datestamp
 		self.sub_datestamp = self.break_datestamp(datestamp)
+		self.keyword_weight = 0
 		
 	def break_datestamp(self, datestamp):
 		"""

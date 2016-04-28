@@ -32,7 +32,7 @@
     </div>
     <div id="dateselector-box">
       <div style="display:inline-block;">
-        <uib-datepicker ng-model="dt" class="well well-sm" datepicker-options="inlineOptions" onclick="redrawMap(document.getElementById('dt').innerHTML)"></uib-datepicker>
+        <uib-datepicker ng-model="dt" class="well well-sm" datepicker-options="inlineOptions" onclick="redrawMap(document.getElementById('dt').innerHTML)" ng-click="checkForData()"></uib-datepicker>
       </div>
     </div>
     <div id="keywords-box">
@@ -67,6 +67,7 @@
     <div id="headlines-box-inner" ng-repeat="headline in data[formatDate(dt)].headlines | orderBy:sortByKeyword">
       <a class="animate-repeat" href="{{headline.link_str}}" target="_blank">{{headline.headline_str}}</a> <span class="headline-source">{{headline.source}}</span>
       <br>
+      <span ng-if="!hasHeadline(dt)">No headlines!</span>
     </div>
     {% endraw %}
   </div>
