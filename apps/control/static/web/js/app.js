@@ -4,6 +4,8 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
 
     $scope.data = {};
     $scope.keyword = "";
+    
+    $scope.gradientBool = "true";
 
     // First grab of headline data (including keywords)
     getHeadlineData('curr_week', function(output) {
@@ -98,18 +100,18 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
             var week = Math.floor($filter('date')($scope.dt, 'd') / 7) +
                 "." +
                 $filter('date')($scope.dt, 'MM.yyyy');
-            console.log(week);
+            //console.log(week);
 
             getHeadlineData(week, function(output) {
                 for (var newdate in output) $scope.data[newdate] = output[newdate];
                 $scope.$apply();
-                console.log("data = ", $scope.data);
+                //console.log("data = ", $scope.data);
             });
         }
     }
 
     $scope.hasHeadline = function(date) {
-        console.log($scope.data[$scope.formatDate(date)].headlines.length);
+        //console.log($scope.data[$scope.formatDate(date)].headlines.length);
         return $scope.data[$scope.formatDate(date)].headlines.length > 0;
     }
 
