@@ -4,6 +4,7 @@ Written by: Anders Maraviglia
 """
 
 import data_structures
+import database
 from lxml import html
 import requests
 import bs4
@@ -26,13 +27,72 @@ def get_website_URLs():
 	f.close()
 	return websites
 
-def get_rcp_primary_result_data(website_url):
-	page = requests.get(website_url)
-	page.raise_for_status()
-	bs_obj = bs4.BeautifulSoup(page.text, 'lxml')
-	results_bs_table = bs_obj.find('table')
-	#table_body = results_bs_table.find('tbody')
-	print results_bs_table
+def get_red_rcp_primary_result_data(finished_states_dict):
+	data_filepath = database.get_database_filepath() + "rep_primary_results_table.html"
+	html_str = open(data_filepath, 'r').read()
+	bs_obj = bs4.BeautifulSoup(html_str, 'html.parser')
+	table = bs_obj.find('table')
+	for row in table.find_all("tr"):
+		state_name = ""
+		span_list = row.find_all('span')
+		if len(span_list) > 1:
+			state_name = span_list[1].string
+		elt_list = row.find_all("td")
+		if len(elt_list) > 0:
+			if elt_list[1].span != None:
+				date_str = elt_list[1].span.string
+				if elt_list[3].string != None:
+					trump_votes = int(elt_list[3].string) # trump
+					cruz_votes = int(elt_list[4].string) # cruz
+					if elt_list[5].string != None:
+						rubio_votes = int(elt_list[5].string) # rubio
+					else:
+						rubio_votes = 0
+					kasich_votes = int(elt_list[6].string) # kasich
+					state_obj = None
+					if state_name not in finished_states_dict.keys():
+						state_obj = data_structures.State_Poll_Data(state_name)
+					else:
+						state_obj = finished_states_dict[state_name]
+					red_dict = {}
+					can_dict = {}
+					can_dict["Trump"] = trump_votes
+					can_dict["Cruz"] = cruz_votes
+					can_dict["Rubio"] = rubio_votes
+					can_dict["Kasich"] = kasich_votes
+					red_dict[date_str] = can_dict
+					state_obj.red_poll_dict_list.append(red_dict)
+					finished_states_dict[state_name] = state_obj
+
+def get_blue_rcp_primary_result_data(finished_states_dict):
+	data_filepath = database.get_database_filepath() + "dem_primary_results_table.html"
+	html_str = open(data_filepath, 'r').read()
+	bs_obj = bs4.BeautifulSoup(html_str, 'html.parser')
+	table = bs_obj.find('table')
+	for row in table.find_all("tr"):
+		state_name = ""
+		span_list = row.find_all('span')
+		if len(span_list) > 1:
+			state_name = span_list[1].string
+		elt_list = row.find_all("td")
+		if len(elt_list) > 0:
+			if elt_list[1].string != "-":
+				date_str = elt_list[1].string
+				if elt_list[3].string != None:
+					clinton_votes = int(elt_list[3].string) # clinton
+					sanders_votes = int(elt_list[4].string) # sanders
+					state_obj = None
+					if state_name not in finished_states_dict.keys():
+						state_obj = data_structures.State_Poll_Data(state_name)
+					else:
+						state_obj = finished_states_dict[state_name]
+					red_dict = {}
+					can_dict = {}
+					can_dict["Clinton"] = clinton_votes
+					can_dict["Sanders"] = sanders_votes
+					red_dict[date_str] = can_dict
+					state_obj.blue_poll_dict_list.append(red_dict)
+					finished_states_dict[state_name] = state_obj
 
 def get_rcp_poll_data(website_url):
 	"""
@@ -99,9 +159,9 @@ def get_all_poll_data():
 	rcp_poll_race_dict = get_rcp_poll_data('http://www.realclearpolitics.com/epolls/latest_polls/') # realclearpolotics poll data
 	return rcp_poll_race_dict
 
-def main():
-	get_rcp_primary_result_data("http://www.realclearpolitics.com/epolls/2016/president/republican_delegate_count.html")
-
-if __name__ == "__main__":
-	main()
+def get_finished_states_dict():
+	finished_states_dict = {}
+	get_red_rcp_primary_result_data(finished_states_dict)
+	get_blue_rcp_primary_result_data(finished_states_dict)
+	return finished_states_dict
 

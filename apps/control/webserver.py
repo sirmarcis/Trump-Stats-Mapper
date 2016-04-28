@@ -50,6 +50,11 @@ def get_headline_data():
 		data = database.get_headline_JSON_obj(week)
 	return jsonify(result=data)
 
+@app.route('/get_finished_states_data')
+def get_finished_states_data():
+	data = database.get_finished_states_JSON_obj()
+	return jsonify(result=data)
+
 @app.route('/_add_numbers')
 def add_numbers():
     a = request.args.get('a', 0, type=int)

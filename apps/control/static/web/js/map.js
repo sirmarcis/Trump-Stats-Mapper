@@ -60,7 +60,7 @@ var d = new Date();
 var sampleData = {};
 
 // function to redraw the map with new data
-function drawBar(percent1, percent2) {
+function drawBar(percent1, percent2,percent3) {
     // clamping of percents
     if (percent1 > 1) percent1 = 1;
     if (percent2 > 1) percent2 = 1;
@@ -70,16 +70,17 @@ function drawBar(percent1, percent2) {
     d3.select("#barsvg").selectAll("*").remove();
     // draw background black bar
     d3.select("#barsvg").append("rect")
-        .attr("x", 120)
-        .attr("y", 10)
+        .attr("x", 123)
+        .attr("y", 11)
         .attr("rx", 10)
         .attr("ry", 10)
-        .attr("width", 720)
-        .attr("height", 75)
+        .attr("width", 715)
+        .attr("height", 44)
         .style("fill", "black");
 
     var blue_width = 700 * percent1;
     var red_width = 700 * percent2;
+    var green_width = 700* percent3;
     var names = ["Trump", "Clinton", "Other"]
     var percents = [percent1 * 100, percent2 * 100, Math.floor((1 - percent1 - percent2).toPrecision(2) * 100)];
     // draw main bars
@@ -96,41 +97,60 @@ function drawBar(percent1, percent2) {
 
     d3.select("#barsvg").append("rect")
         .attr("x", 130)
-        .attr("y", 22)
+        .attr("y", 18)
         .attr("width", 700)
-        .attr("height", 50)
+        .attr("height", 30)
         .style("fill", "grey");
 
     d3.select("#barsvg").append("rect")
         .attr("x", 130)
-        .attr("y", 22)
+        .attr("y", 18)
         .attr("width", blue_width)
-        .attr("height", 50)
+        .attr("height", 30)
         .style("fill", "blue");
+
+    if(percent1>=0.06){
+        d3.select("#barsvg").append("text")
+            .attr("x", 130+blue_width/2 -14)
+            .attr("y", 40)
+            .attr("font-size", "20px")
+            .attr("fill", "white")
+            .text(percent1*100+"%");
+    }
+
+    d3.select("#barsvg").append("rect")
+        .attr("x", 130 + 700 - red_width-green_width)
+        .attr("y", 18)
+        .attr("width", green_width)
+        .attr("height", 30)
+        .style("fill", "green");
+    if(percent3>=0.06){
+        d3.select("#barsvg").append("text")
+        .attr("x", 130 + 700 - red_width-green_width/2 -14)
+        .attr("y", 40)
+        .attr("font-size", "20px")
+        .attr("fill", "white")
+        .text(percent3*100+"%");
+    }
 
     d3.select("#barsvg").append("rect")
         .attr("x", 130 + 700 - red_width)
-        .attr("y", 22)
+        .attr("y", 18)
         .attr("width", red_width)
-        .attr("height", 50)
+        .attr("height", 30)
         .style("fill", "red");
 
-    d3.select("#barsvg").append("text")
-        .attr("x", 130 + blue_width / 2)
-        .attr("y", 11)
-        .attr("dy", ".35em")
-        .attr("text", function(d) {
-            return percent1 + "%" })
+    if(percent2>=0.06){
 
-    d3.select("#barsvg").append("text")
-        .attr("x", 130 + 700 - red_width / 2)
-        .attr("y", 11)
-        .attr("fill", "#fff")
-        .style("stroke-width", 1)
-        .style({ "font-size": "18px", "z-index": "999999999" })
-        .style("text-anchor", "middle")
-        .attr("text", function(d) {
-            return percent2 + "%" });
+        d3.select("#barsvg").append("text")
+            .attr("x", 130 + 700 - red_width/2 -14)
+            .attr("y", 40)
+            .attr("font-size", "20px")
+            .attr("fill", "white")
+            .text(percent2*100+"%");
+    }
+
+   
 
     d3.select("#barsvg").selectAll("rect")
         .on("mouseover", mouseOver)
@@ -258,7 +278,7 @@ function redrawMap(input) {
 			d3.select("#statesvg").selectAll("*").remove();
 			uStates.draw("#statesvg", sampleData, tooltipHtmlDem);
 			uStates.updateColor("#statesvg", sampleData);
-			drawBar((totalC1 / count / 100).toPrecision(2), (totalC2 / count / 100).toPrecision(2));
+			drawBar((totalC1 / count / 100).toPrecision(2), (totalC2 / count / 100).toPrecision(2),0);
 		} else {
 			var key;
 			var counter = 0;
@@ -353,7 +373,7 @@ function redrawMap(input) {
 			d3.select("#statesvg").selectAll("*").remove();
 			uStates.draw("#statesvg", sampleData, tooltipHtmlGop);
 			uStates.updateColor("#statesvg", sampleData);
-			drawBar((totalC1 / count / 100).toPrecision(2), (totalC2 / count / 100).toPrecision(2));
+			drawBar((totalC1 / count / 100).toPrecision(2), (totalC2 / count / 100).toPrecision(2),.06);
 		}
     });
 }
