@@ -679,6 +679,7 @@ redrawMap('gop');
 
 // Reset the map
 function resetMap() {
+	d = new Date();
     redrawMap('gop');
     document.getElementById("gop").checked = true;
 }
