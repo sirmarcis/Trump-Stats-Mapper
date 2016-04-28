@@ -1,3 +1,7 @@
+#options-container .box {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 #map-box {
   overflow: hidden;
 }
@@ -37,9 +41,11 @@
 #candidates-box {
   padding-left: 20px;
 }
+#candidates-box span {
+  margin-left: 10px;
+}
 #dateselector-box {
   min-width: 200px;
-  margin-top: 25px;
 }
 #keywords-box {
   min-height: 200px;
