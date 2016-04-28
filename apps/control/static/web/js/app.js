@@ -95,6 +95,8 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
         });
     }
 
+    // Checks if new data (headlines + keywords) need to be retrieved and
+    //  retrieves if necessary
     $scope.checkForData = function() {
         if ($scope.data[$scope.formatDate($scope.dt)] == null) {
             var week = Math.floor($filter('date')($scope.dt, 'd') / 7) +
@@ -110,20 +112,24 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
         }
     }
 
+    // Checks if headlines exist
     $scope.hasHeadline = function(date) {
         //console.log($scope.data[$scope.formatDate(date)].headlines.length);
         return $scope.data[$scope.formatDate(date)].headlines.length > 0;
     }
 
+    // Formats date to make grabbing JSON data easier
     $scope.formatDate = function(date) {
         var d = $filter('date')(date, 'EEE, d MMM y');
         return d;
     }
 
+    // Sort by the occurrences of keywords in headlines
     $scope.sortByKeyword = function(headline) {
         return -1 * headline.keywords.indexOf($scope.keyword)
     }
 
+    // Sets word used to sort the headlines
     $scope.clickKeyword = function(word) {
         $scope.keyword = word;
     }
