@@ -14,7 +14,7 @@
   <div id="options-container">
     <div id="candidates-box">
       <h2>Candidates</h2>
-      <form action="">
+      <form>
         <h3><input type="radio" name="party" value="democrat" onclick="redrawMap('democrat')">Democrat</h3>
         <div class="candidate-label clinton"></div>Clinton
         <br>
@@ -36,20 +36,13 @@
       </div>
     </div>
     <div id="keywords-box">
+      {% raw %}
       <h2>Keywords</h2>
-      <span class="keyword">Trump</span>
-      <br>
-      <span class="keyword">Cruz</span>
-      <br>
-      <span class="keyword">House</span>
-      <br>
-      <span class="keyword">War</span>
-      <br>
-      <span class="keyword">Obama</span>
-      <br>
-      <span class="keyword">Iraq</span>
-      <br>
-      <span class="keyword">Wall</span>
+      <div id="keywords-box-inner" ng-repeat="word in data[formatDate(dt)].keywords">
+        <span class="animate-repeat keyword" ng-click="clickKeyword(word)">{{word}}</span>
+        <br>
+      </div>
+      {% endraw %}
     </div>
   </div>
   <div id="map-box">
@@ -66,14 +59,12 @@
     <script type="text/javascript">
     var $SCRIPT_ROOT = {{ request.script_root | tojson | safe }};
     </script>
-    
     <button onclick="resetMap()">Reset</button>
-    
   </div>
   <div id="headlines-box">
     {% raw %}
-    <h2 id="dt">{{formatDate(dt)}}</h2>
-    <div id="headlines-box-inner" ng-repeat="headline in headlines[formatDate(dt)]">
+    <h2 id="dt">{{dt | date: 'EEEE, MMMM d, y'}}</h2>
+    <div id="headlines-box-inner" ng-repeat="headline in data[formatDate(dt)].headlines | orderBy:sortByKeyword">
       <a class="animate-repeat" href="{{headline.link_str}}" target="_blank">{{headline.headline_str}}</a> <span class="headline-source">{{headline.source}}</span>
       <br>
     </div>
