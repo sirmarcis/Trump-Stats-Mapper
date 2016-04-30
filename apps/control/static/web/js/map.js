@@ -43,6 +43,7 @@ var party;
 var d = new Date();
 d.setHours(0,0,0,0);
 var gradient = true;
+var runningThrough = false;
 
 // function to redraw the progress bar with new data
 function drawBar(percent1, percent2,percent3) {
@@ -415,5 +416,34 @@ function resetMap() {
 	d = new Date();
     redrawMap('gop');
     document.getElementById("gop").checked = true;
+}
+
+function runThroughRace() {
+	if (!runningThrough) {
+		runningThrough = true;
+		var id = setInterval(runThrough,750);
+		var oldDate = d;
+		var runDate = new Date(2016,1,1);
+		var currentDate = new Date();
+		var currentParty = party;
+		var oldGradient = gradient;
+		function runThrough() {
+			console.log("it is working");
+			if (runDate.getTime() > currentDate.getTime()) {
+				clearInterval(id);
+				runningThrough = false;
+				party = currentParty;
+				d = oldDate;
+				gradient = oldGradient;
+				redrawMap(d);
+				document.getElementById(party).checked = true;
+			} else {
+				party = currentParty;
+				redrawMap(runDate);
+				runDate.setDate(runDate.getDate() + 7);
+				document.getElementById(party).checked = true;
+			}
+		}
+	}
 }
 
