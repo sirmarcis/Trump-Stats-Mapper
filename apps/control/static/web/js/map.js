@@ -252,32 +252,34 @@ function redrawMap(input) {
 						//	'#74c476', '#41ab5d', '#238b45', '#006d2c', '#00441b'];
 						// create gradient color for candidate
 						if (gradient) {
-							var orange = ['#fee6ce', '#fdd0a2', '#fdae6b',
-								'#fd8d3c', '#f16913', '#d94801', '#a63603', '#7f2704'];
+							// var orange = ['#fee6ce', '#fdd0a2', '#fdae6b',
+							//	'#fd8d3c', '#f16913', '#d94801', '#a63603', '#7f2704'];
+							var blue = ['#bdd7e7','#6baed6','#3182bd','#08519c'];
 							var index = candidate1 - candidate2;
 							index = Math.floor(index / 5);
 							// clamp the gradient
-							if (index > 7) index = 7;
+							if (index > 3) index = 3;
 							else if (index < 0) index = 0;
-							color = orange[index];
+							color = blue[index];
 						} else {
-							color = 'orange';
+							color = 'blue';
 						}
 					} else {
 						//var blue = ['#f7fbff', '#deebf7', '#c6dbef', '#9ecae1',
 						//	'#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b'];
 						// create gradient color for candidate
 						if (gradient) {
-							var purple = ['#efedf5', '#dadaeb', '#bcbddc',
-								'#9e9ac8', '#807dba', '#6a51a3', '#54278f', '#3f007d'];
+							// var purple = ['#efedf5', '#dadaeb', '#bcbddc',
+							//	'#9e9ac8', '#807dba', '#6a51a3', '#54278f', '#3f007d'];
+							var green = ['#bae4b3','#74c476','#31a354','#006d2c'];
 							var index = candidate2 - candidate1;
 							index = Math.floor(index / 5);
 							// clamp the gradient
-							if (index > 7) index = 7;
+							if (index > 3) index = 3;
 							else if (index < 0) index = 0;
-							color = purple[index];
+							color = green[index];
 						} else {
-							color = 'purple';
+							color = 'green';
 						}
 					}
 				}
@@ -365,23 +367,19 @@ function redrawMap(input) {
 					}
 					// select the color for the candidate with the highest numbers
 					if (gradient) {
-						var blue = ['#f7fbff', '#deebf7', '#c6dbef', '#9ecae1',
-							'#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b'];
-						var purple = ['#efedf5', '#dadaeb', '#bcbddc',
-							'#9e9ac8', '#807dba', '#6a51a3', '#54278f', '#3f007d'];
-						var green = ['#f7fcf5', '#e5f5e0', '#c7e9c0', '#a1d99b',
-							'#74c476', '#41ab5d', '#238b45', '#006d2c', '#00441b'];
-						var orange = ['#fee6ce', '#fdd0a2', '#fdae6b',
-							'#fd8d3c', '#f16913', '#d94801', '#a63603', '#7f2704'];
-						var colors = [blue,orange,green,purple];
+						var blue = ['#bdd7e7','#6baed6','#3182bd','#08519c'];
+						var purple = ['#cbc9e2','#9e9ac8','#756bb1','#54278f'];
+						var green = ['#bae4b3','#74c476','#31a354','#006d2c'];
+						var red = ['#fcae91','#fb6a4a','#de2d26','#a50f15'];
+						var colors = [blue,red,green,purple];
 						// make it a gradient versus the person in second place
 						var colorIndex = max - secondMax;
 						colorIndex = Math.floor(colorIndex / 5);
-						if (colorIndex > 7) colorIndex = 7;
+						if (colorIndex > 3) colorIndex = 3;
 						else if (colorIndex < 0) colorIndex = 0;
 						color = colors[maxIndex][colorIndex];
 					} else {
-						var colors = ['blue','orange','green','purple'];
+						var colors = ['blue','red','green','purple'];
 						color = colors[maxIndex];
 					}
 				}
@@ -477,40 +475,36 @@ function redrawMap(input) {
 							if (gradient) {
 								// var green = ['#f7fcf5', '#e5f5e0', '#c7e9c0', '#a1d99b',
 								//	'#74c476', '#41ab5d', '#238b45', '#006d2c', '#00441b'];
-								var orange = ['#fee6ce', '#fdd0a2', '#fdae6b',
-									'#fd8d3c', '#f16913', '#d94801', '#a63603', '#7f2704'];
+								var blue = ['#bdd7e7','#6baed6','#3182bd','#08519c'];
 								var index = candidate1 - candidate2;
 								index = Math.floor(index / 5);
-								if (index > 7) index = 7;
+								if (index > 3) index = 3;
 								else if (index < 0) index = 0;
-								color = orange[index];
+								color = blue[index];
 							} else {
-								color = 'orange';
+								color = 'blue';
 							}
 						} else {
 							if (gradient) {
-								//var blue = ['#f7fbff', '#deebf7', '#c6dbef', '#9ecae1',
+								// var blue = ['#f7fbff', '#deebf7', '#c6dbef', '#9ecae1',
 								//	'#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b'];
-								var purple = ['#efedf5', '#dadaeb', '#bcbddc',
-									'#9e9ac8', '#807dba', '#6a51a3', '#54278f', '#3f007d'];
+								// var purple = ['#efedf5', '#dadaeb', '#bcbddc',
+								//	'#9e9ac8', '#807dba', '#6a51a3', '#54278f', '#3f007d'];
+								var green = ['#bae4b3','#74c476','#31a354','#006d2c'];
 								var index = candidate2 - candidate1;
 								index = Math.floor(index / 5);
-								if (index > 7) index = 7;
+								if (index > 3) index = 3;
 								else if (index < 0) index = 0;
-								color = purple[index];
+								color = green[index];
 							} else {
-								color = 'purple';
+								color = 'green';
 							}
 						}
 					}
 					// if the state was skipped, leave it as the color it was
 					// otherwise something went wrong and make it gray
-					if (candidate1 == 0 && candidate2 == 0) {
-						if (skipped[key]) {
-							color = color = "#ffffff";
-						} else {
-							color = "white";
-						}
+					if ((candidate1 == 0 && candidate2 == 0) || skipped[key]) {
+						color = "#ffffff";
 						count--;
 					}
 					var name1 = "Clinton";
@@ -611,33 +605,25 @@ function redrawMap(input) {
 						// select the color based on who has the most delegates 
 						// gradient based on how many more than the second largest
 						if (gradient) {
-							var blue = ['#f7fbff', '#deebf7', '#c6dbef', '#9ecae1',
-								'#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b'];
-							var purple = ['#efedf5', '#dadaeb', '#bcbddc',
-								'#9e9ac8', '#807dba', '#6a51a3', '#54278f', '#3f007d'];
-							var green = ['#f7fcf5', '#e5f5e0', '#c7e9c0', '#a1d99b',
-								'#74c476', '#41ab5d', '#238b45', '#006d2c', '#00441b'];
-							var orange = ['#fee6ce', '#fdd0a2', '#fdae6b',
-								'#fd8d3c', '#f16913', '#d94801', '#a63603', '#7f2704'];
-							var colors = [blue,orange,green,purple];
+							var blue = ['#bdd7e7','#6baed6','#3182bd','#08519c'];
+							var purple = ['#cbc9e2','#9e9ac8','#756bb1','#54278f'];
+							var green = ['#bae4b3','#74c476','#31a354','#006d2c'];
+							var red = ['#fcae91','#fb6a4a','#de2d26','#a50f15'];
+							var colors = [blue,red,green,purple];
 							var colorIndex = max - secondMax;
 							colorIndex = Math.floor(colorIndex / 5);
-							if (colorIndex > 7) colorIndex = 7;
+							if (colorIndex > 3) colorIndex = 3;
 							else if (colorIndex < 0) colorIndex = 0;
 							color = colors[maxIndex][colorIndex];
 						} else {
-							var colors = ['blue','orange','green','purple'];
+							var colors = ['blue','red','green','purple'];
 							color = colors[maxIndex];
 						}
 					}
 					// if the state was skipped, leave it alone
 					// otherwise an error happened and make it gray
-					if (candidate1 == 0 && candidate2 == 0 && candidate3 == 0 && candidate4 == 0) {
-						if (skipped[key]) {
-							color = "#ffffff";
-						} else {
-							color = "white";
-						}
+					if ((candidate1 == 0 && candidate2 == 0 && candidate3 == 0 && candidate4 == 0) || skipped[key]) {
+						color = "#ffffff";
 						count--;
 					}
 					var name1 = "Trump";
