@@ -128,7 +128,7 @@ function drawBar(percent1, percent2,percent3) {
     }
 }
 
-// go through data function
+// go through polling/finished races function
 function goThroughDataJson(json,data,party,date,finished) {
 	// months variable that helps format the results data
 	var months = {
@@ -145,12 +145,12 @@ function goThroughDataJson(json,data,party,date,finished) {
 		'November': 11,
 		'December': 12
 	};
-	// GOP finished races
 	var skipped = {};
 	var key;
 	var counter = 0;
 	color = '#ffffff';
 	var poll = "";
+	// choose democrat or gop
 	if (party == 'democrat') {
 		poll = "blue_poll_dict_list";
 	} else {
@@ -161,7 +161,7 @@ function goThroughDataJson(json,data,party,date,finished) {
 	var totalC3 = 0;
     var totalC4 = 0;
 	// go through the states
-	// should refactor going through data
+	// now refactored to take any race finished or polling
 	for (key in json) {
 		counter = 0;
 		var candidate1 = 0;
@@ -169,12 +169,12 @@ function goThroughDataJson(json,data,party,date,finished) {
 		var candidate3 = 0;
 		var candidate4 = 0;
 		var key2;
-		// go through the GOP delegates
+		// go through the delegates or polling data
 		for (key2 in json[key][poll]) {
 			var key3;
 			for (key3 in json[key][poll][key2]) {
 				if (finished) {
-					// check if the selected date is before the voted date
+					// check if the selected date is before the voted date for finished races
 					var monthArr = key3.split(" ");
 					var monthNum = months[monthArr[0]] - 1;
 					var pollDate = new Date(2016,monthNum,monthArr[1]);
@@ -191,6 +191,7 @@ function goThroughDataJson(json,data,party,date,finished) {
 						continue;
 					}
 				}
+				// add the delegates to the candidates
 				if (party == 'democrat') {
 					if (json[key][poll][key2][key3].hasOwnProperty("Clinton")) {
 						candidate1 += json[key][poll][key2][key3]["Clinton"];
@@ -199,7 +200,6 @@ function goThroughDataJson(json,data,party,date,finished) {
 						candidate2 += json[key][poll][key2][key3]["Sanders"];
 					}
 				} else {
-					// add the delegates to the candidates
 					if (json[key][poll][key2][key3].hasOwnProperty("Trump")) {
 						candidate1 += json[key][poll][key2][key3]["Trump"];
 					}
@@ -275,13 +275,21 @@ function goThroughDataJson(json,data,party,date,finished) {
 			var name2 = "Cruz";
 			var name3 = "Kasich";
 			var name4 = "Rubio";
+		} else {
+			var name1 = "Clinton";
+			var name2 = "Sanders";
 		}
 		totalC1 += candidate1;
 		totalC2 += candidate2;
 		totalC3 += candidate3;
 		totalC4 += candidate4;
 		var otherName = "Other";
-		var other = 0;
+		if (finished) {
+			var other = 0;
+		} else {
+			var other = 100 - candidate1 - candidate2 - candidate3 - candidate4;
+		}
+		
 		// add it to the json
 		data[key] = {
 			name1,
@@ -408,3 +416,4 @@ function resetMap() {
     redrawMap('gop');
     document.getElementById("gop").checked = true;
 }
+
