@@ -428,7 +428,7 @@ function runThroughRace() {
 		var currentParty = party;
 		var oldGradient = gradient;
 		function runThrough() {
-			console.log("it is working");
+			//console.log("it is working");
 			if (runDate.getTime() > currentDate.getTime()) {
 				clearInterval(id);
 				runningThrough = false;

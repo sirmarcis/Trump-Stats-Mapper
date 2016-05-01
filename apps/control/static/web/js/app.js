@@ -13,11 +13,38 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
         $scope.$apply();
     });
 
+    Date.prototype.addDays = function(days) {
+        this.setDate(this.getDate() + parseInt(days));
+        return this;
+    };
+
     // Calendar reset
     $scope.reset = function() {
         $scope.dt = new Date();
     };
     $scope.reset();
+
+    $scope.runThroughRace = function() {
+        var oldDate = $scope.dt;
+        var id = setInterval(runThrough, 750);
+        var current = new Date();
+
+        $scope.dt = new Date(2016, 1, 1);
+
+        function runThrough() {
+          if ($scope.dt > current) {
+            console.log($filter('date')($scope.dt, 'EEEE, MMMM dd, y') + " > " + $filter('date')(current, 'EEEE, MMMM dd, y'));
+            clearInterval(id);
+            $scope.dt = oldDate;
+          } else {
+            $scope.dt = $scope.dt.addDays(7);
+            $scope.$apply();
+          }
+          console.log($filter('date')($scope.dt, 'EEEE, MMMM dd, y'));
+          $scope.$apply();
+          
+        }
+    };
 
     // Calendar options
     $scope.inlineOptions = {
