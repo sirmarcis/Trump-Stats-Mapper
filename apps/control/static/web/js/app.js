@@ -13,11 +13,38 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
         $scope.$apply();
     });
 
+    Date.prototype.addDays = function(days) {
+        this.setDate(this.getDate() + parseInt(days));
+        return this;
+    };
+
     // Calendar reset
     $scope.reset = function() {
         $scope.dt = new Date();
     };
     $scope.reset();
+
+    $scope.runThroughRace = function() {
+        var oldDate = $scope.dt;
+        var id = setInterval(runThrough, 750);
+        var current = new Date();
+
+        $scope.dt = new Date(2016, 1, 1);
+
+        function runThrough() {
+          if ($scope.dt > current) {
+            console.log($filter('date')($scope.dt, 'EEEE, MMMM dd, y') + " > " + $filter('date')(current, 'EEEE, MMMM dd, y'));
+            clearInterval(id);
+            $scope.dt = oldDate;
+          } else {
+            $scope.dt = $scope.dt.addDays(7);
+            $scope.$apply();
+          }
+          console.log($filter('date')($scope.dt, 'EEEE, MMMM dd, y'));
+          $scope.$apply();
+          
+        }
+    };
 
     // Calendar options
     $scope.inlineOptions = {
@@ -95,6 +122,8 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
         });
     }
 
+    // Checks if new data (headlines + keywords) need to be retrieved and
+    //  retrieves if necessary
     $scope.checkForData = function() {
         if ($scope.data[$scope.formatDate($scope.dt)] == null) {
             var week = Math.floor($filter('date')($scope.dt, 'd') / 7) +
@@ -110,20 +139,24 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
         }
     }
 
+    // Checks if headlines exist
     $scope.hasHeadline = function(date) {
         //console.log($scope.data[$scope.formatDate(date)].headlines.length);
         return $scope.data[$scope.formatDate(date)].headlines.length > 0;
     }
 
+    // Formats date to make grabbing JSON data easier
     $scope.formatDate = function(date) {
         var d = $filter('date')(date, 'EEE, d MMM y');
         return d;
     }
 
+    // Sort by the occurrences of keywords in headlines
     $scope.sortByKeyword = function(headline) {
         return -1 * headline.keywords.indexOf($scope.keyword)
     }
 
+    // Sets word used to sort the headlines
     $scope.clickKeyword = function(word) {
         $scope.keyword = word;
     }

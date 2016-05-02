@@ -16,11 +16,13 @@
       <h2>Candidates</h2>
       <form>
       <!-- Radio that selects 1 of the 2 parties -->
+      <!-- DEM -->
         <h3><input id="dem" type="radio" name="party" value="democrat" onclick="redrawMap('democrat')"><span>Democrat</span></h3>
         <div class="candidate-label clinton"></div>Clinton
         <br>
         <div class="candidate-label sanders"></div>Sanders
         <br>
+      <!-- GOP -->
         <h3><input id="gop" type="radio" name="party" value="gop" onclick="redrawMap('gop')" checked="checked"><span>GOP</span></h3>
         <div class="candidate-label trump"></div>Trump
         <br>
@@ -31,15 +33,21 @@
         <div class="candidate-label rubio"></div>Rubio
       </form>
     </div>
+    <!-- Reset button -->
     <button onclick="resetMap()" ng-click="reset()" class="btn btn-sm btn-default btn-option" uib-tooltip="Reset candidates and date">Reset</button>
+    <!-- Gradient toggle button -->
     {% raw %}
     <button uib-btn-checkbox onclick="redrawMap('gradient')" class="btn btn-sm btn-default btn-option" ng-model="gradientBool" btn-checkbox-true="true" btn-checkbox-false="false" uib-tooltip="Display map gradient?">No Gradient</button>
     {% endraw %}
+    <!-- Run through race button -->
+    <button onclick="runThroughRace()" ng-click="runThroughRace()" class="btn btn-sm btn-default btn-option" uib-tooltip="Run through the race">Run</button>
+    <!-- Calendar/ date selector -->
     <div id="dateselector-box" class="box">
       <div style="display:inline-block;">
         <uib-datepicker ng-model="dt" class="well well-sm" datepicker-options="inlineOptions" onclick="redrawMap(document.getElementById('dt').innerHTML)" ng-click="checkForData()"></uib-datepicker>
       </div>
     </div>
+    <!-- Keywords container -->
     <div id="keywords-box" class="box">
       {% raw %}
       <h2>Keywords</h2>
@@ -50,6 +58,7 @@
       {% endraw %}
     </div>
   </div>
+  <!-- Map container -->
   <div id="map-box" class="box">
     <div id="tooltip"></div>
     <!-- div to hold tooltip. -->
@@ -65,9 +74,12 @@
     var $SCRIPT_ROOT = {{ request.script_root | tojson | safe }};
     </script>
   </div>
+  <!-- Headlines container -->
   <div id="headlines-box" class="box">
     {% raw %}
+    <!-- Date selected -->
     <h2 id="dt">{{dt | date: 'EEEE, MMMM d, y'}}</h2>
+    <!-- Angularjs that generates the list of article headlines -->
     <div id="headlines-box-inner" ng-repeat="headline in data[formatDate(dt)].headlines | orderBy:sortByKeyword">
       <a class="animate-repeat" href="{{headline.link_str}}" target="_blank">{{headline.headline_str}}</a> <span class="headline-source">{{headline.source}}</span>
       <br>
@@ -76,6 +88,7 @@
     {% endraw %}
   </div>
 </body>
+<!-- Dependencies, scripts, and libraries -->
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.js"></script>
 <script src="https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.3.1.js"></script>
