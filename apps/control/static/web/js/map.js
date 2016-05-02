@@ -254,6 +254,7 @@ function goThroughDataJson(json,data,party,date,finished) {
             var max = 0;
             var maxIndex = 0;
             var secondMax = 0;
+            var totalcandidatevals= candidate4+candidate2+candidate3+candidate1;
             for (var candidate in candidates) {
                 if (candidates[candidate] > max) {
                     secondMax = max;
@@ -267,7 +268,8 @@ function goThroughDataJson(json,data,party,date,finished) {
             // gradient based on how many more than the second largest
             if (gradient) {
                 var blue = ['#bdd7e7','#6baed6','#3182bd','#08519c'];
-                var purple = ['#cbc9e2','#9e9ac8','#756bb1','#54278f'];
+                var purple = ['#9e9ac8','#9e9ac8','#9e9ac8','#9e9ac8'];
+                // var purple = ['#cbc9e2','#9e9ac8','#756bb1','#54278f'];
                 var green = ['#bae4b3','#74c476','#31a354','#006d2c'];
                 var red = ['#fcae91','#fb6a4a','#de2d26','#a50f15'];
                 var colors;
@@ -278,15 +280,22 @@ function goThroughDataJson(json,data,party,date,finished) {
                 }
                 var colorIndex = max - secondMax;
                 colorIndex = Math.floor(colorIndex / 5);
+
+                //colorindex/5, 0,1,2,3
+                //we need 5%, 10%,15%,20%
+
+                //two cans
+                //25, 15
+                //total = 40
                 if (colorIndex > 3) colorIndex = 3;
                 else if (colorIndex < 0) colorIndex = 0;
                 color = colors[maxIndex][colorIndex];
             } else {
                 var colors;
                 if (party == 'gop') {
-                    colors = ['blue','red','green','purple'];
+                    colors = ['#08519c','#a50f15','#006d2c','#54278f'];
                 } else {
-                    colors = ['blue','green'];
+                    colors = ['#08519c','#006d2c'];
                 }
                 color = colors[maxIndex];
             }
