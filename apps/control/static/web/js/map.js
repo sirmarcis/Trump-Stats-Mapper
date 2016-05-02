@@ -279,7 +279,7 @@ function goThroughDataJson(json,data,party,date,finished) {
                     colors = [blue,green];
                 }
                 var colorIndex = max - secondMax;
-                colorIndex = Math.floor(colorIndex / 5);
+                colorIndex = Math.floor(((colorIndex/totalcandidatevals)*100) / 10);
 
                 //colorindex/5, 0,1,2,3
                 //we need 5%, 10%,15%,20%
@@ -287,6 +287,7 @@ function goThroughDataJson(json,data,party,date,finished) {
                 //two cans
                 //25, 15
                 //total = 40
+                //10/40 =
                 if (colorIndex > 3) colorIndex = 3;
                 else if (colorIndex < 0) colorIndex = 0;
                 color = colors[maxIndex][colorIndex];
