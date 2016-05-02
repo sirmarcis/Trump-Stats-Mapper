@@ -45,7 +45,32 @@ d.setHours(0,0,0,0);
 var gradient = true;
 
 // function to redraw the progress bar with new data
-function drawBar(percent1, percent2,percent3) {
+function drawBar(delegates1, delegates2,delegates3) {
+
+    var percent1;
+    var percent2;
+    var percent3;
+    var colorslist =[];
+    // var blue = ['#bdd7e7','#6baed6','#3182bd','#08519c'];
+    //                     var purple = ['#cbc9e2','#9e9ac8','#756bb1','#54278f'];
+    //                     var green = ['#bae4b3','#74c476','#31a354','#006d2c'];
+    //                     var red = ['#fcae91','#fb6a4a','#de2d26','#a50f15'];
+    if(delegates3 == 0){//dems
+        percent1=(delegates1/4051).toPrecision(2);
+        percent2=(delegates2/4051).toPrecision(2);
+        percent3=0;
+        colorslist[0]='#08519c';
+        colorslist[1]='#006d2c';
+        colorslist[2]='#a50f15';//not used
+    }else{//gop
+        percent1 =(delegates1/2472).toPrecision(2);
+        percent2 =(delegates2/2472).toPrecision(2);
+        percent3 =(delegates3/2472).toPrecision(2);
+        colorslist[0]='#08519c';
+        colorslist[1]='#a50f15';
+        colorslist[2]='#006d2c';
+
+    }
     // clamping of percents
     if (percent1 > 1) percent1 = 1;
     if (percent2 > 1) percent2 = 1;
@@ -81,7 +106,7 @@ function drawBar(percent1, percent2,percent3) {
         .attr("y", 18)
         .attr("width", blue_width)
         .attr("height", 30)
-        .style("fill", "blue");
+        .style("fill", colorslist[0]);
 
 	// do not show number if the percent is less than 6
     if (percent1>=0.06) {
@@ -90,7 +115,7 @@ function drawBar(percent1, percent2,percent3) {
             .attr("y", 40)
             .attr("font-size", "20px")
             .attr("fill", "white")
-            .text(percent1*100+"%");
+            .text(delegates1);
     }
 
     d3.select("#barsvg").append("rect")
@@ -98,7 +123,7 @@ function drawBar(percent1, percent2,percent3) {
         .attr("y", 18)
         .attr("width", green_width)
         .attr("height", 30)
-        .style("fill", "green");
+        .style("fill", colorslist[2]);
 
 	// do not show the number if the percent is less than 6
 	if (percent3>=0.06) {
@@ -107,7 +132,7 @@ function drawBar(percent1, percent2,percent3) {
         .attr("y", 40)
         .attr("font-size", "20px")
         .attr("fill", "white")
-        .text(percent3*100+"%");
+        .text(delegates3);
     }
 
     d3.select("#barsvg").append("rect")
@@ -115,7 +140,7 @@ function drawBar(percent1, percent2,percent3) {
         .attr("y", 18)
         .attr("width", red_width)
         .attr("height", 30)
-        .style("fill", "red");
+        .style("fill", colorslist[1]);
 
 	// do not show the number if the percent is less than 6
     if (percent2>=0.06) {
@@ -124,7 +149,7 @@ function drawBar(percent1, percent2,percent3) {
             .attr("y", 40)
             .attr("font-size", "20px")
             .attr("fill", "white")
-            .text(percent2*100+"%");
+            .text(delegates2);
     }
 }
 
@@ -214,464 +239,450 @@ function redrawMap(input) {
 		
 	// get polling data Ajax call
     getpolldata(weekString, function(output) {
-		// democratic party
-		if (party == 'democrat') {
-			var key;
-			var counter = 0;
-			color = '#ffffff';
-			// go through the states
-			for (key in output) {
-				counter = 0;
-				candidate1 = 0;
-				candidate2 = 0;
-				var key2;
-				// go through the democratic polling data
-				for (key2 in output[key]["blue_poll_dict_list"]) {
-					var key3;
-					// go through the last few polls from that state
-					for (key3 in output[key]["blue_poll_dict_list"][key2]) {
-						// add the data to the candidates if they are in the polling
-						if (output[key]["blue_poll_dict_list"][key2][key3].hasOwnProperty("Clinton")) {
-							candidate1 += output[key]["blue_poll_dict_list"][key2][key3]["Clinton"];
-						}
-						if (output[key]["blue_poll_dict_list"][key2][key3].hasOwnProperty("Sanders")) {
-							candidate2 += output[key]["blue_poll_dict_list"][key2][key3]["Sanders"];
-						}
-					}
-					counter++;
-				}
-				// console.log("State: " + key +" candidate1: " + candidate1 + " candidate2: " + candidate2);
-				// if there was at least one poll for the state
-				if (counter > 0) {
-					// average out the polls for the candidates
-					candidate1 = Math.floor(candidate1 / counter);
-					candidate2 = Math.floor(candidate2 / counter);
-					// check who is winning the race
-					if (candidate1 > candidate2) {
-						//var green = ['#f7fcf5', '#e5f5e0', '#c7e9c0', '#a1d99b',
-						//	'#74c476', '#41ab5d', '#238b45', '#006d2c', '#00441b'];
-						// create gradient color for candidate
-						if (gradient) {
-							var orange = ['#fee6ce', '#fdd0a2', '#fdae6b',
-								'#fd8d3c', '#f16913', '#d94801', '#a63603', '#7f2704'];
-							var index = candidate1 - candidate2;
-							index = Math.floor(index / 5);
-							// clamp the gradient
-							if (index > 7) index = 7;
-							else if (index < 0) index = 0;
-							color = orange[index];
-						} else {
-							color = 'orange';
-						}
-					} else {
-						//var blue = ['#f7fbff', '#deebf7', '#c6dbef', '#9ecae1',
-						//	'#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b'];
-						// create gradient color for candidate
-						if (gradient) {
-							var purple = ['#efedf5', '#dadaeb', '#bcbddc',
-								'#9e9ac8', '#807dba', '#6a51a3', '#54278f', '#3f007d'];
-							var index = candidate2 - candidate1;
-							index = Math.floor(index / 5);
-							// clamp the gradient
-							if (index > 7) index = 7;
-							else if (index < 0) index = 0;
-							color = purple[index];
-						} else {
-							color = 'purple';
-						}
-					}
-				}
-				// if both candidates are 0, then something went wrong
-				// set the color to gray
-				if (candidate1 == 0 && candidate2 == 0) {
-					color = "white";
-					count--;
-				}
-				var name1 = "Clinton";
-				var name2 = "Sanders";
-				var otherName = "Other";
-				var other = 100 - candidate1 - candidate2;
-				count++;
-				// add the data to the json
-				sampleData[key] = {
-					name1,
-					candidate1,
-					name2,
-					candidate2,
-					otherName,
-					other,
-					color
-				};
-			}
-			/*
-			d3.select("#statesvg").selectAll("*").remove();
-			uStates.draw("#statesvg", sampleData, tooltipHtmlDem);
-			uStates.updateColor("#statesvg", sampleData);
-			drawBar((totalC1 / count / 100).toPrecision(2), (totalC2 / count / 100).toPrecision(2),0);
-			*/
-		} else {
-			// GOP for polling data
-			var key;
-			var counter = 0;
-			color = '#ffffff';
-			// go through the states
-			for (key in output) {
-				counter = 0;
-				candidate1 = 0;
-				candidate2 = 0;
-				candidate3 = 0;
-				candidate4 = 0;
-				var key2;
-				// go through the republician data
-				for (key2 in output[key]["red_poll_dict_list"]) {
-					var key3;
-					for (key3 in output[key]["red_poll_dict_list"][key2]) {
-						// add the polling data to the candidates that are in the json
-						if (output[key]["red_poll_dict_list"][key2][key3].hasOwnProperty("Trump")) {
-							candidate1 += output[key]["red_poll_dict_list"][key2][key3]["Trump"];
-						}
-						if (output[key]["red_poll_dict_list"][key2][key3].hasOwnProperty("Cruz")) {
-							candidate2 += output[key]["red_poll_dict_list"][key2][key3]["Cruz"];
-						}
-						if (output[key]["red_poll_dict_list"][key2][key3].hasOwnProperty("Kasich")) {
-							candidate3 += output[key]["red_poll_dict_list"][key2][key3]["Kasich"];
-						}
-						if (output[key]["red_poll_dict_list"][key2][key3].hasOwnProperty("Rubio")) {
-							candidate4 += output[key]["red_poll_dict_list"][key2][key3]["Rubio"];
-						}
-					}
-					counter++;
-				}
-				// console.log("State: " + key +" candidate1: " + candidate1 + " candidate2: " + candidate2);
-				if (counter > 0) {
-					// if there was a poll or multiple, average them
-					candidate1 = Math.floor(candidate1 / counter);
-					candidate2 = Math.floor(candidate2 / counter);
-					candidate3 = Math.floor(candidate3 / counter);
-					candidate4 = Math.floor(candidate4 / counter);
-					candidates = [candidate1,candidate2,candidate3,candidate4];
-					var max = 0;
-					var maxIndex = 0;
-					var secondMax = 0;
-					// find the highest and the second highest polling numbers
-					for (var candidate in candidates) {
-						if (candidates[candidate] > max) {
-							secondMax = max;
-							max = candidates[candidate];
-							maxIndex = candidate;
-						} else if (candidates[candidate] > secondMax) {
-							secondMax = candidates[candidate];
-						}
-					}
-					// select the color for the candidate with the highest numbers
-					if (gradient) {
-						var blue = ['#f7fbff', '#deebf7', '#c6dbef', '#9ecae1',
-							'#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b'];
-						var purple = ['#efedf5', '#dadaeb', '#bcbddc',
-							'#9e9ac8', '#807dba', '#6a51a3', '#54278f', '#3f007d'];
-						var green = ['#f7fcf5', '#e5f5e0', '#c7e9c0', '#a1d99b',
-							'#74c476', '#41ab5d', '#238b45', '#006d2c', '#00441b'];
-						var orange = ['#fee6ce', '#fdd0a2', '#fdae6b',
-							'#fd8d3c', '#f16913', '#d94801', '#a63603', '#7f2704'];
-						var colors = [blue,orange,green,purple];
-						// make it a gradient versus the person in second place
-						var colorIndex = max - secondMax;
-						colorIndex = Math.floor(colorIndex / 5);
-						if (colorIndex > 7) colorIndex = 7;
-						else if (colorIndex < 0) colorIndex = 0;
-						color = colors[maxIndex][colorIndex];
-					} else {
-						var colors = ['blue','orange','green','purple'];
-						color = colors[maxIndex];
-					}
-				}
-				// if they are all 0, then something went wrong, and set the color to gray
-				// most likely a poll for the democratic party but not the GOP
-				if (candidate1 == 0 && candidate2 == 0 && candidate3 == 0 && candidate4 == 0) {
-					color = "white";
-					count--;
-				}
-				var name1 = "Trump";
-				var name2 = "Cruz";
-				var name3 = "Kasich";
-				var name4 = "Rubio";
-				var otherName = "Other";
-				var other = 100 - candidate1 - candidate2 - candidate3 - candidate4;
-				count++;
-				// put the data into the json
-				sampleData[key] = {
-					name1,
-					candidate1,
-					name2,
-					candidate2,
-					name3,
-					candidate3,
-					name4,
-					candidate4,
-					otherName,
-					other,
-					color
-				};
-			}
-			/*
-			d3.select("#statesvg").selectAll("*").remove();
-			uStates.draw("#statesvg", sampleData, tooltipHtmlGop);
-			uStates.updateColor("#statesvg", sampleData);
-			drawBar((totalC1 / count / 100).toPrecision(2), (totalC2 / count / 100).toPrecision(2),.06);
-			*/
-		}
-		// Ajax call to get the data for finished states
-		getFinishedStates(function(finished) {
-			if (party == 'democrat') {
-				var skipped = {};
-				var key;
-				var counter = 0;
-				color = '#ffffff';
-				// go through the states
-				for (key in finished) {
-					counter = 0;
-					candidate1 = 0;
-					candidate2 = 0;
-					var key2;
-					// go through the polls
-					for (key2 in finished[key]["blue_poll_dict_list"]) {
-						var key3;
-						for (key3 in finished[key]["blue_poll_dict_list"][key2]) {
-							// get the date of when the race finished
-							// in the json it is formatted
-							// MonthName DayofMonth so March 1
-							var monthArr = key3.split(" ");
-							var monthNum = months[monthArr[0]] - 1;
-							var pollDate = new Date(2016,monthNum,monthArr[1]);
-							
-							// console.log("pollDate: " + pollDate.getTime() + " currentDate: " + d.getTime())
-							// console.log(pollDate);
-							// console.log(d);
-							
-							// check the date that the race finished versus
-							// the date that is selected
-							if (pollDate.getTime() > d.getTime()) {
-								counter--;
-								// console.log("skipped: " + key);
-								
-								// if it is past the selected date, skip it
-								skipped[key] = true;
-								continue;
-							}
-							// set the number of delegates for each canidate
-							if (finished[key]["blue_poll_dict_list"][key2][key3].hasOwnProperty("Clinton")) {
-								candidate1 += finished[key]["blue_poll_dict_list"][key2][key3]["Clinton"];
-							}
-							if (finished[key]["blue_poll_dict_list"][key2][key3].hasOwnProperty("Sanders")) {
-								candidate2 += finished[key]["blue_poll_dict_list"][key2][key3]["Sanders"];
-							}
-						}
-						counter++;
-					}
-					// console.log("State: " + key +" candidate1: " + candidate1 + " candidate2: " + candidate2);
-					if (counter > 0) {
-						// get the color for who ever has more delegates in the state
-						candidate1 = Math.floor(candidate1 / counter);
-						candidate2 = Math.floor(candidate2 / counter);
-						if (candidate1 > candidate2) {
-							if (gradient) {
-								// var green = ['#f7fcf5', '#e5f5e0', '#c7e9c0', '#a1d99b',
-								//	'#74c476', '#41ab5d', '#238b45', '#006d2c', '#00441b'];
-								var orange = ['#fee6ce', '#fdd0a2', '#fdae6b',
-									'#fd8d3c', '#f16913', '#d94801', '#a63603', '#7f2704'];
-								var index = candidate1 - candidate2;
-								index = Math.floor(index / 5);
-								if (index > 7) index = 7;
-								else if (index < 0) index = 0;
-								color = orange[index];
-							} else {
-								color = 'orange';
-							}
-						} else {
-							if (gradient) {
-								//var blue = ['#f7fbff', '#deebf7', '#c6dbef', '#9ecae1',
-								//	'#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b'];
-								var purple = ['#efedf5', '#dadaeb', '#bcbddc',
-									'#9e9ac8', '#807dba', '#6a51a3', '#54278f', '#3f007d'];
-								var index = candidate2 - candidate1;
-								index = Math.floor(index / 5);
-								if (index > 7) index = 7;
-								else if (index < 0) index = 0;
-								color = purple[index];
-							} else {
-								color = 'purple';
-							}
-						}
-					}
-					// if the state was skipped, leave it as the color it was
-					// otherwise something went wrong and make it gray
-					if (candidate1 == 0 && candidate2 == 0) {
-						if (skipped[key]) {
-							color = color = "#ffffff";
-						} else {
-							color = "white";
-						}
-						count--;
-					}
-					var name1 = "Clinton";
-					var name2 = "Sanders";
-					totalC1 += candidate1;
-					totalC2 += candidate2;
-					var otherName = "Other";
-					var other = 0;
-					count++;
-					// over write any previous data put in for the state
-					// (polling data or 0)
-					sampleData[key] = {
-						name1,
-						candidate1,
-						name2,
-						candidate2,
-						otherName,
-						other,
-						color
-					};
-				}
-				// draw the map and progress bar for the Democrats
-				d3.select("#statesvg").selectAll("*").remove();
-				uStates.draw("#statesvg", sampleData, tooltipHtmlDem);
-				uStates.updateColor("#statesvg", sampleData);
-				drawBar((totalC1 / 4051).toPrecision(2), (totalC2 / 4051).toPrecision(2),0);
-			} else {
-				// GOP finished races
-				var skipped = {};
-				var key;
-				var counter = 0;
-				color = '#ffffff';
-				// go through the states
-				// should refactor going through data
-				for (key in finished) {
-					counter = 0;
-					candidate1 = 0;
-					candidate2 = 0;
-					candidate3 = 0;
-					candidate4 = 0;
-					var key2;
-					// go through the GOP delegates
-					for (key2 in finished[key]["red_poll_dict_list"]) {
-						var key3;
-						for (key3 in finished[key]["red_poll_dict_list"][key2]) {
-							// check if the selected date is before the voted date
-							var monthArr = key3.split(" ");
-							var monthNum = months[monthArr[0]] - 1;
-							var pollDate = new Date(2016,monthNum,monthArr[1]);
-							
-							// console.log("pollDate: " + pollDate.getTime() + " currentDate: " + d.getTime())
-							// console.log(pollDate);
-							// console.log(d);
-							
-							// skip the results if the selected date is before the results
-							if (pollDate.getTime() > d.getTime()) {
-								counter--;
-								// console.log("skipped: " + key);
-								skipped[key] = true;
-								continue;
-							}
-							// add the delegates to the candidates
-							if (finished[key]["red_poll_dict_list"][key2][key3].hasOwnProperty("Trump")) {
-								candidate1 += finished[key]["red_poll_dict_list"][key2][key3]["Trump"];
-							}
-							if (finished[key]["red_poll_dict_list"][key2][key3].hasOwnProperty("Cruz")) {
-								candidate2 += finished[key]["red_poll_dict_list"][key2][key3]["Cruz"];
-							}
-							if (finished[key]["red_poll_dict_list"][key2][key3].hasOwnProperty("Kasich")) {
-								candidate3 += finished[key]["red_poll_dict_list"][key2][key3]["Kasich"];
-							}
-							if (finished[key]["red_poll_dict_list"][key2][key3].hasOwnProperty("Rubio")) {
-								candidate4 += finished[key]["red_poll_dict_list"][key2][key3]["Rubio"];
-							}
-						}
-						counter++;
-					}
-					// console.log("State: " + key +" candidate1: " + candidate1 + " candidate2: " + candidate2);
-					if (counter > 0) {
-						// find the max number of delegates and second largest
-						candidate1 = Math.floor(candidate1 / counter);
-						candidate2 = Math.floor(candidate2 / counter);
-						candidate3 = Math.floor(candidate3 / counter);
-						candidate4 = Math.floor(candidate4 / counter);
-						candidates = [candidate1,candidate2,candidate3,candidate4];
-						var max = 0;
-						var maxIndex = 0;
-						var secondMax = 0;
-						for (var candidate in candidates) {
-							if (candidates[candidate] > max) {
-								secondMax = max;
-								max = candidates[candidate];
-								maxIndex = candidate;
-							} else if (candidates[candidate] > secondMax) {
-								secondMax = candidates[candidate];
-							}
-						}
-						// select the color based on who has the most delegates 
-						// gradient based on how many more than the second largest
-						if (gradient) {
-							var blue = ['#f7fbff', '#deebf7', '#c6dbef', '#9ecae1',
-								'#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b'];
-							var purple = ['#efedf5', '#dadaeb', '#bcbddc',
-								'#9e9ac8', '#807dba', '#6a51a3', '#54278f', '#3f007d'];
-							var green = ['#f7fcf5', '#e5f5e0', '#c7e9c0', '#a1d99b',
-								'#74c476', '#41ab5d', '#238b45', '#006d2c', '#00441b'];
-							var orange = ['#fee6ce', '#fdd0a2', '#fdae6b',
-								'#fd8d3c', '#f16913', '#d94801', '#a63603', '#7f2704'];
-							var colors = [blue,orange,green,purple];
-							var colorIndex = max - secondMax;
-							colorIndex = Math.floor(colorIndex / 5);
-							if (colorIndex > 7) colorIndex = 7;
-							else if (colorIndex < 0) colorIndex = 0;
-							color = colors[maxIndex][colorIndex];
-						} else {
-							var colors = ['blue','orange','green','purple'];
-							color = colors[maxIndex];
-						}
-					}
-					// if the state was skipped, leave it alone
-					// otherwise an error happened and make it gray
-					if (candidate1 == 0 && candidate2 == 0 && candidate3 == 0 && candidate4 == 0) {
-						if (skipped[key]) {
-							color = "#ffffff";
-						} else {
-							color = "white";
-						}
-						count--;
-					}
-					var name1 = "Trump";
-					var name2 = "Cruz";
-					var name3 = "Kasich";
-					var name4 = "Rubio";
-					totalC1 += candidate1;
-					totalC2 += candidate2;
-					totalC3 += candidate3;
-					totalC4 += candidate4;
-					var otherName = "Other";
-					var other = 0;
-					count++;
-					// add it to the json
-					sampleData[key] = {
-						name1,
-						candidate1,
-						name2,
-						candidate2,
-						name3,
-						candidate3,
-						name4,
-						candidate4,
-						otherName,
-						other,
-						color
-					};
-				}
-				d3.select("#statesvg").selectAll("*").remove();
-				uStates.draw("#statesvg", sampleData, tooltipHtmlGop);
-				uStates.updateColor("#statesvg", sampleData);
-				drawBar((totalC1 / 2472).toPrecision(2), (totalC2 / 2472).toPrecision(2), (totalC3 / 2472).toPrecision(2));
-			}
-		});
+        // democratic party
+        if (party == 'democrat') {
+            var key;
+            var counter = 0;
+            color = '#ffffff';
+            // go through the states
+            for (key in output) {
+                counter = 0;
+                candidate1 = 0;
+                candidate2 = 0;
+                var key2;
+                // go through the democratic polling data
+                for (key2 in output[key]["blue_poll_dict_list"]) {
+                    var key3;
+                    // go through the last few polls from that state
+                    for (key3 in output[key]["blue_poll_dict_list"][key2]) {
+                        // add the data to the candidates if they are in the polling
+                        if (output[key]["blue_poll_dict_list"][key2][key3].hasOwnProperty("Clinton")) {
+                            candidate1 += output[key]["blue_poll_dict_list"][key2][key3]["Clinton"];
+                        }
+                        if (output[key]["blue_poll_dict_list"][key2][key3].hasOwnProperty("Sanders")) {
+                            candidate2 += output[key]["blue_poll_dict_list"][key2][key3]["Sanders"];
+                        }
+                    }
+                    counter++;
+                }
+                // console.log("State: " + key +" candidate1: " + candidate1 + " candidate2: " + candidate2);
+                // if there was at least one poll for the state
+                if (counter > 0) {
+                    // average out the polls for the candidates
+                    candidate1 = Math.floor(candidate1 / counter);
+                    candidate2 = Math.floor(candidate2 / counter);
+                    // check who is winning the race
+                    if (candidate1 > candidate2) {
+                        //var green = ['#f7fcf5', '#e5f5e0', '#c7e9c0', '#a1d99b',
+                        //  '#74c476', '#41ab5d', '#238b45', '#006d2c', '#00441b'];
+                        // create gradient color for candidate
+                        if (gradient) {
+                            // var orange = ['#fee6ce', '#fdd0a2', '#fdae6b',
+                            //  '#fd8d3c', '#f16913', '#d94801', '#a63603', '#7f2704'];
+                            var blue = ['#bdd7e7','#6baed6','#3182bd','#08519c'];
+                            var index = candidate1 - candidate2;
+                            index = Math.floor(index / 5);
+                            // clamp the gradient
+                            if (index > 3) index = 3;
+                            else if (index < 0) index = 0;
+                            color = blue[index];
+                        } else {
+                            color = 'blue';
+                        }
+                    } else {
+                        //var blue = ['#f7fbff', '#deebf7', '#c6dbef', '#9ecae1',
+                        //  '#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b'];
+                        // create gradient color for candidate
+                        if (gradient) {
+                            // var purple = ['#efedf5', '#dadaeb', '#bcbddc',
+                            //  '#9e9ac8', '#807dba', '#6a51a3', '#54278f', '#3f007d'];
+                            var green = ['#bae4b3','#74c476','#31a354','#006d2c'];
+                            var index = candidate2 - candidate1;
+                            index = Math.floor(index / 5);
+                            // clamp the gradient
+                            if (index > 3) index = 3;
+                            else if (index < 0) index = 0;
+                            color = green[index];
+                        } else {
+                            color = 'green';
+                        }
+                    }
+                }
+                // if both candidates are 0, then something went wrong
+                // set the color to gray
+                if (candidate1 == 0 && candidate2 == 0) {
+                    color = "white";
+                    count--;
+                }
+                var name1 = "Clinton";
+                var name2 = "Sanders";
+                var otherName = "Other";
+                var other = 100 - candidate1 - candidate2;
+                count++;
+                // add the data to the json
+                sampleData[key] = {
+                    name1,
+                    candidate1,
+                    name2,
+                    candidate2,
+                    otherName,
+                    other,
+                    color
+                };
+            }
+            /*
+            d3.select("#statesvg").selectAll("*").remove();
+            uStates.draw("#statesvg", sampleData, tooltipHtmlDem);
+            uStates.updateColor("#statesvg", sampleData);
+            drawBar((totalC1 / count / 100).toPrecision(2), (totalC2 / count / 100).toPrecision(2),0);
+            */
+        } else {
+            // GOP for polling data
+            var key;
+            var counter = 0;
+            color = '#ffffff';
+            // go through the states
+            for (key in output) {
+                counter = 0;
+                candidate1 = 0;
+                candidate2 = 0;
+                candidate3 = 0;
+                candidate4 = 0;
+                var key2;
+                // go through the republician data
+                for (key2 in output[key]["red_poll_dict_list"]) {
+                    var key3;
+                    for (key3 in output[key]["red_poll_dict_list"][key2]) {
+                        // add the polling data to the candidates that are in the json
+                        if (output[key]["red_poll_dict_list"][key2][key3].hasOwnProperty("Trump")) {
+                            candidate1 += output[key]["red_poll_dict_list"][key2][key3]["Trump"];
+                        }
+                        if (output[key]["red_poll_dict_list"][key2][key3].hasOwnProperty("Cruz")) {
+                            candidate2 += output[key]["red_poll_dict_list"][key2][key3]["Cruz"];
+                        }
+                        if (output[key]["red_poll_dict_list"][key2][key3].hasOwnProperty("Kasich")) {
+                            candidate3 += output[key]["red_poll_dict_list"][key2][key3]["Kasich"];
+                        }
+                        if (output[key]["red_poll_dict_list"][key2][key3].hasOwnProperty("Rubio")) {
+                            candidate4 += output[key]["red_poll_dict_list"][key2][key3]["Rubio"];
+                        }
+                    }
+                    counter++;
+                }
+                // console.log("State: " + key +" candidate1: " + candidate1 + " candidate2: " + candidate2);
+                if (counter > 0) {
+                    // if there was a poll or multiple, average them
+                    candidate1 = Math.floor(candidate1 / counter);
+                    candidate2 = Math.floor(candidate2 / counter);
+                    candidate3 = Math.floor(candidate3 / counter);
+                    candidate4 = Math.floor(candidate4 / counter);
+                    candidates = [candidate1,candidate2,candidate3,candidate4];
+                    var max = 0;
+                    var maxIndex = 0;
+                    var secondMax = 0;
+                    // find the highest and the second highest polling numbers
+                    for (var candidate in candidates) {
+                        if (candidates[candidate] > max) {
+                            secondMax = max;
+                            max = candidates[candidate];
+                            maxIndex = candidate;
+                        } else if (candidates[candidate] > secondMax) {
+                            secondMax = candidates[candidate];
+                        }
+                    }
+                    // select the color for the candidate with the highest numbers
+                    if (gradient) {
+                        var blue = ['#bdd7e7','#6baed6','#3182bd','#08519c'];
+                        var purple = ['#cbc9e2','#9e9ac8','#756bb1','#54278f'];
+                        var green = ['#bae4b3','#74c476','#31a354','#006d2c'];
+                        var red = ['#fcae91','#fb6a4a','#de2d26','#a50f15'];
+                        var colors = [blue,red,green,purple];
+                        // make it a gradient versus the person in second place
+                        var colorIndex = max - secondMax;
+                        colorIndex = Math.floor(colorIndex / 5);
+                        if (colorIndex > 3) colorIndex = 3;
+                        else if (colorIndex < 0) colorIndex = 0;
+                        color = colors[maxIndex][colorIndex];
+                    } else {
+                        var colors = ['blue','red','green','purple'];
+                        color = colors[maxIndex];
+                    }
+                }
+                // if they are all 0, then something went wrong, and set the color to gray
+                // most likely a poll for the democratic party but not the GOP
+                if (candidate1 == 0 && candidate2 == 0 && candidate3 == 0 && candidate4 == 0) {
+                    color = "white";
+                    count--;
+                }
+                var name1 = "Trump";
+                var name2 = "Cruz";
+                var name3 = "Kasich";
+                var name4 = "Rubio";
+                var otherName = "Other";
+                var other = 100 - candidate1 - candidate2 - candidate3 - candidate4;
+                count++;
+                // put the data into the json
+                sampleData[key] = {
+                    name1,
+                    candidate1,
+                    name2,
+                    candidate2,
+                    name3,
+                    candidate3,
+                    name4,
+                    candidate4,
+                    otherName,
+                    other,
+                    color
+                };
+            }
+            /*
+            d3.select("#statesvg").selectAll("*").remove();
+            uStates.draw("#statesvg", sampleData, tooltipHtmlGop);
+            uStates.updateColor("#statesvg", sampleData);
+            drawBar((totalC1 / count / 100).toPrecision(2), (totalC2 / count / 100).toPrecision(2),.06);
+            */
+        }
+        // Ajax call to get the data for finished states
+        getFinishedStates(function(finished) {
+            if (party == 'democrat') {
+                var skipped = {};
+                var key;
+                var counter = 0;
+                color = '#ffffff';
+                // go through the states
+                for (key in finished) {
+                    counter = 0;
+                    candidate1 = 0;
+                    candidate2 = 0;
+                    var key2;
+                    // go through the polls
+                    for (key2 in finished[key]["blue_poll_dict_list"]) {
+                        var key3;
+                        for (key3 in finished[key]["blue_poll_dict_list"][key2]) {
+                            // get the date of when the race finished
+                            // in the json it is formatted
+                            // MonthName DayofMonth so March 1
+                            var monthArr = key3.split(" ");
+                            var monthNum = months[monthArr[0]] - 1;
+                            var pollDate = new Date(2016,monthNum,monthArr[1]);
+                            
+                            // console.log("pollDate: " + pollDate.getTime() + " currentDate: " + d.getTime())
+                            // console.log(pollDate);
+                            // console.log(d);
+                            
+                            // check the date that the race finished versus
+                            // the date that is selected
+                            if (pollDate.getTime() > d.getTime()) {
+                                counter--;
+                                // console.log("skipped: " + key);
+                                
+                                // if it is past the selected date, skip it
+                                skipped[key] = true;
+                                continue;
+                            }
+                            // set the number of delegates for each canidate
+                            if (finished[key]["blue_poll_dict_list"][key2][key3].hasOwnProperty("Clinton")) {
+                                candidate1 += finished[key]["blue_poll_dict_list"][key2][key3]["Clinton"];
+                            }
+                            if (finished[key]["blue_poll_dict_list"][key2][key3].hasOwnProperty("Sanders")) {
+                                candidate2 += finished[key]["blue_poll_dict_list"][key2][key3]["Sanders"];
+                            }
+                        }
+                        counter++;
+                    }
+                    // console.log("State: " + key +" candidate1: " + candidate1 + " candidate2: " + candidate2);
+                    if (counter > 0) {
+                        // get the color for who ever has more delegates in the state
+                        candidate1 = Math.floor(candidate1 / counter);
+                        candidate2 = Math.floor(candidate2 / counter);
+                        if (candidate1 > candidate2) {
+                            if (gradient) {
+                                // var green = ['#f7fcf5', '#e5f5e0', '#c7e9c0', '#a1d99b',
+                                //  '#74c476', '#41ab5d', '#238b45', '#006d2c', '#00441b'];
+                                var blue = ['#bdd7e7','#6baed6','#3182bd','#08519c'];
+                                var index = candidate1 - candidate2;
+                                index = Math.floor(index / 5);
+                                if (index > 3) index = 3;
+                                else if (index < 0) index = 0;
+                                color = blue[index];
+                            } else {
+                                color = 'blue';
+                            }
+                        } else {
+                            if (gradient) {
+                                // var blue = ['#f7fbff', '#deebf7', '#c6dbef', '#9ecae1',
+                                //  '#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b'];
+                                // var purple = ['#efedf5', '#dadaeb', '#bcbddc',
+                                //  '#9e9ac8', '#807dba', '#6a51a3', '#54278f', '#3f007d'];
+                                var green = ['#bae4b3','#74c476','#31a354','#006d2c'];
+                                var index = candidate2 - candidate1;
+                                index = Math.floor(index / 5);
+                                if (index > 3) index = 3;
+                                else if (index < 0) index = 0;
+                                color = green[index];
+                            } else {
+                                color = 'green';
+                            }
+                        }
+                    }
+                    // if the state was skipped, leave it as the color it was
+                    // otherwise something went wrong and make it gray
+                    if ((candidate1 == 0 && candidate2 == 0) || skipped[key]) {
+                        color = "#ffffff";
+                        count--;
+                    }
+                    var name1 = "Clinton";
+                    var name2 = "Sanders";
+                    totalC1 += candidate1;
+                    totalC2 += candidate2;
+                    var otherName = "Other";
+                    var other = 0;
+                    count++;
+                    // over write any previous data put in for the state
+                    // (polling data or 0)
+                    sampleData[key] = {
+                        name1,
+                        candidate1,
+                        name2,
+                        candidate2,
+                        otherName,
+                        other,
+                        color
+                    };
+                }
+                // draw the map and progress bar for the Democrats
+                d3.select("#statesvg").selectAll("*").remove();
+                uStates.draw("#statesvg", sampleData, tooltipHtmlDem);
+                uStates.updateColor("#statesvg", sampleData);
+                drawBar(totalC1, totalC2,0);
+            } else {
+                // GOP finished races
+                var skipped = {};
+                var key;
+                var counter = 0;
+                color = '#ffffff';
+                // go through the states
+                // should refactor going through data
+                for (key in finished) {
+                    counter = 0;
+                    candidate1 = 0;
+                    candidate2 = 0;
+                    candidate3 = 0;
+                    candidate4 = 0;
+                    var key2;
+                    // go through the GOP delegates
+                    for (key2 in finished[key]["red_poll_dict_list"]) {
+                        var key3;
+                        for (key3 in finished[key]["red_poll_dict_list"][key2]) {
+                            // check if the selected date is before the voted date
+                            var monthArr = key3.split(" ");
+                            var monthNum = months[monthArr[0]] - 1;
+                            var pollDate = new Date(2016,monthNum,monthArr[1]);
+                            
+                            // console.log("pollDate: " + pollDate.getTime() + " currentDate: " + d.getTime())
+                            // console.log(pollDate);
+                            // console.log(d);
+                            
+                            // skip the results if the selected date is before the results
+                            if (pollDate.getTime() > d.getTime()) {
+                                counter--;
+                                // console.log("skipped: " + key);
+                                skipped[key] = true;
+                                continue;
+                            }
+                            // add the delegates to the candidates
+                            if (finished[key]["red_poll_dict_list"][key2][key3].hasOwnProperty("Trump")) {
+                                candidate1 += finished[key]["red_poll_dict_list"][key2][key3]["Trump"];
+                            }
+                            if (finished[key]["red_poll_dict_list"][key2][key3].hasOwnProperty("Cruz")) {
+                                candidate2 += finished[key]["red_poll_dict_list"][key2][key3]["Cruz"];
+                            }
+                            if (finished[key]["red_poll_dict_list"][key2][key3].hasOwnProperty("Kasich")) {
+                                candidate3 += finished[key]["red_poll_dict_list"][key2][key3]["Kasich"];
+                            }
+                            if (finished[key]["red_poll_dict_list"][key2][key3].hasOwnProperty("Rubio")) {
+                                candidate4 += finished[key]["red_poll_dict_list"][key2][key3]["Rubio"];
+                            }
+                        }
+                        counter++;
+                    }
+                    // console.log("State: " + key +" candidate1: " + candidate1 + " candidate2: " + candidate2);
+                    if (counter > 0) {
+                        // find the max number of delegates and second largest
+                        candidate1 = Math.floor(candidate1 / counter);
+                        candidate2 = Math.floor(candidate2 / counter);
+                        candidate3 = Math.floor(candidate3 / counter);
+                        candidate4 = Math.floor(candidate4 / counter);
+                        candidates = [candidate1,candidate2,candidate3,candidate4];
+                        var max = 0;
+                        var maxIndex = 0;
+                        var secondMax = 0;
+                        for (var candidate in candidates) {
+                            if (candidates[candidate] > max) {
+                                secondMax = max;
+                                max = candidates[candidate];
+                                maxIndex = candidate;
+                            } else if (candidates[candidate] > secondMax) {
+                                secondMax = candidates[candidate];
+                            }
+                        }
+                        // select the color based on who has the most delegates 
+                        // gradient based on how many more than the second largest
+                        if (gradient) {
+                            var blue = ['#bdd7e7','#6baed6','#3182bd','#08519c'];
+                            var purple = ['#cbc9e2','#9e9ac8','#756bb1','#54278f'];
+                            var green = ['#bae4b3','#74c476','#31a354','#006d2c'];
+                            var red = ['#fcae91','#fb6a4a','#de2d26','#a50f15'];
+                            var colors = [blue,red,green,purple];
+                            var colorIndex = max - secondMax;
+                            colorIndex = Math.floor(colorIndex / 5);
+                            if (colorIndex > 3) colorIndex = 3;
+                            else if (colorIndex < 0) colorIndex = 0;
+                            color = colors[maxIndex][colorIndex];
+                        } else {
+                            var colors = ['blue','red','green','purple'];
+                            color = colors[maxIndex];
+                        }
+                    }
+                    // if the state was skipped, leave it alone
+                    // otherwise an error happened and make it gray
+                    if ((candidate1 == 0 && candidate2 == 0 && candidate3 == 0 && candidate4 == 0) || skipped[key]) {
+                        color = "#ffffff";
+                        count--;
+                    }
+                    var name1 = "Trump";
+                    var name2 = "Cruz";
+                    var name3 = "Kasich";
+                    var name4 = "Rubio";
+                    totalC1 += candidate1;
+                    totalC2 += candidate2;
+                    totalC3 += candidate3;
+                    totalC4 += candidate4;
+                    var otherName = "Other";
+                    var other = 0;
+                    count++;
+                    // add it to the json
+                    sampleData[key] = {
+                        name1,
+                        candidate1,
+                        name2,
+                        candidate2,
+                        name3,
+                        candidate3,
+                        name4,
+                        candidate4,
+                        otherName,
+                        other,
+                        color
+                    };
+                }
+                d3.select("#statesvg").selectAll("*").remove();
+                uStates.draw("#statesvg", sampleData, tooltipHtmlGop);
+                uStates.updateColor("#statesvg", sampleData);
+                drawBar(totalC1, totalC2, totalC3);
+            }
+        });
     });
 }
 //initial draw map
@@ -679,6 +690,7 @@ redrawMap('gop');
 
 // Reset the map
 function resetMap() {
+    d = new Date();
     redrawMap('gop');
     document.getElementById("gop").checked = true;
 }

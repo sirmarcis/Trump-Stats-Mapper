@@ -20,22 +20,22 @@
   border: 1p solid rgba(0,0,0,0.2);
 }
 .clinton {
-  background: #0A1CC9;
+  background: #08519c;
 }
 .sanders {
-  background: #10AF84;
+  background: #006d2c;
 }
 .trump {
-  background: #0A1CC9;
+  background: #08519c;
 }
 .cruz {
-  background: #E7D509;
+  background: #a50f15;
 }
 .kasich {
-  background: #25D07E;
+  background: #006d2c;
 }
 .rubio {
-  background: #CB1515;
+  background: #54278f;
 }
 #options-container {
   min-width: 200px;
