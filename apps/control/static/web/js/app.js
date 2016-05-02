@@ -33,14 +33,14 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
 
         function runThrough() {
           if ($scope.dt > current) {
-            console.log($filter('date')($scope.dt, 'EEEE, MMMM dd, y') + " > " + $filter('date')(current, 'EEEE, MMMM dd, y'));
+            //console.log($filter('date')($scope.dt, 'EEEE, MMMM dd, y') + " > " + $filter('date')(current, 'EEEE, MMMM dd, y'));
             clearInterval(id);
             $scope.dt = oldDate;
           } else {
             $scope.dt = $scope.dt.addDays(7);
             $scope.$apply();
           }
-          console.log($filter('date')($scope.dt, 'EEEE, MMMM dd, y'));
+          //console.log($filter('date')($scope.dt, 'EEEE, MMMM dd, y'));
           $scope.$apply();
           
         }
@@ -147,7 +147,7 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
 
     // Formats date to make grabbing JSON data easier
     $scope.formatDate = function(date) {
-        var d = $filter('date')(date, 'EEE, d MMM y');
+        var d = $filter('date')(date, 'EEE, dd MMM y');
         return d;
     }
 
