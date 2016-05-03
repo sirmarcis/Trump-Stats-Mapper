@@ -35,19 +35,20 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
 			var current = new Date();
 			current.setHours(0);
 			var date = new Date(2016,0,25);
+			var finish = false;
 			date.setHours(0);
 			//date.setHours(0);
 			$scope.dt = date;
 
 			function runThrough() {
-			  if ($scope.dt.getTime() > current.getTime()) {
-				//console.log($filter('date')($scope.dt, 'EEEE, MMMM dd, y') + " > " + $filter('date')(current, 'EEEE, MMMM dd, y'));
-				$scope.setDate(current.getFullYear(),current.getMonth(),current.getDate());
-			  } else if ($scope.dt.getDate() == current.getDate() && $scope.dt.getFullYear() == current.getFullYear() && $scope.dt.getMonth() == current.getMonth()) {
-				console.log("it makes it here");
+			  if (finish) {
 				clearInterval(id);
 				$scope.runThroughBool = "false";
 				$scope.setDate(oldDate.getFullYear(),oldDate.getMonth(),oldDate.getDate());
+			  } else if (date.getTime() > current.getTime() && $scope.dt.getTime() < current.getTime()) {
+				//console.log($filter('date')($scope.dt, 'EEEE, MMMM dd, y') + " > " + $filter('date')(current, 'EEEE, MMMM dd, y'));
+				finish = true;
+				$scope.setDate(current.getFullYear(),current.getMonth(),current.getDate());				
 			  } else {
 				$scope.setDate(date.getFullYear(),date.getMonth(),date.getDate());
 				date.setDate(date.getDate() + 7);
