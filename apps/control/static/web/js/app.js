@@ -54,7 +54,7 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
 				date.setDate(date.getDate() + 7);
 				//$scope.$apply();
 			  }
-			  console.log($filter('date')($scope.dt, 'EEEE, MMMM dd, y'));
+			  //console.log($filter('date')($scope.dt, 'EEEE, MMMM dd, y'));
 			  $scope.$apply();
 			  
 			}
