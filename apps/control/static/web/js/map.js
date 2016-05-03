@@ -448,9 +448,11 @@ redrawMap('gop');
 
 // Reset the map
 function resetMap() {
-    d = new Date();
-    redrawMap('gop');
-    document.getElementById("gop").checked = true;
+	if (!runningThrough) {
+		d = new Date();
+		redrawMap('gop');
+		document.getElementById("gop").checked = true;
+	}
 }
 
 function runThroughRace() {
@@ -458,24 +460,33 @@ function runThroughRace() {
         runningThrough = true;
         var id = setInterval(runThrough,750);
         var oldDate = d;
-        var runDate = new Date(2016,1,1);
+        var runDate = new Date(2016,0,25);
+		runDate.setHours(23,59,59,999);
         var currentDate = new Date();
         var currentParty = party;
         var oldGradient = gradient;
         function runThrough() {
             //console.log("it is working");
             if (runDate.getTime() > currentDate.getTime()) {
+				party = currentParty;
+                runDate = oldDate;
+                gradient = oldGradient;
+                redrawMap(currentDate);
+                document.getElementById(party).checked = true;
+			} else if (runDate.getTime() == oldDate.getTime()) {
                 clearInterval(id);
                 runningThrough = false;
                 party = currentParty;
-                d = oldDate;
                 gradient = oldGradient;
+				d = oldDate;
                 redrawMap(d);
                 document.getElementById(party).checked = true;
             } else {
                 party = currentParty;
+				gradient = oldGradient;
                 redrawMap(runDate);
                 runDate.setDate(runDate.getDate() + 7);
+				runDate.setHours(23,59,59,999);
                 document.getElementById(party).checked = true;
             }
         }

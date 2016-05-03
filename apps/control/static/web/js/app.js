@@ -6,6 +6,7 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
     $scope.keyword = "";
     
     $scope.gradientBool = "true";
+	$scope.runThroughBool = "false";
 
     // First grab of headline data (including keywords)
     getHeadlineData('curr_week', function(output) {
@@ -20,30 +21,43 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
 
     // Calendar reset
     $scope.reset = function() {
-        $scope.dt = new Date();
+		if ($scope.runThroughBool == "false") {
+			$scope.dt = new Date();
+		}
     };
     $scope.reset();
 
     $scope.runThroughRace = function() {
-        var oldDate = $scope.dt;
-        var id = setInterval(runThrough, 750);
-        var current = new Date();
+		if ($scope.runThroughBool == "false") {
+			$scope.runThroughBool = "true";
+			var oldDate = $scope.dt;
+			var id = setInterval(runThrough, 750);
+			var current = new Date();
+			current.setHours(0);
+			var date = new Date(2016,0,25);
+			date.setHours(0);
+			//date.setHours(0);
+			$scope.dt = date;
 
-        $scope.dt = new Date(2016, 1, 1);
-
-        function runThrough() {
-          if ($scope.dt > current) {
-            //console.log($filter('date')($scope.dt, 'EEEE, MMMM dd, y') + " > " + $filter('date')(current, 'EEEE, MMMM dd, y'));
-            clearInterval(id);
-            $scope.dt = oldDate;
-          } else {
-            $scope.dt = $scope.dt.addDays(7);
-            $scope.$apply();
-          }
-          //console.log($filter('date')($scope.dt, 'EEEE, MMMM dd, y'));
-          $scope.$apply();
-          
-        }
+			function runThrough() {
+			  if ($scope.dt.getTime() > current.getTime()) {
+				//console.log($filter('date')($scope.dt, 'EEEE, MMMM dd, y') + " > " + $filter('date')(current, 'EEEE, MMMM dd, y'));
+				$scope.setDate(current.getFullYear(),current.getMonth(),current.getDate());
+			  } else if ($scope.dt.getDate() == current.getDate() && $scope.dt.getFullYear() == current.getFullYear() && $scope.dt.getMonth() == current.getMonth()) {
+				console.log("it makes it here");
+				clearInterval(id);
+				$scope.runThroughBool = "false";
+				$scope.setDate(oldDate.getFullYear(),oldDate.getMonth(),oldDate.getDate());
+			  } else {
+				$scope.setDate(date.getFullYear(),date.getMonth(),date.getDate());
+				date.setDate(date.getDate() + 7);
+				//$scope.$apply();
+			  }
+			  console.log($filter('date')($scope.dt, 'EEEE, MMMM dd, y'));
+			  $scope.$apply();
+			  
+			}
+		}
     };
 
     // Calendar options
