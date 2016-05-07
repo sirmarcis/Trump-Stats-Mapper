@@ -62,6 +62,8 @@
 }
 #keywords-box .keyword:hover {
   text-decoration: underline;
+  cursor: pointer;
+  cursor: hand;
 }
 #headlines-box {
   overflow: hidden;
