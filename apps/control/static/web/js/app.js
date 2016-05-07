@@ -23,6 +23,8 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
     $scope.reset = function() {
 		if ($scope.runThroughBool == "false") {
 			$scope.dt = new Date();
+            $scope.keyword = "";
+            $scope.gradientBool = "true";
 		}
     };
     $scope.reset();
