@@ -23,6 +23,8 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
     $scope.reset = function() {
 		if ($scope.runThroughBool == "false") {
 			$scope.dt = new Date();
+            $scope.keyword = "";
+            $scope.gradientBool = "true";
 		}
     };
     $scope.reset();
@@ -54,7 +56,7 @@ angular.module('trump-stats-mapper').controller('TrumpStatsMapperCtrl', function
 				date.setDate(date.getDate() + 7);
 				//$scope.$apply();
 			  }
-			  console.log($filter('date')($scope.dt, 'EEEE, MMMM dd, y'));
+			  //console.log($filter('date')($scope.dt, 'EEEE, MMMM dd, y'));
 			  $scope.$apply();
 			  
 			}

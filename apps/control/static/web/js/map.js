@@ -38,12 +38,24 @@ function tooltipHtmlGop(n, d) {
         "</table>";
 }
 
+function Map(party,gradient,date,runningThrough) {
+	this.party = party;
+	this.gradient = gradient;
+	this.date = date;
+	this.runningThrough = runningThrough;
+}
+
+var d = new Date();
+d.setHours(0,0,0,0);
+var map = new Map('gop',true,d,false);
 // variables that the map uses
+/*
 var party;
 var d = new Date();
 d.setHours(0,0,0,0);
 var gradient = true;
 var runningThrough = false;
+*/
 
 // function to redraw the progress bar with new data
 function drawBar(delegates1, delegates2,delegates3) {
@@ -155,7 +167,7 @@ function drawBar(delegates1, delegates2,delegates3) {
 }
 
 // go through polling/finished races function
-function goThroughDataJson(json,data,party,date,finished) {
+function goThroughDataJson(json,data,mapObj,finished) {
     // months variable that helps format the results data
     var months = {
         'January': 1,
@@ -177,7 +189,7 @@ function goThroughDataJson(json,data,party,date,finished) {
     color = '#ffffff';
     var poll = "";
     // choose democrat or gop
-    if (party == 'democrat') {
+    if (mapObj.party == 'democrat') {
         poll = "blue_poll_dict_list";
     } else {
         poll = "red_poll_dict_list";
@@ -210,7 +222,7 @@ function goThroughDataJson(json,data,party,date,finished) {
                     // console.log(d);
                 
                     // skip the results if the selected date is before the results
-                    if (pollDate.getTime() > d.getTime()) {
+                    if (pollDate.getTime() > (mapObj.date).getTime()) {
                         counter--;
                         // console.log("skipped: " + key);
                         skipped[key] = true;
@@ -218,7 +230,7 @@ function goThroughDataJson(json,data,party,date,finished) {
                     }
                 }
                 // add the delegates to the candidates
-                if (party == 'democrat') {
+                if (mapObj.party == 'democrat') {
                     if (json[key][poll][key2][key3].hasOwnProperty("Clinton")) {
                         candidate1 += json[key][poll][key2][key3]["Clinton"];
                     }
@@ -266,14 +278,14 @@ function goThroughDataJson(json,data,party,date,finished) {
             }
             // select the color based on who has the most delegates 
             // gradient based on how many more than the second largest
-            if (gradient) {
+            if (mapObj.gradient) {
                 var blue = ['#bdd7e7','#6baed6','#3182bd','#08519c'];
                 var purple = ['#9e9ac8','#9e9ac8','#9e9ac8','#9e9ac8'];
                 // var purple = ['#cbc9e2','#9e9ac8','#756bb1','#54278f'];
                 var green = ['#bae4b3','#74c476','#31a354','#006d2c'];
                 var red = ['#fcae91','#fb6a4a','#de2d26','#a50f15'];
                 var colors;
-                if (party == 'gop') {
+                if (map.party == 'gop') {
                     colors = [blue,red,green,purple];
                 } else {
                     colors = [blue,green];
@@ -293,7 +305,7 @@ function goThroughDataJson(json,data,party,date,finished) {
                 color = colors[maxIndex][colorIndex];
             } else {
                 var colors;
-                if (party == 'gop') {
+                if (mapObj.party == 'gop') {
                     colors = ['#08519c','#a50f15','#006d2c','#54278f'];
                 } else {
                     colors = ['#08519c','#006d2c'];
@@ -306,7 +318,7 @@ function goThroughDataJson(json,data,party,date,finished) {
         if ((candidate1 == 0 && candidate2 == 0 && candidate3 == 0 && candidate4 == 0) || skipped[key]) {
             color = "#ffffff";
         }
-        if (party == 'gop') {
+        if (mapObj.party == 'gop') {
             var name1 = "Trump";
             var name2 = "Cruz";
             var name3 = "Kasich";
@@ -349,14 +361,16 @@ function goThroughDataJson(json,data,party,date,finished) {
 // or date
 function redrawMap(input) {
     if (input == 'democrat' || input == 'gop') {
-        party = input;
+        map.party = input;
     } else if (input == "gradient") {
-        gradient = !gradient;
+        map.gradient = !map.gradient;
     } else {
-        d = new Date(input);
+        map.date = new Date(input);
         // console.log(d);
     }
     
+	// console.log(map);
+	
     // set default variables
     var count = 0;
     var candidate1 = 0;
@@ -376,7 +390,7 @@ function redrawMap(input) {
      "Oklahoma", "Texas", "New Mexico", "Kansas", "Nebraska", "South Dakota", "North Dakota", "Wyoming", "Montana", "Colarado", "Idaho",
      "Utah", "Arizona", "Nevada", "Oregon", "Washington", "California", "New Jersey"]
     .forEach(function(d) {
-        if (party == 'democrat') {
+        if (map.party == 'democrat') {
             var name1 = "Clinton";
             var name2 = "Sanders";
             var otherName = "Other";
@@ -399,16 +413,19 @@ function redrawMap(input) {
     var today = new Date();
     today.setHours(0,0,0,0);
     // check if current date is today
-    if (d.getTime() == today.getTime()) {
+	// console.log(map);
+	// var d = map.date;
+	// console.log(d);
+    if ((map.date).getTime() == today.getTime()) {
         weekString = 'curr_week';
         // console.log("today");
     } else {
         var extra = ""
-        if (d.getMonth() < 9) {
+        if ((map.date).getMonth() < 9) {
             extra = '0';
         }
         // format the weekString to W/MM/YYYY
-        weekString = Math.floor(d.getDate()/7) + "." + extra + (d.getMonth()+1) + "." + d.getFullYear();
+        weekString = Math.floor((map.date).getDate()/7) + "." + extra + ((map.date).getMonth()+1) + "." + (map.date).getFullYear();
         // console.log("not today " + input);
     }
 
@@ -417,16 +434,16 @@ function redrawMap(input) {
     // get polling data Ajax call
     getpolldata(weekString, function(output) {
         // democratic party
-        sampleData = goThroughDataJson(output,sampleData,party,d,false)[0];
+        sampleData = goThroughDataJson(output,sampleData,map,false)[0];
         // Ajax call to get the data for finished states
         getFinishedStates(function(finished) {
-            var returnResult = goThroughDataJson(finished,sampleData,party,d,true);
+            var returnResult = goThroughDataJson(finished,sampleData,map,true);
             sampleData = returnResult[0];
             totalC1 = returnResult[1];
             totalC2 = returnResult[2];
             totalC3 = returnResult[3];
             totalC4 = returnResult[4];
-            if (party == 'democrat') {
+            if (map.party == 'democrat') {
                 // draw the map and progress bar for the Democrats
                 d3.select("#statesvg").selectAll("*").remove();
                 uStates.draw("#statesvg", sampleData, tooltipHtmlDem);
@@ -448,46 +465,48 @@ redrawMap('gop');
 
 // Reset the map
 function resetMap() {
-	if (!runningThrough) {
-		d = new Date();
+	if (!map.runningThrough) {
+		map.date = new Date();
+		map.gradient = true;
 		redrawMap('gop');
 		document.getElementById("gop").checked = true;
 	}
 }
 
 function runThroughRace() {
-    if (!runningThrough) {
-        runningThrough = true;
+    if (!map.runningThrough) {
+        map.runningThrough = true;
         var id = setInterval(runThrough,750);
-        var oldDate = d;
+        var oldDate = map.date;
         var runDate = new Date(2016,0,25);
 		runDate.setHours(23,59,59,999);
         var currentDate = new Date();
-        var currentParty = party;
-        var oldGradient = gradient;
+        var currentParty = map.party;
+		// console.log(currentParty);
+        var oldGradient = map.gradient;
         function runThrough() {
             //console.log("it is working");
             if (runDate.getTime() > currentDate.getTime()) {
-				party = currentParty;
+				map.party = currentParty;
                 runDate = oldDate;
-                gradient = oldGradient;
+                map.gradient = oldGradient;
                 redrawMap(currentDate);
-                document.getElementById(party).checked = true;
+                document.getElementById(map.party).checked = true;
 			} else if (runDate.getTime() == oldDate.getTime()) {
                 clearInterval(id);
-                runningThrough = false;
-                party = currentParty;
-                gradient = oldGradient;
-				d = oldDate;
-                redrawMap(d);
-                document.getElementById(party).checked = true;
+                map.runningThrough = false;
+                map.party = currentParty;
+                map.gradient = oldGradient;
+				map.date = oldDate;
+                redrawMap(map.date);
+                document.getElementById(map.party).checked = true;
             } else {
-                party = currentParty;
-				gradient = oldGradient;
+                map.party = currentParty;
+				map.gradient = oldGradient;
                 redrawMap(runDate);
                 runDate.setDate(runDate.getDate() + 7);
 				runDate.setHours(23,59,59,999);
-                document.getElementById(party).checked = true;
+                document.getElementById(map.party).checked = true;
             }
         }
     }
